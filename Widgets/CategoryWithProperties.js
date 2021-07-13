@@ -86,10 +86,10 @@ class Property {
         return this._unit;
     }
 
-    get isSelect(){
+    get isSelect() {
         return this._isSelect;
     }
-    set isSelect(value){
+    set isSelect(value) {
         this._isSelect = value;
     }
     //#endregion
@@ -129,10 +129,10 @@ class CategoryWithProperties {
     getName(lang) {
         return this._name[lang];
     }
-    get selected(){
+    get selected() {
         const props = [];
-        for(let property of this._list){
-            if(property.isSelect){
+        for (let property of this._list) {
+            if (property.isSelect) {
                 props.push(property);
             }
         }
