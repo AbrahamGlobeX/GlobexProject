@@ -2,7 +2,6 @@ class WidgetDialog extends BaseWidget {
 
 	constructor() {
 		super();
-
 	}
 
 	onCreate() {
@@ -42,13 +41,12 @@ class WidgetDialog extends BaseWidget {
 
 		const widget = this.props.widgets[this.id];
 
-		let eventAttributes = {};
-		
+		let eventAttributes = {};		
 		
 		for (let eventName in widget.events) {
 			eventAttributes[eventName] = (event) => this.eventHandler(eventName, event);
 		}
-		
+		//#region 
 		// return (
 		// 	// Base Dialog Html
 		// 	<div
@@ -80,11 +78,11 @@ class WidgetDialog extends BaseWidget {
 		// 		</div>
 		// 	</div>
 		// );
-
+		//#endregion
 	}
 	
 	onComponentDidMount() {
-
+		//#region 
 		// this.dialogContent = document.getElementById("contentDialog_" + this.id);
 		// this.headerElement = document.getElementById("headerDialog_" + this.id);
 		// this.dialogContentContainer = document.getElementById("containerContentDialog_" + this.id);
@@ -94,6 +92,7 @@ class WidgetDialog extends BaseWidget {
 		// this.buttonNames.push("OK");
 		// this.buttonNames.push("CLOSE");
 		// this.updateButtons();
+		//#endregion
 	}
 
 	set minHeight(value) {
