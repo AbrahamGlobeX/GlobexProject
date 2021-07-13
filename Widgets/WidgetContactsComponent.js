@@ -5,9 +5,9 @@ class WidgetContacts extends BaseWidget {
 		this.autoFontSize = true;
 		this.fontSize = 25;
 		this._lessHundred = false;
-		
+
 		this.ripples = [];
-		
+
 	}
 
 	eventHandler(eventType, eventObject) {
@@ -15,9 +15,9 @@ class WidgetContacts extends BaseWidget {
 		eventObject.persist();
 		console.log(eventType, eventObject);
 		let widgetWindow = null;
-		for( let i = 1; i < idWidgets; i++){
+		for (let i = 1; i < idWidgets; i++) {
 			widgetWindow = document.getElementById("divWindow_widget_" + i);
-			if(widgetWindow) break;
+			if (widgetWindow) break;
 		}
 		if (widgetWindow) widgetWindow.parentThis.inverseEnableHeader();
 		Module.Store.dispatch({
@@ -31,36 +31,36 @@ class WidgetContacts extends BaseWidget {
 		const widget = this.props.widgets[this.id];
 
 		let eventAttributes = {};
-		
-		
+
+
 		for (let eventName in widget.events) {
 			eventAttributes[eventName] = (event) => this.eventHandler(eventName, event);
 		}
-		
+
 		return (
 			// Base Contacts Html
-			<div 
-				id={this.id} 
+			<div
+				id={this.id}
 				className="WidgetContacts"
 				{...widget.attributes}
 				{...eventAttributes}
 			>
-				< div 
-					id={"textContacts_" + this.id} 
-					className = "WidgetContactsText" 
-					>
-						 {widget.textContent}
+				< div
+					id={"textContacts_" + this.id}
+					className="WidgetContactsText"
+				>
+					{widget.textContent}
 				</div>
-				< div 
-					id={"iconContacts_" + this.id} 
-					className= "MaterialIcon"
-				 >
-				 </div>
+				< div
+					id={"iconContacts_" + this.id}
+					className="MaterialIcon"
+				>
+				</div>
 			</div>
 		);
 
 	}
-	
+
 	onComponentDidMount() {
 
 		this.htmlText = document.getElementById("textContacts_" + this.id);
@@ -70,9 +70,9 @@ class WidgetContacts extends BaseWidget {
 		} catch (e) { }
 		this.htmlElement.addEventListener("click", this.startAnimation.bind(this));
 	}
-	
+
 	controlFontSize() {
-		
+
 		if (!this.autoSize) {
 			this.htmlText.style.fontSize = this.fontSize + 'px';
 			return;
@@ -97,23 +97,23 @@ class WidgetContacts extends BaseWidget {
 		} else {
 			this.htmlText.style.fontSize = (fontSize) + '%';
 		}
-		
+
 	}
-	
+
 	startAnimation(event) {
-		
+
 		const w = this.htmlElement.offsetWidth;
 		const h = this.htmlElement.offsetHeight;
-		
+
 		const rippleSize = Math.max(w, h) * 4;
 		const delay = 100;
 		const posX = event.clientX;
 		const posY = event.clientY;
 
-		
+
 		const x = this.htmlElement.offsetLeft;
 		const y = this.htmlElement.offsetTop;
-		
+
 		const dx = posX - x;
 		const dy = posY - y;
 
@@ -295,5 +295,5 @@ class WidgetContacts extends BaseWidget {
 		}
 	}
 
-	
+
 }
