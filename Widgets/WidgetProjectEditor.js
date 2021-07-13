@@ -94,6 +94,12 @@ class ProjectEditor extends BaseObjectEditor {
     this.drawLeftWidget();
   }
   drawLeftWidget() {
+    this.drawLabel(this._leftLayout, "Edit mode", {
+      width: "100%",
+      minHeight: "40px",
+      maxHeight: "46px",
+      "border-bottom": "2px solid rgb(170, 170, 170)",
+    });
     this.drawButton(
       this.drawLayout(this._leftLayout, "layoutHorizontal", {
         width: "100%",
@@ -423,13 +429,21 @@ class ProjectEditor extends BaseObjectEditor {
       borderTop: "2px solid #aaa",
       borderBottom: "2px solid #aaa",
     });
-    this.drawLabel(nameLayout, "Название проекта");
-    this.drawLabel(nameLayout, project["meta"]["name"]);
+    // this.drawLabel(nameLayout, "Название проекта");
+
+    // VIEW TITLE //
+
+    let headerText = this.drawLabel(
+      nameLayout,
+      `Edit project "${project["meta"]["name"]}"`
+    );
     const switchGroupLayout = this.drawLayout(
       this._headerLayout,
       "layoutHorizontal",
       { width: "100%", minHeight: "60px", maxHeight: "60px" }
     );
+    ReactComponent[headerText].fontSize = 40;
+    ReactComponent[headerText].fontWeight = "bold";
     //this._centerContentLayout = this.drawLayout(this.drawLayout(this._centerLayout,"layoutHorizontal",{"width" : "100%"}),"layoutVertical",{});
     const btnObject = this.drawButton(
       switchGroupLayout,
@@ -500,22 +514,22 @@ class ProjectEditor extends BaseObjectEditor {
       "layoutVertical",
       { height: "100%" }
     );
-    this.drawLabel(
-      this.drawLayout(classificatorLayout, "layoutHorizontal", {
-        width: "100%",
-        maxHeight: "50px",
-        minHeight: "50px",
-      }),
-      "Классификатор"
-    );
-    this.drawLabel(
-      this.drawLayout(classificatorLayout, "layoutHorizontal", {
-        width: "100%",
-        maxHeight: "50px",
-        minHeight: "50px",
-      }),
-      "созданный на основе объектов проекта"
-    );
+    // this.drawLabel(
+    //   this.drawLayout(classificatorLayout, "layoutHorizontal", {
+    //     width: "100%",
+    //     maxHeight: "50px",
+    //     minHeight: "50px",
+    //   }),
+    //   "Классификатор"
+    // );
+    // this.drawLabel(
+    //   this.drawLayout(classificatorLayout, "layoutHorizontal", {
+    //     width: "100%",
+    //     maxHeight: "50px",
+    //     minHeight: "50px",
+    //   }),
+    //   "созданный на основе объектов проекта"
+    // );
 
     const classificatorTreeLayout = this.drawLayout(
       classificatorLayout,
@@ -543,22 +557,22 @@ class ProjectEditor extends BaseObjectEditor {
         "layoutVertical",
         { height: "100%", paddingLeft: "3%" }
       );
-      this.drawLabel(
-        this.drawLayout(classificationLayout, "layoutHorizontal", {
-          width: "100%",
-          maxHeight: "50px",
-          minHeight: "50px",
-        }),
-        "Классификация проекта"
-      );
-      this.drawLabel(
-        this.drawLayout(classificationLayout, "layoutHorizontal", {
-          width: "100%",
-          maxHeight: "50px",
-          minHeight: "50px",
-        }),
-        this._currentProject["meta"]["name"]
-      );
+      // this.drawLabel(
+      //   this.drawLayout(classificationLayout, "layoutHorizontal", {
+      //     width: "100%",
+      //     maxHeight: "50px",
+      //     minHeight: "50px",
+      //   }),
+      //   "Классификация проекта"
+      // );
+      // this.drawLabel(
+      //   this.drawLayout(classificationLayout, "layoutHorizontal", {
+      //     width: "100%",
+      //     maxHeight: "50px",
+      //     minHeight: "50px",
+      //   }),
+      //   this._currentProject["meta"]["name"]
+      // );
 
       const classificationTreeLayout = this.drawLayout(
         classificationLayout,
@@ -585,7 +599,7 @@ class ProjectEditor extends BaseObjectEditor {
 
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
-          width: "100%",
+          width: "99%",
         }),
         "Добавить объект",
         { color: "#123456" },
@@ -1293,7 +1307,7 @@ class Classificator {
   }
   openPrototypeCreateForm(name, category) {
     this.loadPrototype(category, (prototype) => {
-      debugger;
+      //debugger;
       if (prototype) {
         return APP.log("warn", "Данный прототип уже создан");
       }
@@ -1748,47 +1762,30 @@ class ObjectSystem extends BaseObjectEditor {
     ReactComponent[layout].clearWidget();
     const object = this.findObjectByID(projectID, id);
     console.log("showObjectInfo", object);
-    this.showObjectFromTitle(layout);
     this.showObjectTitle(layout, object, projectID);
     this.showObjectProperties(layout, object);
   }
-  showObjectFromTitle(layout) {
-    const titleLayout = this.drawLayout(layout, "layoutHorizontal", {
+
+  showObjectTitle(layout, object) {
+    const newLayout = this.drawLayout(layout, "layoutHorizontal", {
       width: "100%",
-      maxHeight: "50px",
-      minHeight: "50px",
+      maxHeight: "25px",
+      minHeight: "25px",
     });
-    this.drawLabel(titleLayout, "Просмотр объекта");
-  }
-  showObjectTitle(layout, object, projectID) {
-    const editButtonLayout = this.drawLayout(layout, "layoutHorizontal", {
-      width: "100%",
-      maxHeight: "50px",
-      minHeight: "50px",
+    const headerTitle = this.drawLabel(newLayout, "Object", {
+      background: "rgb(156 155 155 / 80)",
+      height: "25px",
     });
-    this.drawButton(
-      editButtonLayout,
-      "Редактировать",
-      { color: "#123456" },
-      () => {
-        console.log("object", object);
-        this.loadPrototype(object["additional"]["category"][0], (pattern) => {
-          const editor = new PatternEditorSystem(this);
-          editor.openObjectFormEdit(object, this._objectProps, pattern, () => {
-            console.log("object", object);
-            this.loadObjectProperties(projectID, () => {
-              this.updateObject(projectID, object["_id"]["$oid"]);
-              this.showObjectInfo(layout, projectID, object["_id"]["$oid"]);
-            });
-          });
-        });
-      }
-    );
+
+    ReactComponent[headerTitle].fontWeight = "bold";
+    ReactComponent[headerTitle].fontSize = 20;
+
     const nameLayout = this.drawLayout(layout, "layoutHorizontal", {
       width: "100%",
       maxHeight: "50px",
       minHeight: "50px",
     });
+
     this.drawLabel(nameLayout, "Название");
     this.drawLabel(nameLayout, object["meta"]["name"]);
 
@@ -1800,6 +1797,7 @@ class ObjectSystem extends BaseObjectEditor {
     this.drawLabel(wikiLayout, "Википедия");
     this.drawLabel(wikiLayout, object["additional"]["wiki_ref"]["en"]);
   }
+
   loadPrototype(category, callback) {
     const loaded = function (resultJSON) {
       console.log("resultJSOn", resultJSON);
@@ -1828,6 +1826,7 @@ class ObjectSystem extends BaseObjectEditor {
     APP.dbWorker.responseDOLMongoRequest = loadedOwnPatterns.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
+
   async showObjectProperties(parentLayout, object) {
     console.log("this._objectProps", this._objectProps);
     const propsLayout = this.drawLayout(
@@ -1880,5 +1879,33 @@ class ObjectSystem extends BaseObjectEditor {
       //this.drawLabel(layout,object["object"][prop]["value"]);
       //this.drawLabel(layout,this._objectProps[prop]["category"]);
     }
+
+    this.DrawEditObjectButton(parentLayout);
+  }
+
+  DrawEditObjectButton(parentLayout) {
+    this.drawButton(
+      parentLayout,
+      "Редактировать",
+      {
+        color: "#123456",
+        width: "100%",
+        maxHeight: "50px",
+        minHeight: "50px",
+      },
+      () => {
+        console.log("object", object);
+        this.loadPrototype(object["additional"]["category"][0], (pattern) => {
+          const editor = new PatternEditorSystem(this);
+          editor.openObjectFormEdit(object, this._objectProps, pattern, () => {
+            console.log("object", object);
+            this.loadObjectProperties(projectID, () => {
+              this.updateObject(projectID, object["_id"]["$oid"]);
+              this.showObjectInfo(layout, projectID, object["_id"]["$oid"]);
+            });
+          });
+        });
+      }
+    );
   }
 }

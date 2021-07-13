@@ -30,12 +30,6 @@ class Characteristics_ColorType extends BasePropertyType {
         // const color = new WidgetColor();
         // color.color = this.value;
 
-
-
-        
-
-
-
         // const input = new WidgetInput();
         // input.htmlElement.onchange = (e) => {
         //     this._colorvalue = e.target.value;
