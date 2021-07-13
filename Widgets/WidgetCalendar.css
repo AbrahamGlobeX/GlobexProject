@@ -1,0 +1,144 @@
+.Calendar {
+  background: white;
+  overflow: hidden;
+}
+
+.CalendarHeader {
+  background: rgb(0, 150, 136);
+  /*width: 310px;*/
+  height: 100px;
+  padding-left: 24px;
+
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.CurrentYear {
+  font-size: 1.5rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  color: rgba(255, 255, 255, 0.54);
+  font-weight: 400;
+  line-height: 1.5em;
+  cursor: pointer !important;
+}
+
+.CurrentDate {
+  font-size: 2.125rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  color: rgba(255, 255, 255, 0.54);
+
+  font-weight: 400;
+  line-height: 1.20588em;
+  margin-left: -0.04em;
+}
+
+.MonthNavigator {
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  justify-content: space-between;
+}
+
+.CurrentMonth {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.46429em;
+}
+
+.LeftNav,
+.RightNav {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer !important;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  margin-left: 23px;
+  margin-right: 23px;
+}
+
+/*.LeftNav:hover, .RightNav:hover {*/
+/*border: solid 1px black;*/
+/*border-radius: 15px;*/
+/*background: lightblue;*/
+/*}*/
+
+.Week {
+  height: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.375em;
+
+  padding-bottom: 10px;
+}
+
+.WeekDay {
+  width: 36px;
+  color: rgba(0, 0, 0, 0.38);
+  margin: 0 2px;
+  text-align: center;
+}
+
+.CalendarGrid {
+}
+
+.CalendarGrid > .Week {
+  height: 36px;
+  padding-bottom: 0;
+}
+
+.Day {
+  width: 36px;
+  color: rgba(0, 0, 0, 0.87);
+  height: 36px;
+  line-height: 36px;
+  margin: 0 2px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer !important;
+  text-align: center;
+  transition: background-color 150ms;
+  border-radius: 50%;
+}
+
+.Day:hover {
+  background: rgba(45, 156, 131, 0.5);
+}
+
+.CalendarYearContent {
+  overflow: auto;
+  height: 280px;
+}
+
+.Year {
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  outline: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.Year:hover {
+  background-color: rgb(129, 207, 200);
+  color: #009688;
+}

@@ -1,0 +1,5 @@
+.frameWidgetFrame {
+	width: 100%;
+	height: calc(100% - 4px);
+	border: 0px none;
+}

@@ -1,0 +1,106 @@
+.WidgetTree {
+	position: relative;
+}
+
+.ContainerLeaf {
+	box-sizing: border-box;
+	width: 100%;
+	justify-content: center;
+	display: flex;
+}
+
+.ContainerNode {
+	box-sizing: border-box;
+	width: 100%;
+	justify-content: center;
+	display: flex;
+}
+
+.IconLeaf {
+	height: 100%;
+	width: 30px;
+	min-width: 30px;
+	font-family: "Material Icons";
+	font-size: 20px;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	/*color: var(--main-color);*/
+	z-index: 1;
+}
+
+.IconNode {
+	height: 100%;
+	width: 30px;
+	min-width: 30px;
+	font-family: "Material Icons";
+	font-size: 20px;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+	/*color: var(--main-color);*/
+	z-index: 1;
+}
+/*
+.IconLeaf:hover {
+	color: blue;
+	z-index: 50;
+}*/
+/*
+.IconNode:hover {
+	color: green;
+	z-index: 50;
+}*/
+
+.ContainerLeaf > .WidgetLabel {
+    height: 100% !important;
+    width: 100% !important;
+    justify-content: left !important;
+}
+
+.ContainerNode > .WidgetLabel {
+    height: 100% !important;
+    width: 100% !important;
+    justify-content: left !important;
+}
+
+/*.ContainerLeaf:hover {
+	background-image: linear-gradient(rgb(52, 176, 164) 20%, #1a8279 90%);
+	color: white;
+}
+
+.ContainerNode:hover {
+	background-image: linear-gradient(rgb(52, 176, 164) 20%, #1a8279 90%);
+	color: white;
+}
+*/
+/*.ContainerLeaf:hover > .IconLeaf {
+	color: white;
+}
+
+.ContainerNode:hover > .IconNode {
+	color: white;
+}
+*/
+.AreaItems {
+	flex-direction: column;
+	overflow: hidden;
+
+/*    background-color: #26a65212;/*temp*/*/
+}
+
+.LineSVG {
+	position: absolute;
+    height: 1px;
+    overflow: visible;
+    width: 1px;
+    top: 0;
+    left: 0;
+}
+
+/*.Selected {*/
+	/*background-image: linear-gradient(90deg,rgba(0, 150, 136, 0.53) 0%,rgba(0, 150, 136, 0.21) 20%,rgba(0, 150, 136, 0.16) 70%, #26a69a9c 91%);*/
+    /*border-radius: 1px;*/
+    /*border: 2px solid #0000000f;*/
+    /*box-sizing: border-box;*/
+/*}*/

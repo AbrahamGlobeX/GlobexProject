@@ -1,0 +1,9 @@
+.ObjectEditorContainer{
+    width               : 600px !important;
+    height              : 600px !important;
+    background-color    : white;
+}
+.ObjectEditorContentContainer{
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,59 @@
+.ContextMenu{
+    position: absolute;
+    background-color: #f9f9f9;
+    z-index: 9999;
+    border: 1px solid #dbdbdb;
+    
+}
+
+
+/* new */
+.ContextMenu > ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ContextMenu li{
+    width: 100%;
+    padding: 5px;
+    font-size: 15px;
+    border-bottom: 1px solid grey;
+    cursor: pointer;
+}
+.ContextMenu li > p{
+    margin: 0;
+    padding: 5px;
+}
+.ContextMenu li:hover > p{
+    background: red;
+}
+.ContextMenu li:last-child{
+    border-bottom: none;
+}
+.subMenuChild{
+    display: none;
+    list-style: none;
+    left: 100%;
+    top: 0;
+    width: 100%;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #dbdbdb;
+    padding: 0;
+    margin-left: 1px;
+    max-height: 300px;
+    overflow: auto;
+}
+.subMenuParent{
+    position: relative;
+    /*float: left;*/
+    display: block;
+    cursor: context-menu !important;
+}
+.subMenuParent:hover > ul{
+    display: block;  
+}
+.ContextMenu-notSelectable p{
+    background: none !important;
+}

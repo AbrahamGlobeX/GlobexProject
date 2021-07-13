@@ -1,0 +1,363 @@
+
+
+
+#ApplicationTopName {
+	overflow: hidden;
+	font-size: 15px;
+	font-weight: bold;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#TopRightDiv {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#TopRightDiv>* {
+	padding: 0 15px;
+	text-align: center;
+	border-right: 1px solid black;
+	box-shadow: 0px 0px 5px 0px black;
+}
+
+.loginDiv {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #808080a6;
+	z-index: 10;
+}
+.loginDiv>div {
+	position: absolute;
+	width: 300px;
+	height: 210px;
+	left: calc(50% - 150px);
+	top: calc(50% - 150px);
+	background: #dad2d2;
+	border-radius: 10px;
+	border: 2px solid;
+	padding: 10px;
+}
+
+.loginDiv>div>* {
+	width: 100%;
+	/* height: 25px; */
+	user-select: none;
+}
+
+.loginDiv>div>input {
+	margin-bottom: 10px
+}
+
+.LoginTitle {
+	text-align: center;
+	font-size: 25px;
+	line-height: 25px;
+	margin-bottom: 10px;
+}
+
+.LoginBtn {
+	border: 1px white solid;
+	width: 50%;
+	max-width: 50%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	margin-top: 10px;
+	border-radius: 5px;
+	background: #b5b3b3bd;
+	color: white;
+}
+
+.LoginBtn:hover {
+	background: #9c9c9b;
+}
+
+.LoginBtnConstainer {
+	display: flex;
+}
+
+
+
+.ListScriptsContainer{
+	position: absolute;
+	background: #808080a8;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+.ListScriptsContainer {
+	position: absolute;
+	background: #808080a8;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+.ListScriptsContainer>* {
+	position: absolute;
+	width: 600px;
+	height: 800px;
+	background: gray;
+	overflow: hidden;
+	top: calc(50% - 400px);
+	left: calc(50% - 300px);
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.ListScripts {
+	height: 700px;
+	overflow: auto;
+	border: 1px solid;
+	background: white;
+}
+
+.ScriptListItem {
+	height: 45px;
+	border: 1px solid #0000006b;
+	margin: 5px;
+	user-select: none;
+}
+
+.ScriptListItem:hover {
+	background: #e2f4f478;
+}
+
+.ScriptListItemName {
+	font-size: 25px;
+	overflow: hidden;
+	line-height: 25px;
+	padding-left: 10px;
+}
+
+.ScriptListItemOID {
+	padding-left: 5px;
+	color: gray;
+	font-size: 12px;
+}
+
+.CloseListScripts {
+	width: 100%;
+	text-align: center;
+	background: white;
+	border-radius: 5px;
+	border: 1px solid;
+	height: 50px;
+	line-height: 50px;
+	margin-top: 20px;
+}
+
+
+
+#UsernameDiv {
+	border: none;
+	box-shadow: none;
+	font-size: 15px;
+	font-style: italic;
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+
+#SaveDialogDiv {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #000000b8;
+	z-index: 10;
+}
+
+#SaveDialogForm {
+	position: absolute;
+	background: #ffffffa6;
+	width: 310px;
+	height: 300px;
+	top: calc(50% - 200px);
+	left: calc(50% - 155px);
+	padding: 10px;
+}
+
+.SaveDialogTitle {
+	text-align: center;
+	font-size: 25px;
+	font-weight: bold;
+	padding: 0px 0px 10px 0px;
+}
+
+
+.SaveDialogText {
+	padding: 5px 0px 0 10px;
+	font-size: 15px;
+}
+
+.SaveDialogInput {
+	width: 100%;
+}
+
+.SaveDialogBTNs {
+	display: flex;
+	padding-top: 20px;
+}
+
+.SaveDialogBTN {
+	width: 50%;
+	text-align: center;
+	border: 1px solid black;
+	margin: 5px;
+	height: 30px;
+	line-height: 30px;
+	user-select: none;
+}
+
+
+
+
+/* VALUE EDIT */
+#ValueEditDiv {
+	position: absolute;
+	background: rgba(128, 128, 128, 0.568);
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+#ValueEditSubDiv,
+#ValueEditSubDiv1 {
+	position: absolute;
+	left: calc(50% - 200px);
+	width: 400px;
+	background: gainsboro;
+	border: 1px solid;
+	padding: 10px;
+	user-select: none;
+}
+
+#ValueEditSubDiv {
+	top: calc(50% - 120px);
+	height: 240px;
+}
+
+#ValueEditSubDiv1 {
+	top: calc(50% - 145px);
+	height: 290px;
+}
+
+
+#ValueEditTitle {
+	height: 50px;
+	font-size: 25px;
+	line-height: 25px;
+	text-align: center;
+	/* padding-top: 10px; */
+}
+
+#ValueEditInputContainer {
+	width: 100%;
+	padding: 10px 0;
+}
+
+.ValueEditTypeContainer {
+	display: flex;
+	width: 100%;
+}
+
+.ValueEditTypeContainerL,
+.ValueEditTypeContainerR {
+	display: flex;
+	width: 50%;
+	height: 30px;
+	line-height: 30px;
+	font-size: 20px;
+}
+
+.ValueEditTypeContainerL {
+	flex: none;
+}
+
+.ValueEditTypeContainerL>div {
+	width: 100%;
+	text-align: right;
+}
+
+.ValueEditTypeContainerL>input {
+	margin-left: 10px !important;
+	margin-right: 10px !important;
+	width: 30px;
+	height: 20px;
+}
+
+
+.ValueEditTypeContainerR {
+	flex-direction: row-reverse;
+}
+
+.ValueEditTypeContainerR>div {
+	width: 100%;
+}
+
+.ValueEditTypeContainerR>input {
+	margin-right: 10px !important;
+	margin-left: 10px !important;
+	width: 30px;
+	height: 20px;
+}
+
+
+
+.ValueEditInput {
+	width: 100%;
+}
+
+.ValueEditInput {
+	width: 100%;
+}
+.ValueEditInputB {
+	width: 100%;
+	height: 45px;
+	margin: 0 !important;
+}
+
+.ValueEditInputN {
+	width: 100%;
+	height: 50px;
+	font-size: 25px;
+}
+
+.ValueEditInputS {
+	width: 100%;
+	height: 50px;
+	font-size: 25px;
+}
+
+.ValueEditInputT {
+	max-width: 100%;
+	min-width: 100%;
+	max-height: 100px;
+	min-height: 100px;
+}
+
+
+.VEBTNs {
+	display: flex;
+}
+
+.VEBTN {
+	width: 50%;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	font-size: 20px;
+	border-radius: 5px;
+	border: 1px solid black;
+	margin: 2px;
+}

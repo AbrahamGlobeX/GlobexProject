@@ -1,0 +1,301 @@
+.WidgetTable {
+	background-color: rgba(0, 0, 0, 0.01);
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	box-sizing: border-box;
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
+	border-radius: 5px;
+	position: relative;
+	background-size: cover;
+
+	/*эта телега чтобы не перетаскивалось нихера*/
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	-khtml-user-drag: none;
+	-webkit-user-drag: none;
+}
+
+.WidgetTable::-webkit-scrollbar {
+	width: 6px;
+	background-color: var(--background-color);
+}
+
+.WidgetTable::-webkit-scrollbar-thumb {
+	background-color: var(--background-color-dark);
+}
+
+.WidgetTable .content-container::-webkit-scrollbar {
+	width: 6px;
+	background-color: var(--background-color);
+}
+
+.WidgetTable .content-container::-webkit-scrollbar-thumb {
+	background-color: var(--background-color-dark);
+}
+
+.WidgetTable tbody, thead{}
+
+.WidgetTable .table-container {
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.WidgetTable tr, .WidgetTable.header-row {
+	align-items: center;
+	padding: 0 24px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(0, 0, 0, .12);
+}
+
+.WidgetTable tr {
+	height: 20px;
+}
+
+.WidgetTable.header-row {
+	min-height: 56px;
+}
+
+.WidgetTable td, .WidgetTable th{
+	overflow: hidden;
+	/*word-wrap: break-word;*/
+	text-align: inherit;
+}
+
+.WidgetTable td.center, .WidgetTable th.center {
+	text-align: center;
+}
+
+.WidgetTable td.right, .WidgetTable th.right {
+	text-align: right;
+}
+
+.WidgetTable td.left, .WidgetTable th.left {
+	text-align: left;
+}
+
+.WidgetTable td {
+	color: rgba(0,0,0,.87);
+	font-size: 14px;
+}
+
+.WidgetTable td.border-need{
+	border-right: 1px solid #b7b7b7;
+}
+
+.WidgetTable th.border-need{
+	border-right: 1px solid #969696;
+}
+
+.WidgetTable th {
+	position: relative;
+	padding: 0;
+	font-weight: inherit;
+	color: rgba(0,0,0,.54);
+	font-size: 12px;
+}
+
+.WidgetTable .table-resizer {
+	display: block;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-modify: read-only;
+	cursor: col-resize;
+	height: inherit;
+	width: 2px;
+	position: absolute;
+	background-color: #a1a1a15e;
+	top: 0;
+	bottom: 0;
+	z-index: 1;
+}
+
+.WidgetTable .table-resizer-left {
+	left: -1px;
+}
+
+.WidgetTable .table-resizer-left:hover {
+	background-color: #878787;
+	width: 4px;
+}
+
+.WidgetTable .table-resizer-left:active {
+	background-color: #878787;
+	width: 4px;
+}
+
+.WidgetTable .table-resizer-right {
+	right: -1px;
+}
+
+.WidgetTable .sort-baton {
+	transform: translateY(0px);
+	opacity: 1;
+	height: 12px !important;
+	width: 12px !important;
+	min-width: 12px;
+	margin-right: 6px;
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	align-self: center;
+	color: #777777;
+	margin-left: auto;
+}
+
+.WidgetTable .sort-baton.default {
+	color: rgba(111, 111, 111, 0.18);
+}
+
+.WidgetTable .sort-baton:hover,.stem:hover,.indicator:hover {
+	color: #777777;
+}
+
+.WidgetTable .stem {
+	background: currentColor;
+	height: 10px;
+	width: 2px;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	border-radius: 2px;
+}
+
+.WidgetTable .indicator {
+	width: 100%;
+	height: 2px;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 2px;
+}
+
+.WidgetTable .indicator.indicator-up {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: translateY(0px);
+}
+
+.WidgetTable .indicator.indicator-down {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: translateY(10px);
+}
+
+.WidgetTable .pointer-left {
+	transform-origin: right;
+	left: 0;
+	background: currentColor;
+	width: 6px;
+	height: 2px;
+	position: absolute;
+	top: 0;
+	border-radius: 2px;
+}
+
+.WidgetTable .indicator-up .pointer-left {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: rotate(-45deg);
+}
+
+.WidgetTable .indicator-down .pointer-left {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: rotate(45deg);
+}
+
+.WidgetTable .pointer-right {
+	transform-origin: left;
+	right: 0;
+	background: currentColor;
+	width: 6px;
+	height: 2px;
+	position: absolute;
+	top: 0;
+	border-radius: 2px;
+}
+
+.WidgetTable .indicator-up .pointer-right {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: rotate(45deg);
+}
+
+.WidgetTable .indicator-down .pointer-right {
+	transition-property: transform;
+	transition-duration: 0.1s;
+	transform: rotate(-45deg);
+}
+
+.WidgetTable .pointer-middle {
+	margin: auto;
+	height: 2px;
+	width: 2px;
+	background: currentColor;
+	transform: rotate(45deg);
+}
+
+.WidgetTable .table-resizer-right:hover {
+	background-color: #878787;
+	width: 4px;
+ }
+
+.WidgetTable .table-resizer-right:active {
+	background-color: #878787;
+	width: 4px;
+}
+
+.WidgetTable .resize-off .table-resizer {
+	display: none;
+}
+
+.WidgetTable .content-container .table-resizer {
+	z-index: 0;
+}
+
+.WidgetTable .content-container {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.WidgetTable .header-container {
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: absolute;
+	z-index: 1;
+	background: #b7b7b7;
+	top: 0;
+	left: 0;
+	margin: 0 auto;
+	width: auto;
+}
+
+.WidgetTable .table-content {
+	display: flex;
+	width: 100%;
+}
+
+.WidgetTable .numbers {
+	width: 32px; /*когда пизданет, я придумаю как это сделать*/
+	color: rgba(0, 0, 0, 0.4);
+	background: rgba(0, 0, 0, 0.08);
+	text-align: center;
+}
+
+.WidgetTable .first {
+	background: #b7b7b7;
+}
+
+.table-content > * {
+     width: inherit !important; 
+     height: inherit !important; 
+}

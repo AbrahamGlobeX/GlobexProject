@@ -1,0 +1,14 @@
+.WidgetLabel {
+  display: flex;
+}
+
+.WidgetLabelText {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,119 @@
+<html>
+
+<head>
+
+    <!-- bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+                integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+                integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+            <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+                integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+                crossorigin="anonymous"></script>
+
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+                crossorigin="anonymous"></script>
+
+            <!-- treeview -->
+            <link href="View/Bootstrap/Style/bootstrap-treeview.min.css" rel="stylesheet">
+            <script src="View/Bootstrap/bootstrap-treeview.min.js"></script>
+
+
+    <!-- react -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.js"
+        integrity="sha256-MwqiltuWhN7+rUTHBqWOXez3Vr7J8BFXoYhK/npJIno=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.min.js"
+        integrity="sha256-s0U4ejtXg27GJfqbun0DwJURbUtmlUPpiXNbOxz/URU=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/FluxUtils.js"
+        integrity="sha256-ieefu7GXeZr3uslI6Q3tzuuaIN5MHn92x8VQeTw9OMA=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/FluxUtils.min.js"
+        integrity="sha256-Wxj6RfZBJPdy9niOhznU7KZNaohxZrhhsfrpDh3mJQI=" crossorigin="anonymous"></script>
+
+
+
+
+    <link rel="stylesheet" href="View/Style/style.css">
+
+
+
+    <script src="Model/microevent.js"></script>
+    <script src="Model/BaseModel.js"></script>
+    
+    <script src="Model/Component/Property/ComponentPropertyModel.js"></script>
+    <script src="Model/Component/Property/EnumComponentPropertyModel.js"></script>
+
+    <script src="Model/Component/BaseComponentModel.js"></script>
+    <script src="Model/Component/TextComponentModel.js"></script>
+    <script src="Model/Component/ContainerComponentModel.js"></script>
+
+    <script src="Model/Component/ConcreteComponents/ButtonComponentModel.js"></script>
+    <script src="Model/Component/ConcreteComponents/CheckboxComponentModel.js"></script>
+    <script src="Model/Component/ConcreteComponents/DivComponentModel.js"></script>
+    <script src="Model/Component/ConcreteComponents/InputComponentModel.js"></script>
+    <script src="Model/Component/ConcreteComponents/LabelComponentModel.js"></script>
+    
+    <script src="Model/Component/ComponentsModel.js"></script>
+    
+
+    <script src="Model/Form/FormModel.js"></script>
+    <script src="Model/Form/ComponentSelectorModel.js"></script>
+    <script src="Model/MainModel.js"></script>
+
+    
+    <script src="View/BaseView.js"></script>
+    <script src="View/ComponentToolboxView.js"></script>
+    <script src="View/ComponentTreeView.js"></script>
+    <script src="View/Components/AppComponent.js" type="text/babel"></script>
+    <script src="View/Components/FormRootComponent.js" type="text/babel"></script>
+
+    <script src="View/ComponentWrappers.js"></script>
+    <script src="View/ComponentResizersView.js"></script>
+    <script src="View/ComponentSelectorView.js"></script>
+     
+    <script src="View/FormEditFieldView.js" type="text/babel"></script>
+    <script src="View/Properties/PropertyBlockView.js"></script>
+    <script src="View/Properties/ConcretePropertyViews/InputPropertyView.js"></script>
+    <script src="View/Properties/ConcretePropertyViews/SpinBoxPropertyView.js"></script>
+    <script src="View/Properties/ConcretePropertyViews/ColorPropertyView.js"></script>
+    <script src="View/Properties/ConcretePropertyViews/CheckBoxPropertyView.js"></script>
+    <script src="View/Properties/ConcretePropertyViews/DropDownPropertyView.js"></script>
+    
+    <script src="View/Properties/PropertiesBlockView.js"></script>
+    <script src="View/CenterBlockView.js" type="text/babel"></script>
+    <script src="View/HeaderMenuView.js"></script>
+    <script src="View/MainView.js" type="text/babel"></script>
+
+    <script src="Controller/AddComponentController.js"></script>
+    <script src="Controller/DeleteComponentController.js"></script>
+    <script src="Controller/CopyPasteComponentController.js"></script>
+    <script src="Controller/ComponentPropertiesController.js"></script>
+    <script src="Controller/ComponentSelectionController.js"></script>
+    <script src="Controller/ComponentResizeController.js"></script>
+    
+    <script src="Controller/MainController.js"></script>
+
+    <script src="FormEditorApp.js" type="text/babel"></script>
+
+    
+
+</head>
+
+<body>
+    
+    <div id="root" style="height: 100%; width: 100%;"/>
+    <script src="main.js" type="text/babel"/></script>
+</body>
+
+</html>

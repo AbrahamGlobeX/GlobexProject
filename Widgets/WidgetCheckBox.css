@@ -1,0 +1,493 @@
+.WidgetCheckBox > * {
+	cursor: pointer;
+}
+
+.WidgetCheckBoxDisabled {
+	color: gray !important;
+	pointer-events: none;
+}
+
+.Content {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	/*justify-content: space-evenly;*/
+	align-items: center;
+	overflow: hidden;
+}
+
+/* CheckBox */
+.CheckBox {
+	position: relative;
+	background: #fcfff4;
+	background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+	-webkit-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.CheckBox label {
+	cursor: pointer;
+	position: absolute;
+	left: 4px;
+	right: 4px;
+	top: 4px;
+	bottom: 4px;
+
+	-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+	-moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+
+	background: -webkit-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -moz-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -o-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -ms-linear-gradient(top, #222 0%, #45484d 100%);
+	background: linear-gradient(top, #222 0%, #45484d 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222', endColorstr='#45484d',GradientType=0 );
+}
+
+.CheckBox label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	opacity: 0;
+	content: '';
+	position: absolute;
+	background: #26a69a;
+
+	background: -webkit-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -moz-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -o-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -ms-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: linear-gradient(top, #26A69A 0%, #26A69A 100%);
+
+	left: 2px;
+	right: 2px;
+	top: 2px;
+	bottom: 2px;
+
+	-webkit-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.CheckBox label:hover::after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+}
+
+.CheckBox input[type=checkbox]:checked + label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+.CheckBox input[type=checkbox] {
+	display: none;
+}
+
+.CheckBoxDisabled, .CheckBoxDisabled label {
+	background: gray;
+}
+
+.CheckBoxDisabled label:after {
+	background: darkgray;
+}
+
+/* Toggle */
+.Toggle {
+	position: relative;
+	background: #333;
+
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+
+	-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+	-moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+}
+
+.Toggle label {
+	display: block;
+	height: 0;
+	padding-bottom: 35%;
+	width: 35%;
+
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+
+	-webkit-transition: all .4s ease;
+	-moz-transition: all .4s ease;
+	-o-transition: all .4s ease;
+	-ms-transition: all .4s ease;
+	transition: all .4s ease;
+	cursor: pointer;
+	position: absolute;
+	top: -36%;
+	left: -6%;
+
+	-webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	background: #fcfff4;
+
+	background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+}
+
+.Toggle input[type=checkbox] {
+	display: none;
+}
+
+.Toggle input[type=checkbox]:checked + label {
+	left: 74%;
+}
+
+.ToggleDisabled {
+	background: gray;
+}
+
+.ToggleDisabled label {
+	background: darkgray;
+}
+
+/* RadioButton */
+.RadioButton {
+	position: relative;
+	border-radius: 50px;
+	background: #fcfff4;
+	background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+	-webkit-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.RadioButton label {
+	cursor: pointer;
+	position: absolute;
+	border-radius: 50px;
+	left: 4px;
+	right: 4px;
+	top: 4px;
+	bottom: 4px;
+
+	-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+	-moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+
+	background: -webkit-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -moz-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -o-linear-gradient(top, #222 0%, #45484d 100%);
+	background: -ms-linear-gradient(top, #222 0%, #45484d 100%);
+	background: linear-gradient(top, #222 0%, #45484d 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#222', endColorstr='#45484d',GradientType=0 );
+}
+
+.RadioButton label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	opacity: 0;
+	content: '';
+	position: absolute;
+	border-radius: 50px;
+	background: #26a69a;
+
+	background: -webkit-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -moz-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -o-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: -ms-linear-gradient(top, #26A69A 0%, #26A69A 100%);
+	background: linear-gradient(top, #26A69A 0%, #26A69A 100%);
+
+	left: 2px;
+	right: 2px;
+	top: 2px;
+	bottom: 2px;
+
+	-webkit-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.RadioButton label:hover::after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+}
+
+.RadioButton input[type=checkbox]:checked + label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+.RadioButton input[type=checkbox] {
+	display: none;
+}
+
+.RadioButtonDisabled, .RadioButtonDisabled label {
+	background: gray;
+}
+
+.RadioButtonDisabled label:after {
+	background: darkgray;
+}
+
+/* ClassicCheckBox */
+.ClassicCheckBox {
+	position: relative;
+}
+
+@keyframes CheckBoxColorAnimation2 {
+	from {
+		background-color: var(--main-color);
+	}
+	to {
+		background-color: transparent;
+	}
+}
+
+.ClassicCheckBox label {
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: 0;
+	animation-name: CheckBoxColorAnimation2;
+	animation-duration: 1s;
+	border: 2px solid var(--main-color);
+	box-sizing: border-box;
+	border-radius: 4px;
+	box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, .4);
+}
+
+.ClassicCheckBox label:after {
+	content: '';
+	position: absolute;
+	top: 22%;
+	bottom: 37%;
+	left: 18%;
+	right: 13%;
+	border: 3px solid #26a69a;
+	border-top: none;
+	border-right: none;
+	background: transparent;
+	opacity: 0;
+	transform: rotate(-45deg);
+ }
+
+.ClassicCheckBox label:hover::after {
+	 opacity: 0.5;
+ }
+
+.ClassicCheckBox input[type=checkbox] {
+	visibility: hidden;
+}
+
+.ClassicCheckBox input[type=checkbox]:checked + label:after {
+	border: 3px solid white;
+	border-top: none;
+	border-right: none;
+	background: transparent;
+	opacity: 1;
+ }
+
+.ClassicCheckBoxDisabled label{
+	border: none;
+	background: darkgray !important;
+}
+
+.ClassicCheckBoxDisabled label:after{
+	border-color: gray !important;
+}
+
+@keyframes CheckBoxColorAnimation {
+	from {
+		background-color: transparent;
+	}
+	to {
+		background-color: var(--main-color);
+	}
+}
+
+.ClassicCheckBox input[type=checkbox]:checked + label {
+	animation-name: CheckBoxColorAnimation;
+	animation-duration: 1s;
+	background: var(--main-color);
+	/*border: none;*/
+}
+
+/* ClassicToggle */
+.ClassicToggle {
+	top: 1%;
+	position: relative;
+	background: darkgray;
+	z-index: 1;
+
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+
+	-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+	-moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+}
+
+.ClassicToggle label {
+	display: block;
+	height: 0;
+	padding-bottom: 60%;
+	width: 60%;
+
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+
+	-webkit-transition: all .4s ease;
+	-moz-transition: all .4s ease;
+	-o-transition: all .4s ease;
+	-ms-transition: all .4s ease;
+	transition: all .4s ease;
+	cursor: pointer;
+	position: absolute;
+	top: -12%;
+	left: -6%;
+
+	-webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+	background: white;
+}
+
+.ClassicToggle input[type=checkbox] {
+	display: none;
+}
+
+.ClassicToggle input[type=checkbox]:checked + label {
+	background-color: #26a69a;
+	left: 47%;
+}
+
+.ClassicToggle label:before {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	opacity: 0;
+	content: '';
+	position: absolute;
+	border-radius: 50px;
+
+	left: -3px;
+	right: -3px;
+	top: -3px;
+	bottom: -3px;
+	z-index: -1;
+
+	background: gray;
+}
+
+.ClassicToggle label:hover::before {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+}
+
+.ClassicToggleChecked {
+	background-color: #26a69a92;
+}
+
+.ClassicToggleChecked label:before {
+	background: var(--main-color);
+}
+
+.ClassicToggleDisabled{
+	background: darkgray;
+}
+
+.ClassicToggleDisabled label{
+	background: gray !important;
+}
+
+/* ClassicRadioButton */
+.ClassicRadioButton {
+	position: relative;
+	border: 2px solid var(--main-color);
+	border-radius: 50px;
+}
+
+.ClassicRadioButton label {
+	cursor: pointer;
+	position: absolute;
+	border-radius: 50px;
+	left: 2px;
+	right: 2px;
+	top: 2px;
+	bottom: 2px;
+}
+
+.ClassicRadioButton label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	opacity: 0;
+	content: '';
+	position: absolute;
+	border-radius: 50px;
+
+	left: 2px;
+	right: 2px;
+	top: 2px;
+	bottom: 2px;
+
+	background: var(--main-color);
+}
+
+.ClassicRadioButton label:hover::after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+	filter: alpha(opacity=30);
+	opacity: 0.3;
+}
+
+.ClassicRadioButton input[type=checkbox]:checked + label:after {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+.ClassicRadioButton input[type=checkbox] {
+	display: none;
+}
+
+.ClassicRadioButtonDisabled {
+	border: 2px solid gray;
+}
+
+.ClassicRadioButtonDisabled label:after {
+	background: gray;
+}
+
+/* Text */
+.WidgetCheckBoxText {
+	position: relative;
+	display: inline-block;
+}
+
+/* IconOffset */
+.MaterialIconOffset {
+	left: 7% !important;
+}

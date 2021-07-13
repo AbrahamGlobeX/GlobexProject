@@ -1,0 +1,120 @@
+:root{
+	--combobox-height-items: 30px;
+}
+
+.WidgetComboBox {
+	background-color: transparent;
+	height: 40px;
+}
+
+.ItemArea > .WidgetLabel {
+	width: 100% !important;
+}
+
+.LineContainer {
+	height: 96%;
+	display: flex;
+	border-radius: 3px;
+	border: 1px solid #aaaaaa;
+}
+
+.InputWithHeader{
+	width: 85%;	
+}
+
+.InputHeader {
+	height: 30%;
+	width: 92%;
+	position: relative;
+	top: 0;
+	flex-grow: 0;
+	text-align: left;
+	margin-left: 2%;
+	font-size: x-small;
+	color: var(--background-color-dark);
+	overflow: hidden;
+}
+
+.DisplayLabel {
+	height: 70%;
+	font-size: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+   	text-align: center;
+}
+
+.InputSearch {
+	/*padding: 2%;*/
+	width: 100%;
+	border: none;
+	font-size: inherit;
+	border-bottom: 1px solid #757575;
+	background-color: transparent;
+	text-align: center;
+	text-overflow: ellipsis;
+}
+
+.ButtonCombobox {
+	width: 15%;
+	padding: 0%;
+	outline: none;
+	overflow: hidden;
+	cursor: pointer !important;
+	border-width: 0;
+	border-radius: 2px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+	background-color: var(--main-color);
+	
+	font-family: 'Material Icons';
+
+	/* color: #ecf0f1; */
+	transition: background-color .3s;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.ComboBoxArea {
+	height: 0%;
+	background-color: #777777;
+	/* var(--background-color); */
+	overflow: hidden;
+	transition: height 0.3s cubic-bezier(0, 0, 1, 1) 10ms;
+	width: 100%;
+	/*display: flex;*/
+	flex-direction: column;
+	z-index: 999;
+}
+
+.Down {
+	box-shadow: 3px 5px 6px 0px rgba(0, 0, 0, .4);
+	position: fixed;
+}
+
+.Up {
+	box-shadow: 4px -1px 15px 0px rgba(0, 0, 0, .4);
+	bottom: 46px;
+	position: absolute;
+}
+
+.ItemArea {
+	border:  1px solid #beb7b7;
+	justify-content: center;
+    display: flex;
+}
+
+.ItemArea:hover {
+	background-color: linear-gradient(rgb(52, 176, 164) 20%, #1a8279 90%);
+	/* color: #fff; */
+}
+
+.ItemArea.select {
+	background-color: #646464b3;
+}
+
+.ItemArea.hidden {
+	display: none;
+	/*visibility: hidden;
+	height: 0px;*/
+}

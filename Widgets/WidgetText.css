@@ -1,0 +1,40 @@
+.WidgetText {
+	display        : flex;
+	flex-direction : column;
+	overflow       : hidden;
+	box-sizing: border-box;
+}
+
+.WidgetText > .WidgetTextHeader {
+	display : flex;
+}
+
+.WidgetText > .WidgetTextContent {
+	text-align : justify;
+	outline    : none;
+	resize     : none;
+	height     : 100%;
+	width      : 100%;
+	/* background : transparent; */
+	/* border     : none; */
+	margin     : 0;
+	overflow: auto;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.WidgetText > .WidgetTextContent > .btn {
+	color: blue;
+	-webkit-user-select: text !important;
+	-moz-user-select: text !important;
+	-ms-user-select: text !important;
+}
+.WidgetTextContent::-webkit-scrollbar {
+	width            : 6px;
+	height           : 6px;
+	background-color : var(--background-color);
+}
+
+.WidgetTextContent::-webkit-scrollbar-thumb {
+	background-color : var(--background-color-dark);
+}

@@ -1,0 +1,79 @@
+
+class SpinBoxPropertyView extends PropertyBlockView {
+
+    static nameToType = {}
+
+    static nameToInitFunc = {}
+
+    static nameToUpdateValueFunc = {}
+
+    static propertiesInfo = {};
+
+    constructor(propertiesBlock) {
+
+        super(propertiesBlock);
+
+        this.inputElement = null;
+    }
+
+    initHtml(name, value) {
+
+        let propertyInfo = PropertyBlockView.propertiesInfo[name];
+
+        let htmlContainer = document.createElement('div');
+         
+        htmlContainer.classList.add("input-group");
+
+        let inputGroupAddon = document.createElement('span');
+         
+        inputGroupAddon.classList.add("input-group-addon");
+         
+        inputGroupAddon.textContent = name;
+
+        htmlContainer.appendChild(inputGroupAddon);
+
+        let inputElement = document.createElement('input');
+         
+        inputElement.classList.add("form-control");
+         
+        inputElement.setAttribute("type", "number");
+         
+        inputElement.setAttribute("max", propertyInfo.maxValue);
+        
+        inputElement.setAttribute("min", propertyInfo.minValue);
+        
+        inputElement.setAttribute("step", propertyInfo.stepValue);
+
+        if(typeof value === 'undefined')
+            value = PropertyBlockView.getDefault(name);
+
+        inputElement.value = value.toString();
+
+        inputElement.addEventListener('input', function(event) {
+
+            this.handleInput();
+
+            this.propertiesBlock.trigger("changePropertyViewValue", name, Number(event.target.value));
+            
+        }.bind(this));
+
+        htmlContainer.appendChild(inputElement);
+
+        this.inputElement = inputElement;
+
+        this.htmlContainer = htmlContainer;
+    }
+
+    onInit(name, value) {
+
+        this.initHtml(name, value);
+    }
+
+    setValue(value, rewriteEmpty = true) {
+
+        if(!this.checkEmptyRewrite(value, rewriteEmpty))
+            return;
+
+        this.inputElement.value = value;
+    }
+}

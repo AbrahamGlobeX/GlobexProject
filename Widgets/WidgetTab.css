@@ -1,0 +1,193 @@
+
+.WidgetTab {
+	background-color: white;
+	overflow: hidden;
+}
+.WidgetTab.Right {
+	display: flex;
+	flex-direction: row-reverse;
+}
+.WidgetTab.Bottom {
+	display: flex;
+	flex-direction: column-reverse;
+}
+.WidgetTab.Left {
+	display: flex;
+}
+
+/* ПАНЕЛЬ УПРАВЛЕНИя*/
+
+.WidgetTabHeader.Top.TabAutoSize > .WidgetTabPageHeader > .WidgetButton, .WidgetTabHeader.Bottom.TabAutoSize > .WidgetTabPageHeader > .WidgetButton {
+	width: 100% !important;
+}
+
+.WidgetTabHeader.Top.TabAutoSize > .WidgetTabPageHeader, .WidgetTabHeader.Bottom.TabAutoSize > .WidgetTabPageHeader {
+
+	width: 100% !important;
+}
+
+.WidgetTabPageHeader {
+	display: flex;
+	position: relative;
+	background-color: #d6d6d6;
+}
+
+.TabPageCloseButton {
+	width: 16px;
+	height: 16px;
+	textSize: 16px;
+	right: 0px;
+	position: absolute;
+	z-index: 1;
+}
+
+.TabPageCloseButton:hover {
+	background: rgba(37, 165, 154, 0.3);
+}
+
+.TabPageCloseButton:active {
+	background: rgba(37, 165, 154, 0.5);
+}
+
+.TabPageCloseButton:hover ~ .WidgetButton {
+	background: rgba(37, 165, 154, 0.5);
+}
+
+.WidgetTabHeader.Left > .WidgetTabPageHeader > .WidgetButton, .WidgetTabHeader.Right > .WidgetTabPageHeader > .WidgetButton {
+	width: 1px !important;
+}
+
+.WidgetTabHeader.Left.TabAutoSize > .WidgetTabPageHeader > .WidgetButton, .WidgetTabHeader.Right.TabAutoSize > .WidgetTabPageHeader > .WidgetButton {
+	height: 100% !important;
+	width: 1px !important; 
+}
+
+.WidgetTabHeader.Top,  .WidgetTabHeader.Bottom {
+	width: 100%;
+	height: auto;
+	overflow: auto;
+	display: flex;
+}
+
+.WidgetTabHeader.Right.TabAutoSize, .WidgetTabHeader.Left.TabAutoSize{
+	width: 100px;
+	height: 100%;
+	overflow: auto;
+	display: grid;
+}
+
+.WidgetTabHeader.Right, .WidgetTabHeader.Left{
+	display: flow-root;
+	overflow: auto;
+}
+
+/* КНОПКИ УПРАВЛЕНИЯ*/
+
+.TabButton.TabButtonSelected {
+	background-color: white;
+}
+
+.Top > .WidgetTabPageHeader > .TabButtonSelected {
+	border-top-color: rgb(0, 150, 136);
+	border-right-color: rgba(150, 150, 150, 1);
+	border-left-color: rgba(150, 150, 150, 1);
+	border-top-style: solid;
+	border-right-style: solid;
+	border-left-style: solid;
+}
+
+.Right > .WidgetTabPageHeader > .TabButtonSelected {
+	border-top-color: rgba(150, 150, 150, 1);
+	border-right-color: rgb(0, 150, 136);
+	border-bottom-color: rgba(150, 150, 150, 1);
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-right-style: solid;
+}
+
+.Bottom > .WidgetTabPageHeader > .TabButtonSelected {
+	border-bottom-color: rgb(0, 150, 136);
+	border-right-color: rgba(150, 150, 150, 1);
+	border-left-color: rgba(150, 150, 150, 1);
+	border-bottom-style: solid;
+	border-right-style: solid;
+	border-left-style: solid;
+}
+
+.Left > .WidgetTabPageHeader > .TabButtonSelected {
+	border-top-color: rgba(150, 150, 150, 1);
+	border-left-color: rgb(0, 150, 136);
+	border-bottom-color: rgba(150, 150, 150, 1);
+	border-top-style: solid;
+	border-left-style: solid;
+	border-bottom-style: solid;
+}
+
+/* ОТОБРАЖАЕМОЕ СОДЕРЖИМОЕ КОНТЕЙНЕРА*/
+
+.WidgetTabContainer {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.WidgetTabContainer > * {
+	width: 100% !important;
+	height: 100% !important;
+	overflow: hidden;
+}
+
+.TabContentHidden {
+display: none !important;
+}
+
+/*
+/***************************************BUTTONS*************************************************/
+
+.WidgetButtonTab {
+	background-color: #d6d6d6;
+	color: #0000007d;
+	border-width: 1px;
+	border-right-color: rgba(150, 150, 150, 1);
+	border-left-color: rgba(150, 150, 150, 1);
+}
+
+.WidgetButtonTab.WidgetButton:hover {
+	background: rgba(37, 165, 154, 0.5);
+}
+
+.WidgetButtonTab.WidgetButton:hover > .WidgetButtonTab.WidgetLabel{
+	background: rgba(37, 165, 154, 0.0);
+}
+
+.WidgetButtonTabSelect.WidgetButton:hover {
+	background: rgba(37, 165, 154, 0.5);
+}
+
+.WidgetButtonTabSelect.WidgetButton:hover > .WidgetButtonTabSelect.WidgetLabel{
+	background: rgba(37, 165, 154, 0.0);
+}
+
+.WidgetButtonTabSelect {
+	background-color: whitesmoke;
+	color: #000000;
+	border-width: 1px;
+}
+
+/* СКРОЛЛ*/
+
+.WidgetTabHeader::-webkit-scrollbar-track {
+	-webkit-box-shadow : inset 0 0 6px rgba(0, 0, 0, 0.79);
+	background-color   : rgba(204, 204, 204, 0.3);
+}
+
+.WidgetTabHeader::-webkit-scrollbar {
+	height           : 5px;
+	width           : 5px;
+	background-color : #F5F5F5;
+}
+
+.WidgetTabHeader::-webkit-scrollbar-thumb {
+	background-color : #FFF;
+	background-image: -webkit-linear-gradient(90deg, rgb(129, 207, 200) 0%, rgb(226, 226, 226) 25%, transparent 100%, rgb(185, 185, 185) 75%, transparent);
+}

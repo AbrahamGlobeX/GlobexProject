@@ -1,0 +1,32 @@
+.WidgetTextArea {
+	display        : flex;
+	flex-direction : column;
+	overflow       : hidden;
+	box-sizing: border-box;
+}
+
+.WidgetTextArea > .WidgetTextAreaHeader {
+	display : flex;
+}
+
+.WidgetTextArea > .WidgetTextAreaContent {
+	text-align : justify;
+	outline    : none;
+	resize     : none;
+	height     : 100%;
+	width      : 100%;
+	/* background : transparent; */
+	/* border     : none; */
+	padding    : 0;
+	margin     : 0;
+}
+
+.WidgetTextAreaContent::-webkit-scrollbar {
+	width            : 6px;
+	height           : 6px;
+	background-color : var(--background-color);
+}
+
+.WidgetTextAreaContent::-webkit-scrollbar-thumb {
+	background-color : var(--background-color-dark);
+}

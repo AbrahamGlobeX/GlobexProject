@@ -1,0 +1,22 @@
+:root {
+	--child-min-height: 150px;
+	--child-max-height: 250px;
+	--child-min-width: 150px;
+	--child-max-width: 250px;
+	--child-spacing: 10px;
+}
+
+.WidgetLayoutFlex {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	overflow-y: auto !important;
+}
+
+.WidgetLayoutFlex > * {
+	min-height: var(--child-min-height) !important;
+	max-height: var(--child-max-height) !important;
+	min-width: var(--child-min-width) !important;
+	max-width: var(--child-max-width) !important;
+	margin: var(--child-spacing) !important;
+}

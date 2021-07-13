@@ -1,0 +1,67 @@
+.WidgetLayoutGrid {
+	display: grid;
+	overflow: hidden;
+}
+
+.LayoutGridCell {
+	-webkit-appearance: none;
+	position: relative;
+	overflow: auto;
+}
+
+.LayoutGridCell::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+.WidgetLayoutGrid::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+.LayoutGridCell::-webkit-scrollbar-track,.WidgetLayoutGrid::-webkit-scrollbar-track  {
+	background: #f1f1f1;
+}
+
+.LayoutGridCell::-webkit-scrollbar-track,.WidgetLayoutGrid::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+.LayoutGridCell::-webkit-scrollbar-track,.WidgetLayoutGrid::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.LayoutGridCell.editMode {
+	border: 1px solid gray;
+}
+
+.cell-resizer {
+	position: absolute;
+	z-index: 2;
+}
+
+.cell-resizer-left {
+	width: 2px;
+	height: 100%;
+	cursor: col-resize;
+}
+
+.cell-resizer-right {
+	width: 2px;
+	height: 100%;
+	right: 0;
+	cursor: col-resize;
+}
+
+.cell-resizer-top {
+	width: 100%;
+	height: 2px;
+	cursor: row-resize;
+}
+
+.cell-resizer-bottom {
+	width: 100%;
+	height: 2px;
+	bottom: 0;
+	cursor: row-resize;
+}

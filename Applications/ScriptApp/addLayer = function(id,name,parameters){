@@ -1,0 +1,6 @@
+"update": "objects",	"updates": [{				"q": {"_id": { "$oid": "609a6e539fb518e175a3f8e3"}},				"u": {"$set":{"types":{"SI":{"Length":{"name":{"en":"Length","ru":"Длина"},"category":"Basic","units":{"km":{"label":{"en":"km","ru":"км"},"name":{"en":"killometr","ru":"километр"},"fromFormula":"x0*1000","toFormula":"x0/1000"},"m":{"label":{"en":"m","ru":"м"},"name":{"en":"metr","ru":"метр"},"fromFormula":"x0","toFormula":"x0"},"c":{"label":{"ru":"c","en":"c"},"name":{"ru":"c","en":"c"},"fromFormula":"x0*0.01","toFormula":"x0/0.01"}},"type":"number","default":"m"},"Clothes":{"name":{"en":"Clothes","ru":"Одежда"},"category":"Basic","units":{"0":{"label":{"en":"44-46","ru":"44-46"},"name":{},"fromFormula":"x0","toFormula":"x0"},"1":{"label":{"en":"46-48","ru":"46-48"},"name":{},"fromFormula":"x0","toFormula":"x0"}},"type":"string","default":""}}}}}				}],	"batchSize": 5	
+
+
+
+
+

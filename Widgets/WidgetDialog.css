@@ -1,0 +1,60 @@
+.WidgetDialog {
+	position: absolute !important;
+	top : 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	background-color: white;
+	flex: 0;
+	z-index: 999;/*что бы попАп меню было поверх диолога*/
+	background: rgba(0, 0, 0, 0.75);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.WidgetDialogContent {
+	background: white;
+	overflow: hidden;
+	padding: 10px;
+}
+
+.WidgetDialogHeader {
+	font-size: 20px;
+	font-weight: bold;
+	/*margin: 15px;*/
+}
+
+.WidgetDialogContentContainer {
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+.WidgetDialogContentContainer > * {
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.WidgetDialogButtonsContainer {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.WidgetDialogButton {
+	color: #26a69a;
+	background: white;
+	margin-left: 10px;
+	min-width: 100px;
+	min-height: 36px;
+	justify-content: center;
+	display: flex;
+	line-height: 200%;
+}
+
+.WidgetDialogButton:hover {
+	background: rgba(50, 50, 50, 0.1);
+}

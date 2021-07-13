@@ -1,0 +1,82 @@
+.WidgetTree {
+    color : black;
+}
+
+.WidgetTreeItem {
+    height              : 23px !important;
+    width               : 100% !important;
+    border-top-color    : black;
+    border-top-style    : solid;
+    border-top-width    : 1px;
+    border-bottom-color : transparent;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    display: table;
+    background          : #e1f5fe;;
+}
+
+.WidgetTreeItem.Parent {
+    background : #b6c1c3;
+}
+
+.WidgetTree > .WidgetTreeItem {
+    background : #b1c4ce;
+}
+
+
+.NoParent:hover {
+    background : rgba(38, 166, 154, 0.5);
+}
+
+.Selected {
+    background : rgba(38, 166, 154, 0.8) !important;
+}
+
+.Unselectable {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.TreeItemContainer {
+    height      : 23px;
+    overflow    : hidden;
+    white-space : nowrap;
+    cursor: default;
+    display: flex;
+    align-items: center;
+}
+
+.TreeItemIcon {
+    font-family : "Material Icons";
+    margin-right: 5px;
+    width       : 10%;
+    float       : left;
+    cursor: pointer;
+}
+
+.WidgetTree > .WidgetTreeItem > .TreeItemContainer {
+    font-size   : 16px;
+    font-weight : bold;
+}
+
+
+.Expand > .WidgetTreeItem {
+    display : table;
+}
+
+.NoExpand > .WidgetTreeItem {
+    display : none;
+}
+
+.NoSearch {
+    display : none !important;
+}
+
+.WidgetTreeItem.None {
+	display: none;
+}

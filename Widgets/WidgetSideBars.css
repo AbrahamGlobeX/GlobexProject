@@ -1,0 +1,174 @@
+:root {
+    --sb-left-panel-width: 25%;
+    --sb-right-panel-width: 25%;
+    --sb-left-panel-max-width: 290px;
+    --sb-right-panel-max-width: 290px;
+    --sb-button-size: 30px;
+}
+
+.WidgetSideBars {
+	background-color: transparent;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: stretch;
+	overflow: hidden;
+}
+
+.WSB-buttons-container {
+    position: absolute;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    display: flex;
+	align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: var(--sb-left-panel-width);
+    overflow: hidden;
+}
+
+.WSB-custom-buttons-container.zero-size, .WSB-buttons-container.hide-panel .WSB-custom-buttons-container.zero-size {
+    height: 0;
+    width: 0;
+}
+
+.WSB-buttons-container.hide-panel {
+    flex-direction: column;
+    width: var(--sb-button-size);
+    height: 100%;
+}
+
+.WSB-custom-buttons-container {
+    display: flex;
+	align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    max-width: calc(100% - var(--sb-button-size));
+    height: 100%;
+    max-height: 100%;
+    transition: width .3s, height .3s;
+    overflow: hidden;
+}
+
+.WSB-buttons-container.hide-panel .WSB-custom-buttons-container {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: calc(100% - var(--sb-button-size));
+    flex-direction: column;
+
+    transition:  width .2s, height .4s;
+}
+
+.WSB-LeftContainer {
+    padding: 0;
+	padding-top: var(--sb-button-size);
+	overflow: hidden;
+    outline: none;
+    width: var(--sb-left-panel-width);
+    max-width: var(--sb-left-panel-max-width);
+    bottom: 0;
+    z-index: 10;
+    transition: width .3s, max-width .3s;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.WSB-RightContainer {
+    padding: 0;
+	padding-top: var(--sb-button-size);
+	overflow: hidden;
+    outline: none;
+    width: var(--sb-right-panel-width);
+    max-width: var(--sb-right-panel-max-width);
+    bottom: 0;
+    z-index: 10;
+    transition: width .3s, max-width .3s;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.WSB-CenterContainer {
+	font-size: 14px;
+    line-height: 1.42857143;
+    background-color: transparent;
+    flex-grow: 1;
+    transition: .3s;
+    overflow: hidden;
+}
+
+.material-icons.WSB-OpenContentBtn {
+	width: var(--sb-button-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #ffffff00;
+    opacity: 1;
+    transform: rotate(0.5turn);
+    transition: .2s transform linear;
+    font-size: var(--sb-button-size);
+}
+
+.material-icons.WSB-custom-button {
+    width: var(--sb-button-size);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	background-color: #ffffff00;
+    opacity: 1;
+    font-size: var(--sb-button-size);
+}
+
+.material-icons.WSB-OpenContentBtn:hover, .material-icons.WSB-custom-button:hover{
+	opacity: .4;
+}
+
+.material-icons.WSB-OpenContentBtn-rotate {
+	transform: rotateZ(90deg);
+}
+
+.hidden-side-bar {
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+}
+
+.WSB-RightContainer.min-width-style {
+    min-width: var(--sb-right-panel-width);
+}
+
+.WSB-LeftContainer.min-width-style {
+    min-width: var(--sb-left-panel-width);
+}
+
+.WSB-CenterContainer-compact-onclick {
+	padding: 0;
+	padding-left: var(--sb-button-size);
+}
+
+.WSB-CenterContainer > *, .WSB-RightContainer > *, .WSB-LeftContainer > * {
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.hiddenPanel {
+	display: none !important;
+}
+
+.WSB-LeftContainer.hiddenPanel ~ .WSB-CenterContainer {
+    padding-left: var(--sb-button-size);
+    transition: .3s;
+}
+
+.material-icons.WSB-OpenContentBtn.hiddenPanel ~ .WSB-LeftContainer.hiddenPanel ~ .WSB-CenterContainer {
+	padding-left: 0;
+}

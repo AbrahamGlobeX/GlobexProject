@@ -1,0 +1,1549 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  overflow: hidden;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  overflow: hidden;
+  background: #007ca0c7;
+  background: #b1b1b1c7;
+  background: #d2d2d2 !important;
+}
+
+#container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: #5d5c5b2e; */
+  /* overflow: hidden; */
+}
+
+#root {
+  --var: 10px;
+  position: absolute;
+  top: 30px;
+  /* left: var(--var); */
+  width: 100%;
+  height: calc(100% - var(--var) * 2);
+  background: #a8a3ab;
+  display: none;
+  z-index: 11;
+}
+
+.SelectedArea {
+  position: absolute;
+  background: rgba(80, 80, 219, 0.637);
+  border: 1px solid rgb(5, 5, 129);
+  z-index: 11;
+}
+
+/* STORE LIST */
+#StaticStoreView {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 200px;
+  height: calc(100% - 20px);
+  overflow: auto;
+  background: #186f8a;
+  background: #ffffff;
+  z-index: 10;
+}
+
+#StaticStoreView > * {
+  height: 30px;
+  line-height: 30px;
+  text-indent: 20px;
+  border-bottom: 1px solid #00000038;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+/* Library LIST */
+#LibraresView {
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  width: 200px;
+  overflow: auto;
+  background: #49879b;
+  /* background: #ffffff; */
+  z-index: 10;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+#LibsView {
+  /* height: calc(100% - 60px); */
+  overflow: auto;
+  height: calc(100% - 40px);
+}
+
+.LibraresViewTrue {
+  height: calc(100% - 30px);
+}
+
+.LibraresViewFalse {
+  width: 80px !important;
+  height: 30px;
+  overflow: hidden !important;
+  line-height: normal;
+  text-indent: 0px;
+  border-radius: 10px;
+  top: 40px !important;
+}
+
+#LibraresBtnContainer {
+  display: flex;
+  width: 100%;
+  padding: 5px;
+  align-items: center;
+}
+
+#LibraresBtnLoadLib,
+#LibraresBtnCollapse {
+  width: 100%;
+  text-align: center;
+  border: 1px gray solid;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.LibraresViewLibContainerTrue > * {
+  padding-left: 20px;
+  border-top: 1px solid gray;
+  overflow: hidden;
+}
+
+.LibraresViewLibContainerTrue > *:hover {
+  background: #a8a8a7ab;
+  border-left: 5px solid gray;
+  border-right: 5px solid gray;
+  font-size: 20px;
+}
+
+.LibraresViewLibContainerFalse {
+  height: 30px;
+  overflow: hidden;
+}
+
+.LibraryDataFalse {
+  color: #9c4545;
+}
+
+.BtnControl {
+  text-align: center;
+  height: 30px;
+  background: rgba(97, 147, 255, 0.158);
+  border: 1px solid black;
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 17px;
+  overflow: hidden;
+  display: flex;
+}
+
+.BtnText {
+  width: 180px;
+  text-align: left;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.BtnControlExclide {
+  width: 20px;
+  border-left: 1px solid;
+}
+
+/* #LibraresView > * {
+	height: 30px;
+	line-height: 30px;
+	text-indent: 20px;
+	border-bottom: 1px solid #00000038;
+} */
+
+/* NODE */
+.node {
+  position: absolute;
+  width: 200px;
+  /* overflow : hidden; */
+  /* background : gainsboro; */
+  background: rgb(0, 64, 82);
+  /* border : 1px solid black; */
+  z-index: 1;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  /* user-drag: none; */
+
+  /* clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 20px 100%, 0% calc(100% - 20px)); */
+  /* clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 150% 40px, 150% 100%, 100% 100%, 20px 100%, 0% calc(100% - 20px), -150% calc(100% - 20px), -150% 0% ); */
+  /* clip-path: polygon(-50% 0, -50% calc(100% - 20px), 25% calc(100% - 20px), 35% 100%, 150% 100%, 150% calc(20px), calc(100% - 40px) calc(20px), 65% 0); */
+
+  /* clip-path: polygon(0% 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, 20px 100%, 0% calc(100% - 20px));
+	 */
+
+  font-family: monospace;
+  background: transparent;
+
+  /* clip-path: url(#blocksTemplatePath); */
+}
+
+.node::before {
+  clip-path: none;
+}
+
+.bad_node > .containers {
+  background: rgb(141, 12, 12);
+}
+
+.bad_node > .node-type {
+  background: rgb(141, 12, 12);
+  color: white !important;
+}
+
+.bad_node > .node-b-indent2 {
+  background: rgb(141, 12, 12);
+  color: white;
+}
+
+.node > * {
+  /* pointer-events: none; */
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.node.focused {
+  /* border: 1px red solid; */
+}
+.node.focused > .node-type {
+  background: #007eff;
+  background: #efff00cf;
+}
+
+/* NODE TOP */
+.node-type {
+  /* height: 40px; */
+  height: 20px;
+  color: whitesmoke;
+  /* line-height: 35px; */
+  padding-left: 10px;
+  font-size: 15px;
+  clip-path: url(#clipPathTemplate1);
+  background: rgb(14, 41, 49);
+
+  background: rgb(197, 247, 217);
+
+  background: rgb(255 255 255);
+  color: black;
+}
+
+.node-info {
+  height: 40px;
+  padding-left: 10px;
+  line-height: 35px;
+  background: rgb(0, 64, 82);
+  background: #84d064;
+  background: #e6eeff;
+}
+
+/* NODE CONNECTIONS */
+.containers {
+  display: flex;
+  /* pointer-events: none; */
+  /* background: #80808078; */
+  background: rgb(0, 64, 82);
+  background: #84d064;
+  background: #e6eeff;
+}
+.connection_container {
+  width: 50%;
+  /* pointer-events: none; */
+}
+.connection_container > * {
+  /* pointer-events: none; */
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.connection {
+  display: flex;
+  line-height: 20px;
+  /* background: #808080bf; */
+  border: black solid 1px;
+  pointer-events: auto;
+  background: rgb(24, 111, 138);
+  background: rgb(98, 230, 157);
+  background: rgb(98 230 157 / 30%);
+}
+.connection > * {
+  /* pointer-events: none; */
+}
+
+.connection.right {
+  text-align: right;
+}
+
+/* NODE DOWN */
+.node-b-indent1 {
+  height: 40px;
+  background: rgb(0, 64, 82);
+  background: #84d064;
+  background: #e6eeff;
+}
+
+.node-b-indent2 {
+  height: 20px;
+  background: rgb(14, 41, 49);
+  /* text-align: right; */
+  color: white;
+  padding-left: 65px;
+
+  clip-path: url(#clipPathTemplate2);
+
+  background: rgb(197 247 217);
+  color: black;
+
+  background: rgb(255 255 255);
+}
+
+.node.focused > .node-b-indent2 {
+  background: #007eff;
+  background: #efff00cf;
+}
+
+.fillText {
+  width: -webkit-fill-available;
+  width: 100%;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.c_point {
+  width: 5px;
+  height: 5px;
+  background: black;
+  margin-top: 8px;
+  box-sizing: border-box;
+}
+.SVG_LINE {
+  position: absolute;
+  overflow: visible;
+  /* width: 1px; */
+  /* height: 1px; */
+  z-index: 0;
+}
+
+.SVG_LINE:hover {
+  z-index: 1;
+}
+
+.SVG_CONTAINER {
+  position: absolute;
+  overflow: visible;
+  z-index: 0;
+}
+
+.connection_path {
+  /* z-index: 0; */
+  stroke-linecap: round;
+  cursor: default;
+  pointer-events: stroke;
+  fill: transparent;
+  stroke-width: 3;
+}
+
+.connection_path.support_path {
+  stroke-width: 14;
+  stroke: transparent;
+}
+
+.connection_path:hover {
+  /* z-index: 2; */
+}
+.connection_path.focused {
+  stroke: orange;
+}
+.fillText,
+.c_point {
+  pointer-events: none;
+}
+
+/* TOP BAR CONTAINER */
+
+#TopBar {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+
+  z-index: 1;
+  display: flex;
+  user-select: none;
+
+  background: rgb(72, 72, 104);
+  background: rgb(14 41 49);
+  background: #af9062;
+  background: #e4ceadb8;
+  color: black;
+}
+/* 
+#TopBar:hover {
+	height: 50px;
+	line-height: 50px;
+} */
+
+.NavBtn {
+  width: 85px;
+  text-align: center;
+  border-right: 1px solid black;
+  box-shadow: 0px 0px 5px 0px black;
+  /* color:#ada4a4; */
+  overflow: hidden;
+}
+
+.StoreBlock {
+  z-index: -1;
+  width: 100px;
+  height: 20px;
+  position: absolute;
+  color: transparent;
+  background: transparent;
+  transition: left 0.2s, z-index 4s;
+  overflow: hidden;
+}
+
+.StoreBlock > * {
+  top: 0;
+  width: 20px;
+  height: 18px;
+  position: absolute;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  text-align: center;
+  color: transparent;
+  background: transparent;
+  line-height: 15px;
+  font-family: monospace;
+}
+
+.StoreBlock > .Fixed {
+  left: 20px;
+}
+
+.connection.right > .StoreBlock > .Fixed {
+  left: 60px;
+}
+
+.StoreBlock:hover > * {
+  border: 1px solid black;
+  background: #808080bf;
+  background: #186f8a;
+  color: black;
+  background: rgb(98, 230, 157);
+}
+
+.connection.right > .StoreBlock.F {
+  left: 200px;
+  color: red;
+  background: #808080bf;
+  background: #186f8a;
+  z-index: 1;
+  border: 1px solid black;
+  box-sizing: border-box;
+  text-align: left;
+  overflow: visible;
+  background: rgb(98, 230, 157);
+}
+.connection > .StoreBlock.F {
+  left: -100px;
+  color: red;
+  background: #808080bf;
+  background: #186f8a;
+  z-index: 1;
+  border: 1px solid black;
+  box-sizing: border-box;
+  text-align: right;
+  overflow: visible;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: rgb(98, 230, 157);
+}
+
+.connection.right > .StoreBlock {
+  left: 100px;
+}
+.connection.right:hover > .StoreBlock {
+  left: 200px;
+  color: red;
+  background: #808080bf;
+  background: #186f8a;
+  z-index: 1;
+  border: 1px solid black;
+  box-sizing: border-box;
+  text-align: left;
+  overflow: visible;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: rgb(98, 230, 157);
+}
+.connection.right:hover > .StoreBlock > * {
+  right: 0;
+}
+
+.connection > .StoreBlock {
+  left: 0px;
+}
+.connection:hover > .StoreBlock {
+  left: -100px;
+  color: red;
+  background: #808080bf;
+  background: #186f8a;
+  z-index: 1;
+  border: 1px solid black;
+  box-sizing: border-box;
+  text-align: right;
+  overflow: visible;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: rgb(98, 230, 157);
+}
+
+.StoresBackground {
+  width: 100%;
+  height: 100%;
+  background: #000000ba;
+  z-index: 1;
+  position: absolute;
+  overflow: auto;
+  user-select: none;
+}
+
+.StoresContainer {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  left: calc(50% - 250px);
+  top: calc(50% - 250px);
+  background: #d8d8d8;
+  /* overflow: auto; */
+}
+
+.StoresContainer2 {
+  width: 100%;
+  height: calc(100% - 30px);
+  overflow: auto;
+  /* background: #459c4b; */
+}
+
+.StoreItem {
+  height: 25px;
+  line-height: 25px;
+  padding-left: 50px;
+  border-bottom: 1px solid;
+}
+
+.StoreItem:hover {
+  box-shadow: 0px 0px 20px 5px black;
+  font-weight: bold;
+}
+
+.StoreItem.Selected {
+  box-shadow: 0px 0px 20px 5px black;
+  font-weight: bold;
+  color: red;
+}
+
+.BtnChooseStore1,
+.BtnChooseStore2 {
+  position: absolute;
+  bottom: -40px;
+  height: 40px;
+  line-height: 40px;
+  width: 250px;
+  text-align: center;
+}
+
+.BtnChooseStore1 {
+  left: 0;
+  background: #459c4b;
+}
+.BtnChooseStore2 {
+  right: 0;
+  background: #9c4545;
+}
+
+.StoreRemove {
+  position: absolute;
+  border: 1px solid black;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-family: monospace;
+  transform: translateY(-24px);
+}
+
+.StoreEdit {
+  position: absolute;
+  border: 1px solid black;
+  right: 60px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-family: monospace;
+  transform: translateY(-24px);
+}
+
+.InputNewStore {
+  height: 21px;
+  padding: 0;
+}
+
+.StartNodes {
+  left: 10px !important;
+  border-color: rgb(0, 204, 255);
+}
+
+.SwitchContainer {
+  display: flex;
+  background: aliceblue;
+  height: 30px;
+}
+
+.BtnSwitch {
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  line-height: 30px;
+  border: black 1px solid;
+}
+
+.BtnSwitch:hover {
+  text-decoration: underline;
+}
+
+.DefaultsContainer {
+  width: 100%;
+  height: calc(100% - 30px);
+  /* background: #45839c; */
+}
+
+.DefaultsInput {
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.ViewView {
+  position: absolute;
+  top: -50000px;
+  left: -50000px;
+  height: 100000px;
+  width: 50300px;
+
+  /* left: 0px; */
+  /* width: 300px; */
+
+  background: rgba(128, 128, 128, 0.1);
+  background: rgb(0 64 82 / 74%);
+  background: rgb(212 220 192 / 74%);
+}
+
+.ViewArea {
+  position: absolute;
+  /* background: #459c4b44; */
+  /* background: #45469c44; */
+  /* background: #9c455844; */
+  /* background: #056f8ea1; */
+  left: -250px;
+  width: 9e10px;
+  user-select: none;
+}
+
+#MenuContainerDiv {
+  position: absolute;
+  top: 30px;
+  width: 200px;
+  background: white;
+  overflow: hidden;
+  border: 1px gray solid;
+  user-select: none;
+  z-index: 11;
+}
+
+#MenuContainerDiv > .NavBtn {
+  width: 100%;
+  text-align: left;
+  padding-left: 20px;
+  box-shadow: 0px 0px 5px 0px black;
+  border: none;
+  height: 30px;
+  line-height: 30px;
+}
+
+#MenuContainerDiv > .NavBtn:hover {
+  background: #9fac9fc9;
+  font-weight: bold;
+}
+
+.Message {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 20px;
+  z-index: 15;
+}
+
+.LoadLibBack {
+  position: absolute;
+  z-index: 11;
+  background: #808080a3;
+  width: 100%;
+  height: 100%;
+}
+
+.LoadLibContainer {
+  position: absolute;
+  width: 400px;
+  height: 600px;
+  left: calc(50% - 200px);
+  top: calc(50% - 300px);
+  background: whitesmoke;
+  padding: 10px;
+}
+
+.LoadLibTitle {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.LoadLibSubContainer {
+  overflow: auto;
+  height: calc(100% - 85px);
+  background: aliceblue;
+}
+
+.LoadLibCategoryName {
+  font-size: 20px;
+  padding: 5px 0px 10px 20px;
+}
+
+.LoadLibItem {
+  height: 45px;
+  user-select: none;
+  padding-left: 10px;
+  border-top: 1px solid #80808096;
+}
+
+.LoadLibItem:hover {
+  background: rgba(128, 128, 128, 0.5);
+}
+
+.LoadLibItem.Selected {
+  background: rgba(162, 141, 245, 0.5);
+}
+
+.LoadLibItemName {
+  font-size: 15px;
+  font-style: italic;
+  line-height: 25px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.LoadLibItemOid {
+  color: gray;
+  font-size: 12px;
+  overflow: hidden;
+  line-height: 20px;
+}
+
+.LoadLibBtnsContainer {
+  display: flex;
+  user-select: none;
+}
+
+.LoadLibBtn {
+  width: 100%;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  /* background: aqua; */
+}
+
+.NodeInputEnum {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 50%;
+}
+
+#DropHandlerView {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #808080d1;
+  z-index: 10;
+}
+
+#DropHandlerViewContainer {
+  position: absolute;
+  top: calc(50% - 200px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 200px;
+  background: #e3deded1;
+  padding: 10px;
+}
+
+#DropHandlerTitle {
+  line-height: 35px;
+  font-size: 35px;
+  /* padding: 10px; */
+}
+
+#DropHandlerInput {
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0px;
+  font-size: 25px;
+}
+
+#DropHandlerBtn {
+  text-align: center;
+  font-size: 25px;
+  border: 1px gray solid;
+  padding: 10px;
+  /* margin: 10px; */
+}
+
+.LibrariesEditorTrue {
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  width: 100%;
+  height: calc(100% - 30px);
+  background: gray;
+  z-index: 10;
+  user-select: none;
+}
+
+.LibrariesEditorFalse {
+  display: none;
+}
+
+.LibrariesEditorContainer {
+  position: absolute;
+  width: 95%;
+  height: 95%;
+  top: 2.5%;
+  left: 2.5%;
+  background: white;
+  display: flex;
+  overflow: hidden;
+}
+
+.LibrariesEditorLibrariesContainer {
+  min-width: 250px;
+  width: 250px;
+  max-width: 250px;
+  height: 100%;
+  background: #dedede;
+}
+
+.LibrariesEditorBlocksContainer {
+  min-width: 250px;
+  width: 250px;
+  max-width: 250px;
+  height: 100%;
+  /* background: aqua; */
+  background: #dedede;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+}
+
+.LibrariesEditorHeader {
+  display: flex;
+  height: 50px;
+  background: #b9b9b9;
+  font-size: 25px;
+  padding: 10px;
+  line-height: 25px;
+  border: 1px solid black;
+}
+
+.LibrariesEditorTitle {
+  width: calc(100% - 50px);
+}
+
+.LibrariesEditorBtn {
+  width: 50px;
+  text-align: center;
+  border: 1px solid;
+}
+
+.LibrariesEditorBtn:hover {
+  background: gray;
+}
+
+.LibrariesEditorBtn:active {
+  background: #272626;
+  color: white;
+}
+
+.LibrariesEditorList {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.LibrariesEditorEditContainer {
+  width: calc(100% - 500px);
+}
+
+.LibrariesEditorItem {
+  display: flex;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.LibrariesEditorItemText {
+  width: 100%;
+}
+
+.LibrariesEditorItemBtn {
+  width: 50px;
+  text-align: center;
+}
+
+.LEItemSelected {
+  background: radial-gradient(#b19dff6b, #a4b6cc94);
+}
+
+.LE_LibraryContainer {
+  margin: 10px 50px;
+}
+
+.LE_EditMainTitle {
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 30px;
+  padding-top: 15px;
+}
+
+.LE_BlockOverflov {
+  overflow: auto;
+  height: calc(100% - 110px);
+}
+
+.LE_EditPropContainer {
+  margin: 0px 30px;
+}
+
+.LE_EditTitle {
+  font-size: 15px;
+  padding-top: 15px;
+}
+
+.LE_EditInput {
+  height: 40px;
+  width: 400px;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+.LE_EditBtn {
+  border: 1px solid black;
+  width: 150px;
+  margin: 0px 40px;
+}
+
+.LE_EditBtn:hover {
+  background: #bcbbc5;
+}
+
+.LE_EditBtn:active {
+  background: gray;
+}
+
+.LE_BlockContainer {
+  margin: 0 0 10px 50px;
+  /* overflow: auto; */
+  height: calc(100% - 350px);
+  overflow: hidden;
+}
+
+.LE_BtnsContainer {
+  display: flex;
+  /* width: 500px; */
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  /* padding: 5px; */
+  margin-top: 20px;
+}
+
+.LE_InputsMainContainer {
+  margin: 0px 30px;
+}
+
+.LE_InputsContainer {
+  display: flex;
+  /* margin: 5px 5px 5px 20px; */
+  overflow: auto;
+  /* width: 100%; */
+  /* height: 40px; */
+}
+
+.LE_InputsContainer2 {
+}
+
+.LE_InputsAddContainer {
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+}
+
+.LE_InputsAddInput {
+  border-radius: 10px;
+}
+
+.LE_InputsAddBtn {
+  border: 1px solid;
+  width: 20px;
+  text-align: center;
+}
+
+.LE_InputItem {
+  background: lightblue;
+  display: flex;
+  border: 1px solid gray;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: 20px;
+  height: 30px;
+}
+
+.LE_InputTxt {
+  padding: 0px 10px;
+  width: max-content;
+}
+
+.LE_InputBtn {
+  border: 1px solid gray;
+  border-radius: 20px;
+  width: 25px;
+  text-align: center;
+  line-height: 25px;
+}
+
+.LE_InputBtn:hover {
+  background: #4f596b;
+  color: white;
+}
+
+.LE_EditTxtArea {
+  width: 100%;
+  height: 200px;
+}
+
+.LE_EditBr {
+  border-bottom: 2px #808080b0 solid;
+  margin: 20px;
+  padding: 10px;
+}
+
+.LE_EnumMainContainer {
+  margin: 0px 30px;
+}
+
+.LE_EditTitle {
+  font-weight: bold;
+}
+
+.LE_EnumsList {
+  line-height: 30px;
+  /* border: 1px solid; */
+  /* padding: 10px; */
+  text-align: center;
+}
+
+.LE_EditTitle2 {
+}
+
+.LE_EditInputAdd {
+  border-radius: 10px;
+  width: 200px;
+}
+
+.LE_EditBtnAdd {
+  width: 20px;
+  text-align: center;
+  border: 1px solid;
+}
+
+.LE_EnumContainer {
+  display: flex;
+  /* border: 1px solid; */
+  font-size: 20px;
+  /* margin: 10px; */
+  padding: 0px 0px 0px 10px;
+}
+
+.LE_EnumContainer2 {
+  display: flex;
+  /* border: 1px solid; */
+  height: 30px;
+  line-height: 30px;
+  background: #acd8e6;
+}
+
+.LE_EnumTxt {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.LE_EnumBtnDel {
+  width: 15px;
+  border: 1px solid;
+}
+
+.LE_EnumBtnDel:hover {
+  background: #4f596b;
+  color: white;
+}
+
+.LE_EnumBtnAdd {
+  width: 30px;
+  height: 30px;
+  border: 1px solid;
+}
+
+.LE_EnumBtnAdd:hover {
+  background: gray;
+}
+
+.LE_EnumListContainer {
+  display: flex;
+  padding: 0 10px;
+  overflow: auto;
+}
+
+.LE_EnumValItem {
+  display: flex;
+  border: 1px solid;
+  border-radius: 10px;
+  margin-right: 10px;
+  background: lightsteelblue;
+}
+
+.LE_EnumValTxt {
+  width: max-content;
+  padding: 0 5px;
+}
+
+.LE_EnumValBtn {
+  width: 20px;
+  border: 1px solid;
+  border-radius: 17px;
+}
+
+.LE_EnumValBtn:hover {
+  background: #2c2348e8;
+  color: whitesmoke;
+}
+
+.LE_EnumValInputAdd {
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.LE_EnumAddValContainer {
+  display: flex;
+  padding: 0 0 0 10px;
+}
+
+.LE_Dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #808080cc;
+  z-index: 11;
+}
+
+.LE_DialogContainer {
+  position: absolute;
+  width: 400px;
+  height: 150px;
+  background: whitesmoke;
+  padding: 25px;
+  left: calc(50% - 200px);
+  top: calc(50% - 75px);
+}
+
+.LE_DialogTitle {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.LE_DialogInput {
+  width: 100%;
+  height: 30px;
+}
+
+.LE_DialogBtnC {
+  display: flex;
+  padding: 10px 0 0 0;
+  width: 100%;
+}
+
+.LE_DialogBtn {
+  width: 150px;
+  height: 30px;
+  border: 1px solid;
+  text-align: center;
+  line-height: 30px;
+  width: 100%;
+}
+
+.LanguageSelect {
+}
+
+#LeftPanel {
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  width: 200px;
+  overflow: auto;
+  background: #49879b;
+  /* background: #ffffff; */
+  z-index: 10;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+
+  transition: width 2s, height 0.5s, border-radius 1s, top 1s;
+}
+
+#LeftPanelControlBtn {
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.LeftPanelView {
+  height: 100%;
+}
+
+.LeftPanelHide {
+  top: 40px !important;
+  width: 80px !important;
+  height: 30px;
+  border-radius: 10px;
+  text-indent: 0px;
+  line-height: normal;
+  overflow: hidden !important;
+}
+
+.TabBtnsContainer {
+  display: flex;
+  height: 40px;
+  overflow: hidden;
+  line-height: 40px;
+  text-align: center;
+  border-top: 1px black solid;
+  border-bottom: 1px black solid;
+}
+
+.TabBtnsContainer > * {
+  width: 100%;
+}
+
+.TabContainer {
+  height: 50%;
+  overflow: hidden;
+}
+
+.TabContainer > * {
+  height: 100%;
+}
+
+.LVMainContainer {
+  height: 100%;
+}
+
+.RightTopContainer {
+  overflow: auto;
+}
+
+.RightTopContainer.Main {
+  display: none;
+}
+
+.BtnAddLogic {
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  font-size: 20px;
+  border: 1px gray solid;
+}
+
+.ListLogicsCon {
+  padding-top: 10px;
+  height: 100%;
+}
+
+.ConnectionContainer {
+}
+
+.DialogEditorBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #88888870;
+}
+
+.DialogEditorContainer {
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 250px);
+  width: 500px;
+  height: 200px;
+  background: #ffffffce;
+  padding: 15px;
+}
+
+.DialogEditorTitle {
+  font-size: 25px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.DialogEditorInput {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+}
+
+.DialogEditorBtns {
+  width: 100%;
+  height: 50px;
+  padding-top: 15px;
+  display: flex;
+}
+
+.DialogEditorBtn {
+  height: 50px;
+  width: 50%;
+  text-align: center;
+  font-size: 25px;
+  line-height: 50px;
+}
+
+.DialogEditorBtn:hover {
+  background: #bdbcbc;
+}
+
+.LogicItem {
+  height: 30px;
+  line-height: 30px;
+  text-indent: 15px;
+  font-size: 20px;
+}
+
+.LogicItem.selected {
+  background: #00000038;
+}
+
+.ConnectionItem {
+  display: flex;
+  height: 40px;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.ConnectionItemTxt {
+  width: 100%;
+  font-weight: bold;
+  text-indent: 10px;
+}
+
+.ConnectionItemTxt2 {
+  width: 100%;
+  text-indent: 20px;
+}
+
+.ConnectionItemBtn {
+  width: 25px;
+  border: 1px solid black;
+  margin: 1px 5px 0 1px;
+  height: 36px;
+  text-align: center;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.menu-block {
+  position: absolute;
+  top: 20px;
+  background: white;
+  width: 100%;
+  overflow: hidden;
+}
+
+.menu-item {
+  border: 1px solid;
+  height: 25px;
+  line-height: 25px;
+  margin: 5px;
+}
+
+/* RIGHT PANEL */
+#RightPanel {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 200px;
+  overflow: auto;
+  background: #49879b;
+  /* background: #ffffff; */
+  z-index: 10;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+  transition: width 2s, height 0.5s, border-radius 1s, top 1s;
+}
+.RightPanelView {
+  height: 100%;
+}
+.RightPanelHide {
+  top: 40px !important;
+  width: 80px !important;
+  height: 30px;
+  border-radius: 10px;
+  text-indent: 0px;
+  line-height: normal;
+  overflow: hidden !important;
+}
+
+#RightPanelControlBtn {
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.RVMainContainer {
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.PropertyName {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.PropertyType {
+  font-size: 15px;
+  font-style: italic;
+}
+
+.ProperyValueContainer {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.PropertyValueDef {
+  width: 100%;
+}
+
+.PropertyTypeBtn {
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 30px;
+  /* width: 30px; */
+}
+
+.PropertyValueStore {
+  width: 148px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #523737;
+  border-right: none;
+}
+
+.PropertyValueStoreBtn {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #333232;
+}

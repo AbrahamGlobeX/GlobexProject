@@ -1,0 +1,70 @@
+:root {
+	--input-space: 10px;
+}
+
+.WidgetInput {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.WidgetInputText {
+	height: 60%;
+	outline: none;
+	font-size: inherit;
+	background-color: transparent;
+	padding: 0 var(--input-space);
+	border: none;
+	border-bottom: 1px solid #757575;
+}
+
+.WidgetInputHeader {
+	color: #999;
+	font-size: x-small;
+	transition: 0.2s ease all;
+	-moz-transition: 0.2s ease all;
+	width: 100%;
+	height: 40%;
+	overflow: hidden;
+	margin-left: 5px;
+}
+
+.WidgetInputText:focus ~ .WidgetInputHeader, .WidgetInputText:valid ~ .WidgetInputHeader {
+	top: 0;
+	left: 0;
+	color: var(--color);
+}
+
+.WidgetInputBar {
+	position:relative;
+	display:block;
+	margin-bottom: 2px;
+}
+
+.WidgetInputBar:before, .WidgetInputBar:after {
+	content: '';
+	height: 2px;
+	top: 0;
+	width: 0;
+	bottom: 1px;
+	position: absolute;
+	background: var(--main-color);
+	transition: 0.2s ease all;
+}
+
+.WidgetInputBar:before {
+	left: 50%;
+}
+
+.WidgetInputBar:after {
+	right: 50%;
+}
+
+.WidgetInputText:focus ~ .WidgetInputBar:before, .WidgetInputText:focus ~ .WidgetInputBar:after {
+	width: 50%;
+}
+
+.Invalid {
+	border: 1px solid red;
+	color : rgba(255, 0, 0, 1) !important;
+}

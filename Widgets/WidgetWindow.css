@@ -1,0 +1,157 @@
+:root {
+	--border-window: 10px;
+}
+
+.WidgetWindow {
+	background-color   : transparent;
+	transition         : opacity .25s ease-in-out;
+	-moz-transition    : opacity .25s ease-in-out;
+	-webkit-transition : opacity .25s ease-in-out;
+	box-sizing: border-box;
+}
+
+.WidgetWindowContainer {
+	width          : 100%;
+	height         : 100%;
+	/*overflow       : auto;*/
+	display        : flex;
+	flex-direction : column;
+	justify-content: center;
+	align-items: center;
+}
+
+.WidgetWindowContainer > * {
+	width  : 100% !important;
+	height : 100% !important;
+}
+
+.WidgetWindowLeftButtonsContainer {
+	display    : inline-block;
+	left       : 10px;
+	margin     : 0;
+	text-align : center;
+}
+
+.WidgetWindowHeaderTextContainer {
+	position   : absolute;
+	top        : 50%;
+	left       : 50%;
+	transform  : translate(-50%, -50%);
+	width      : 50%;
+	height     : 100%;
+	text-align : center;
+	display    : flex;
+}
+
+.WidgetWindowRightButtonsContainer {
+	display    : inline-block;
+	position   : absolute;
+	right      : 10px;
+	margin     : 0;
+	text-align : center;
+}
+
+.withoutHeader > .TopBar {
+	display: none;
+}
+
+.WindowContent {
+	border-radius    : 3px;
+	background-color : rgb(250, 250, 250);
+	width            : calc(100% - (2 * var(--border-window)));
+	height           : calc(100% - (2 * var(--border-window)));
+	position         : relative;
+	top              : var(--border-window);
+	left             : var(--border-window);
+}
+
+.WindowContent > .WidgetLayout {
+	width: 100%;
+}
+
+.TopBar {
+	color                   : white;
+	border-top-left-radius  : 3px;
+	border-top-right-radius : 3px;
+	padding                 : 2px 6px 2px 6px;
+	position                : relative;
+	cursor                  : default;
+	background-color        : var(--main-color-dark);
+	overflow                : hidden;
+}
+
+.TopBar:active {
+	cursor:move;
+}
+
+.WidgetWindowLeftButton {
+	font-family      : "Material Icons";
+	height           : 15px;
+	width            : 15px;
+	margin-left      : 4px;
+	border-radius    : 7px;
+	display          : inline-block;
+	background-color : var(--main-color-light);
+	font-size        : 15px;
+}
+
+.XBtn, .MaxBtn, .MinBtn {
+	font-family      : "Material Icons";
+	height           : 15px;
+	width            : 15px;
+	margin-left      : 4px;
+	border-radius    : 7px;
+	display          : inline-block;
+	background-color : var(--main-color-light);
+	font-size        : 15px;
+}
+
+.MaxBtn:hover, .XBtn:hover, .MinBtn:hover, .WidgetWindowLeftButton:hover{
+	cursor: default;
+	filter: brightness(50%) !important;
+}
+
+.HeaderTextWindow {
+	overflow: hidden;
+	justify-content: center;
+	align-items: center;
+}
+
+.IconTextWindow {
+	line-height: 140%;
+	height: 100%;
+	overflow: hidden;
+	font-family: "Material Icons";
+}
+
+.WindowHeader{
+	width: 100%;
+}
+
+.WidgetWindowActive{
+	z-index: 200;
+}
+
+.ProjectionWindow{
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	background : rgba(200, 200, 200, 0.2);
+	border : solid rgba(200, 200, 200, 0.5) 1px;
+	box-shadow :  var(--elevation-24);
+	border-radius : 5px;
+	position : absolute;
+	/*transition: opacity .25s ease-in-out;*/
+	/*transition: width .5s;*/
+	/*-moz-transition: opacity .25s ease-in-out;*/
+	/*-webkit-transition: opacity .25s ease-in-out;*/
+}
+
+.WindowMovingShielding {
+	position         : absolute;
+	top              : 0;
+	width            : 100%;
+	height           : 100%;
+	background-color : transparent;
+}

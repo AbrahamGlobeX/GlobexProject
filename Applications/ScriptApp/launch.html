@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <script src="compiled_app.js" > </script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.js" integrity="sha256-MwqiltuWhN7+rUTHBqWOXez3Vr7J8BFXoYhK/npJIno="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/Flux.min.js" integrity="sha256-s0U4ejtXg27GJfqbun0DwJURbUtmlUPpiXNbOxz/URU="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/FluxUtils.js" integrity="sha256-ieefu7GXeZr3uslI6Q3tzuuaIN5MHn92x8VQeTw9OMA="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flux/3.1.3/FluxUtils.min.js" integrity="sha256-Wxj6RfZBJPdy9niOhznU7KZNaohxZrhhsfrpDh3mJQI="
+        crossorigin="anonymous"></script> -->
+    
+    <link rel="stylesheet" type="text/css" href="../../ScriptEditor/Styles.css">
+    <link rel="stylesheet" type="text/css" href="../../ScriptEditor/style2.css">
+
+	<!-- WIDGETS -->
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetButton.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetTab.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetTextArea.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetTable.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetSideBars.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetMessagesViewer.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetContacts.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetLoading.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetLabel.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetInput.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetWindow.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetLayout.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetLayoutGrid.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetLayoutFlex.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetDialog.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetComboBox.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetCalendar.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetTree.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetTreeOLD.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetCheckBox.css">
+    <link rel="stylesheet" type="text/css" href="GeoMap/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="../../Widgets/WidgetFrame.css">
+    
+
+    <script type="text/babel" src='../../Widgets/BaseWidgetComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetButtonComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetTabComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetTextAreaComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetTableComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetSideBarsComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetMessagesViewerComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetContactsComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLoadingComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLabelComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetInputComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetSpinBoxComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLayoutComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLayoutGridComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLayoutFlexComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLayoutVerticalComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetLayoutHorizontalComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetWindowComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetDialogComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetComboBoxComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetCalendarComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetTreeComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetCheckBoxComponent.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetGeoMapComponent.js'></script>
+
+    <script src='GeoMap/geoMap/leaflet/leaflet-src.js'></script>
+    <script src='GeoMap/geoMap/leaflet/plugins/textPath.js'></script>
+    <script src='GeoMap/geoMap/leaflet/plugins/leafletGoogleMutant.js'></script>
+    <script src='GeoMap/geoMap/leaflet/plugins/polylineDecorator.js'></script>
+    <script src='GeoMap/geoMap/GeoMapChecker.js'></script>
+    <script src='GeoMap/geoMap/providers/ProviderLayers.js'></script>
+    <script src='GeoMap/geoMap/providers/ProviderControls.js'></script>
+    <script src='GeoMap/geoMap/GeoObject.js'></script>
+    <script src='GeoMap/geoMap/GeoLayerObject.js'></script>
+    <script src='GeoMap/geoMap/GeoMap.js'></script>
+    <script src='GeoMap/geoMap/styles/GeoStyle.js'></script>
+    <script src='GeoMap/geoMap/styles/icons/GeoIcon.js'></script>
+    <script src='GeoMap/geoMap/styles/icons/GeoImageIcon.js'></script>
+    <script src='GeoMap/geoMap/styles/icons/GeoHtmlIcon.js'></script>
+    <script src='GeoMap/geoMap/styles/geometries/GeoPolygonStyle.js'></script>
+    <script src='GeoMap/geoMap/styles/geometries/GeoRectangleStyle.js'></script>
+    <script src='GeoMap/geoMap/styles/geometries/GeoCircleStyle.js'></script>
+    <script src='GeoMap/geoMap/styles/geometries/GeoLineStyle.js'></script>
+    <script src='GeoMap/geoMap/styles/GeoFont.js'></script>
+    <script src='GeoMap/geoMap/styles/GeoLineText.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/GeoMapObject.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/tooltips/GeoTooltip.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/tooltips/GeoMapPopup.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/tooltips/GeoMapTooltip.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/GeoMapMarker.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoMapGeometry.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoMapLine.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoMapPolygon.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoMapRectangle.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoCircle.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoPixelCircle.js'></script>
+    <script src='GeoMap/geoMap/geoMapObjects/geometries/GeoMeterCircle.js'></script>
+    <script src='GeoMap/geoMap/GeoManager.js'></script>
+    <script type="text/babel" src='../../Widgets/WidgetFrameComponent.js'></script>
+
+    <!-- THClient -->
+    <script src='../../THClient/THManager.js'></script>
+
+	<!-- Script editor -->
+	<script src='../../ScriptEditor/library.js'></script>
+	<script src='InitLaunch.js'></script>
+	<script src='UILaunch.js'></script>
+	<script src='../../ScriptEditor/Node.js'></script>
+	<script src='../../ScriptEditor/Connection.js'></script>
+	<script src='DBWorkerLaunch.js'></script>
+	<script src='LibraryControllerLaunch.js'></script>
+	<script src='../../ScriptEditor/NotificationManger.js'></script>
+	<script src='LibrariesEditorLaunch.js'></script>
+	<script src='../../ScriptEditor/TranslateModule.js'></script>
+    <script src='../../ScriptEditor/LogicNode.js'></script>
+	<script src='../../ScriptEditor/LogicsController.js'></script>
+
+    <!-- Form editor -->
+        <!-- bootstrap -->
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+            integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+             crossorigin="anonymous"></script>
+
+        
+    <script type="text/babel" src='../../Widgets/WidgetsComponentsTypes.js'></script>
+    <script src='Components/AppRootComponent.js'></script>
+        
+        <!-- treeview -->
+        <link href="../../FormEditor/View/Bootstrap/Style/bootstrap-treeview.min.css" rel="stylesheet">
+        <script src="../../FormEditor/View/Bootstrap/bootstrap-treeview.min.js"></script>
+
+        <link rel="stylesheet" href="../../FormEditor/View/Style/style.css">
+
+        <script src="../../FormEditor/Model/microevent.js"></script>
+        <script src="../../FormEditor/Model/BaseModel.js"></script>
+        
+        <script src="../../FormEditor/Model/Component/Property/ComponentPropertyModel.js"></script>
+        <script src="../../FormEditor/Model/Component/Property/EnumComponentPropertyModel.js"></script>
+
+        <script src="../../FormEditor/Model/Component/BaseComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/TextComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/ContainerComponentModel.js"></script>
+
+        <script src="../../FormEditor/Model/Component/ConcreteComponents/ButtonComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/ConcreteComponents/CheckboxComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/ConcreteComponents/DivComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/ConcreteComponents/InputComponentModel.js"></script>
+        <script src="../../FormEditor/Model/Component/ConcreteComponents/LabelComponentModel.js"></script>
+        
+        <script src="../../FormEditor/Model/Component/ComponentsModel.js"></script>
+        
+
+        <script src="../../FormEditor/Model/Form/FormModel.js"></script>
+        <script src="../../FormEditor/Model/Form/ComponentSelectorModel.js"></script>
+        <script src="../../FormEditor/Model/MainModel.js"></script>
+
+        
+        <script src="../../FormEditor/View/BaseView.js"></script>
+        <script src="../../FormEditor/View/ComponentToolboxView.js"></script>
+        <script src="../../FormEditor/View/ComponentTreeView.js"></script>
+        <script src="../../FormEditor/View/Components/AppComponent.js" type="text/babel"></script>
+        <script src="../../FormEditor/View/Components/FormRootComponent.js" type="text/babel"></script>
+
+        <script src="../../FormEditor/View/ComponentWrappers.js"></script>
+        <script src="../../FormEditor/View/ComponentResizersView.js"></script>
+        <script src="../../FormEditor/View/ComponentSelectorView.js"></script>
+        
+        <script src="../../FormEditor/View/FormEditFieldView.js"></script>
+        <script src="../../FormEditor/View/Properties/PropertyBlockView.js"></script>
+        <script src="../../FormEditor/View/Properties/ConcretePropertyViews/InputPropertyView.js"></script>
+        <script src="../../FormEditor/View/Properties/ConcretePropertyViews/SpinBoxPropertyView.js"></script>
+        <script src="../../FormEditor/View/Properties/ConcretePropertyViews/ColorPropertyView.js"></script>
+        <script src="../../FormEditor/View/Properties/ConcretePropertyViews/CheckBoxPropertyView.js"></script>
+        <script src="../../FormEditor/View/Properties/ConcretePropertyViews/DropDownPropertyView.js"></script>
+        
+        <script src="../../FormEditor/View/Properties/PropertiesBlockView.js"></script>
+        <script src="../../FormEditor/View/CenterBlockView.js" type="text/babel"></script>
+        <script src="../../FormEditor/View/HeaderMenuView.js"></script>
+        <script src="../../FormEditor/View/MainView.js" type="text/babel"></script>
+
+        <script src="../../FormEditor/Controller/AddComponentController.js"></script>
+        <script src="../../FormEditor/Controller/DeleteComponentController.js"></script>
+        <script src="../../FormEditor/Controller/CopyPasteComponentController.js"></script>
+        <script src="../../FormEditor/Controller/ComponentPropertiesController.js"></script>
+        <script src="../../FormEditor/Controller/ComponentSelectionController.js"></script>
+        <script src="../../FormEditor/Controller/ComponentResizeController.js"></script>
+        
+        <script src="../../FormEditor/Controller/MainController.js"></script>
+
+        <script src="../../FormEditor/FormEditorApp.js" type="text/babel"></script>
+
+</head>
+
+<body>
+
+    <script src = 'microevent.js'></script>
+    <script src = 'ListActs.js'></script>
+
+    <script type="text/babel" src='JSPart.js'></script>
+	<script src='testScript.js'></script>
+	    
+    <script src='JSBlockFunctionLoader.js'></script>
+
+    <!-- <div id= "container" ></div> -->
+    <div id="root" style="display: inline-block;"></div>
+    
+    <script src='ScriptAppMainLaunch.js'></script>
+
+    <script>
+    
+        function waitWasmInited() {
+            
+            if(typeof Module == 'undefined' || typeof Module.Store == 'undefined') {
+
+                setTimeout(waitWasmInited, 100);
+
+            } else {
+
+                init();
+
+                App.run();
+            }
+        }
+
+        waitWasmInited();
+
+   </script>
+
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+:root {
+    --color-incoming-messages: "#D9EDF7";
+    --color-outgoing-messages: "#F7F7F9";
+    --color-text-messages: "black";
+    --color-sender-name: "red";
+    /*--color-date: "#89b8b9";*/
+    --color-date: "transparent";
+}
+
+
+.WidgetMessagesViewer {
+    background-color: #B0BEC5;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.MessagesContainer {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background: no-repeat center;
+    background-size: cover;
+}
+
+.MessagesViewerDateContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.MessagesViewerDate {
+    background-color: var(--color-date);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.MessageContainer {
+    width: calc(100% - 10px);
+    height: max-content;
+    margin: 5px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    color: var(--color-text-messages);
+}
+
+.IncomingMessage {
+    max-width: 80%;
+    text-align: left;
+    /*background-color: #3dcccc;*/
+    background-color: var(--color-incoming-messages);
+    width: max-content;
+    border-radius: 10px;
+    position: relative;
+}
+
+.IncomingMessage:after, .IncomingMessage:before {
+    left: -16px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.IncomingMessage:after {
+    border-color: transparent;
+    border-right-color: var(--color-incoming-messages);
+    border-width: 9px;
+    top: calc(100% - 23px);
+    /*margin-top: -18px;*/
+}
+.IncomingMessage:before {
+    border-color: transparent;
+    border-right-color: var(--color-incoming-messages);
+    border-width: 10px;
+    top: calc(100% - 24px);
+    /*margin-top: -19px;*/
+}
+
+.OutgoingMessage {
+    max-width: 80%;
+    text-align: right;
+    /*background-color: mediumaquamarine;*/
+    background-color: var(--color-outgoing-messages);
+    width: max-content;
+    border-radius: 10px;
+    position: relative;
+}
+
+.OutgoingMessage:after, .OutgoingMessage:before {
+    left: calc(100% - 2px);
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.OutgoingMessage:after {
+    border-color: transparent;
+    border-left-color: var(--color-outgoing-messages);
+    border-width: 9px;
+    top: calc(100% - 25px);
+    /*margin-top: -18px;*/
+}
+.OutgoingMessage:before {
+    border-color: transparent;
+    border-left-color: var(--color-outgoing-messages);
+    border-width: 10px;
+    top: calc(100% - 25px);
+    /*margin-top: -19px;*/
+}
+
+.MessageSendersName {
+    text-align: right;
+    font-size: 12px;
+    color: var(--color-sender-name);
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.MessageTime {
+    color: dimgray;
+    font-size: 12px;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.MessageText {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.MessageStatusContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.MessageDelivered {
+    font-family: "Material Icons";
+    color: dimgray;
+    margin-right: 3px;
+}
+
+.AvatarMessage {
+    width: 50px;
+    height: 50px;
+
+    background: no-repeat center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-size: cover;
+
+    border-radius: 50%;
+    margin: 2px;
+}
+
+

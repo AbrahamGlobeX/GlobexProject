@@ -1,0 +1,596 @@
+:root {
+    --wl-background-color-main: rgba(50, 50, 50, 0.8);
+    --wl-background-color-main-non-opacity: rgb(50, 50, 50);
+
+    --wl-progress-color: rgb(38,37,38);
+    --wl-color-dots: #00FF;
+    --wl-color-Text: #FFFFFF;
+}
+
+.loader-header {
+    font-size: 4em;
+    color: white;
+    text-align: center;
+    margin-top: 4em;
+    font-family: 'Roboto';
+}
+
+.cs-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--wl-background-color-main);
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+}
+
+.cs-loader-with-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--wl-background-color-main);
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+}
+
+.cs-loader-inner {
+    top: 50%;
+    position: absolute;
+    width: calc(100% - 100px);
+    color: var(--wl-color-dots);
+    padding: 0 50px;
+    text-align: center;
+    left: 0;
+}
+
+.cs-loader-inner-with-progress {
+    width: calc(100% - 100px);
+    color: var(--wl-color-dots);
+    padding: 0 50px;
+    text-align: center;
+}
+
+.cs-loader-inner label, .cs-loader-inner-with-progress label {
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	height: 0;
+	width: 21px;
+    /* font-size: 20px;
+    opacity: 0; */
+    display: inline-block;
+    /* font-family: "Material Icons"; */
+}
+
+
+@keyframes lol {
+    0% {
+        opacity: 1;
+        /* opacity: 0; */
+        /* transform: translateX(-300px); */
+    }
+    33% {
+        opacity: 1;
+        /* transform: translateX(0px); */
+    }
+    66% {
+        opacity: 1;
+        /* transform: translateX(0px); */
+    }
+    100% {
+        opacity: 1;
+        /* opacity: 0; */
+        /* transform: translateX(300px); */
+    }
+}
+
+@-webkit-keyframes lol {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateX(-300px);
+    }
+    33% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+    }
+    66% {
+        opacity: 1;
+        -webkit-transform: translateX(0px);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateX(300px);
+    }
+}
+
+/* .cs-loader-inner label:nth-child(8), .cs-loader-inner-with-progress label:nth-child(8) {
+    -webkit-animation: lol 3s infinite ease-in-out;
+    animation: lol 3s infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(7), .cs-loader-inner-with-progress label:nth-child(7) {
+    -webkit-animation: lol 3s 100ms infinite ease-in-out;
+    animation: lol 3s 100ms infinite ease-in-out;
+}
+
+
+.cs-loader-inner label:nth-child(6), .cs-loader-inner-with-progress label:nth-child(6) {
+    -webkit-animation: lol 3s 200ms infinite ease-in-out;
+    animation: lol 3s 200ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(5), .cs-loader-inner-with-progress label:nth-child(5) {
+    -webkit-animation: lol 3s 300ms infinite ease-in-out;
+    animation: lol 3s 300ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(4), .cs-loader-inner-with-progress label:nth-child(4) {
+    -webkit-animation: lol 3s 400ms infinite ease-in-out;
+    animation: lol 3s 400ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(3), .cs-loader-inner-with-progress label:nth-child(3) {
+    -webkit-animation: lol 3s 500ms infinite ease-in-out;
+    animation: lol 3s 500ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(2), .cs-loader-inner-with-progress label:nth-child(2) {
+    -webkit-animation: lol 3s 600ms infinite ease-in-out;
+    animation: lol 3s 600ms infinite ease-in-out;
+}
+
+.cs-loader-inner label:nth-child(1), .cs-loader-inner-with-progress label:nth-child(1) {
+    -webkit-animation: lol 3s 700ms infinite ease-in-out;
+    animation: lol 3s 700ms infinite ease-in-out;
+} */
+
+/* .cs-loader-inner label, .cs-loader-inner-with-progress label {
+    -webkit-animation: lol 2s infinite ease-in-out;
+    animation: lol 2s infinite ease-in-out;
+} by Kuznya */
+
+.progress-pie-chart {
+    min-width: 46px;
+    min-height: 46px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: var(--wl-background-color-main-non-opacity);
+    position: relative;
+}
+
+.progress-pie-chart.gt-50 {
+    background-color: var(--wl-progress-color);
+}
+
+.ppc-progress {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 100%;
+    height: 100%;
+    min-width: 46px;
+    min-height: 46px;
+    clip: rect(0, 200px, 200px, 100px);
+}
+
+.ppc-progress .ppc-progress-fill {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    min-width: 46px;
+    min-height: 46px;
+    clip: rect(0, 100px, 200px, 0);
+    background: var(--wl-progress-color);
+    transform: rotate(60deg);
+}
+
+.gt-50 .ppc-progress {
+    clip: rect(0, 100px, 200px, 0);
+}
+
+.gt-50 .ppc-progress .ppc-progress-fill {
+    clip: rect(0, 200px, 200px, 100px);
+    background: var(--wl-background-color-main-non-opacity);
+}
+
+.ppc-percents {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    left: calc(50% - 173.9130434783px / 2);
+    top: calc(50% - 173.9130434783px / 2);
+    width: 173.9130434783px;
+    height: 173.9130434783px;
+    min-width: 35px;
+    min-height: 35px;
+    background: var(--wl-background-color-main);
+    text-align: center;
+    display: table;
+}
+
+.ppc-percents span {
+    display: block;
+    font-size: 2.6em;
+    font-weight: bold;
+    color: var(--wl-progress-color);
+}
+
+.pcc-percents-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.progress-pie-chart {
+    margin: 50px auto 0;
+}
+
+/*New view loading*/
+.cssload-container *, .cssload-container *:before, .cssload-container *:after{
+	box-sizing: border-box;
+		-o-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+}
+
+.cssload-container {
+	width: 550px;
+	height: 16px;
+}
+
+.cssload-container > div {
+	float: left;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	height: 0;
+	width: 27px;
+	display: inline-block;
+}
+
+.cssload-container > label {
+	font-family : "Arial";
+	font-size : 24px;
+	min-height: 20px;
+	text-align: center;
+	display: block;
+}
+
+.cssload-container .cssload-shaft1 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+
+	animation-delay: 0.08s;
+		-o-animation-delay: 0.08s;
+		-ms-animation-delay: 0.08s;
+		-webkit-animation-delay: 0.08s;
+		-moz-animation-delay: 0.08s;
+}
+.cssload-container .cssload-shaft2 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.16s;
+		-o-animation-delay: 0.16s;
+		-ms-animation-delay: 0.16s;
+		-webkit-animation-delay: 0.16s;
+		-moz-animation-delay: 0.16s;
+}
+.cssload-container .cssload-shaft3 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 0.24s;
+		-o-animation-delay: 0.24s;
+		-ms-animation-delay: 0.24s;
+		-webkit-animation-delay: 0.24s;
+		-moz-animation-delay: 0.24s;
+}
+.cssload-container .cssload-shaft4 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.32s;
+		-o-animation-delay: 0.32s;
+		-ms-animation-delay: 0.32s;
+		-webkit-animation-delay: 0.32s;
+		-moz-animation-delay: 0.32s;
+}
+.cssload-container .cssload-shaft5 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 0.4s;
+		-o-animation-delay: 0.4s;
+		-ms-animation-delay: 0.4s;
+		-webkit-animation-delay: 0.4s;
+		-moz-animation-delay: 0.4s;
+}
+.cssload-container .cssload-shaft6 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.48s;
+		-o-animation-delay: 0.48s;
+		-ms-animation-delay: 0.48s;
+		-webkit-animation-delay: 0.48s;
+		-moz-animation-delay: 0.48s;
+}
+.cssload-container .cssload-shaft7 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 0.56s;
+		-o-animation-delay: 0.56s;
+		-ms-animation-delay: 0.56s;
+		-webkit-animation-delay: 0.56s;
+		-moz-animation-delay: 0.56s;
+}
+.cssload-container .cssload-shaft8 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.64s;
+		-o-animation-delay: 0.64s;
+		-ms-animation-delay: 0.64s;
+		-webkit-animation-delay: 0.64s;
+		-moz-animation-delay: 0.64s;
+}
+.cssload-container .cssload-shaft9 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 0.72s;
+		-o-animation-delay: 0.72s;
+		-ms-animation-delay: 0.72s;
+		-webkit-animation-delay: 0.72s;
+		-moz-animation-delay: 0.72s;
+}
+.cssload-container .cssload-shaft10 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.8s;
+		-o-animation-delay: 0.8s;
+		-ms-animation-delay: 0.8s;
+		-webkit-animation-delay: 0.8s;
+		-moz-animation-delay: 0.8s;
+}
+.cssload-container .cssload-shaft11 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+
+	animation-delay: 0.88s;
+		-o-animation-delay: 0.88s;
+		-ms-animation-delay: 0.88s;
+		-webkit-animation-delay: 0.88s;
+		-moz-animation-delay: 0.88s;
+}
+.cssload-container .cssload-shaft12 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 0.96s;
+		-o-animation-delay: 0.96s;
+		-ms-animation-delay: 0.96s;
+		-webkit-animation-delay: 0.96s;
+		-moz-animation-delay: 0.96s;
+}
+.cssload-container .cssload-shaft13 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 1.04s;
+		-o-animation-delay: 1.04s;
+		-ms-animation-delay: 1.04s;
+		-webkit-animation-delay: 1.04s;
+		-moz-animation-delay: 1.04s;
+}
+.cssload-container .cssload-shaft14 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 1.12s;
+		-o-animation-delay: 1.12s;
+		-ms-animation-delay: 1.12s;
+		-webkit-animation-delay: 1.12s;
+		-moz-animation-delay: 1.12s;
+}
+.cssload-container .cssload-shaft15 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 1.2s;
+		-o-animation-delay: 1.2s;
+		-ms-animation-delay: 1.2s;
+		-webkit-animation-delay: 1.2s;
+		-moz-animation-delay: 1.2s;
+}
+.cssload-container .cssload-shaft16 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 1.28s;
+		-o-animation-delay: 1.28s;
+		-ms-animation-delay: 1.28s;
+		-webkit-animation-delay: 1.28s;
+		-moz-animation-delay: 1.28s;
+}
+.cssload-container .cssload-shaft17 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 1.36s;
+		-o-animation-delay: 1.36s;
+		-ms-animation-delay: 1.36s;
+		-webkit-animation-delay: 1.36s;
+		-moz-animation-delay: 1.36s;
+}
+.cssload-container .cssload-shaft18 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 1.44s;
+		-o-animation-delay: 1.44s;
+		-ms-animation-delay: 1.44s;
+		-webkit-animation-delay: 1.44s;
+		-moz-animation-delay: 1.44s;
+}
+.cssload-container .cssload-shaft19 {
+    	animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-top 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-top 3.2s infinite ease-in-out;
+	animation-delay: 1.52s;
+		-o-animation-delay: 1.52s;
+		-ms-animation-delay: 1.52s;
+		-webkit-animation-delay: 1.52s;
+		-moz-animation-delay: 1.52s;
+}
+.cssload-container .cssload-shaft20 {
+    	animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-o-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-ms-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-webkit-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+		-moz-animation: cssload-wave-bottom 3.2s infinite ease-in-out;
+	animation-delay: 1.6s;
+		-o-animation-delay: 1.6s;
+		-ms-animation-delay: 1.6s;
+		-webkit-animation-delay: 1.6s;
+		-moz-animation-delay: 1.6s;
+}
+
+.cssload-container > div {
+	transform: translateY"("-59px")";
+		-o-transform: translateY"("-59px")";
+		-ms-transform: translateY"("-59px")";
+		-webkit-transform: translateY"("-59px")";
+		-moz-transform: translateY"("-59px")";
+}
+
+
+
+@keyframes cssload-wave-bottom {
+	50% {
+        border-bottom-color: var(--wl-color-dots);
+		transform: translateY"("59px")";
+	}
+}
+
+@-o-keyframes cssload-wave-bottom {
+	50% {
+        border-bottom-color: var(--wl-color-dots);
+		-o-transform: translateY"("59px")";
+	}
+}
+
+@-ms-keyframes cssload-wave-bottom {
+	50% {
+        border-bottom-color: var(--wl-color-dots);
+		-ms-transform: translateY"("59px")";
+	}
+}
+
+@-webkit-keyframes cssload-wave-bottom {
+	50% {
+        border-bottom-color: var(--wl-color-dots);
+		-webkit-transform: translateY"("59px")";
+	}
+}
+
+@-moz-keyframes cssload-wave-bottom {
+	50% {
+        border-bottom-color: var(--wl-color-dots);
+		-moz-transform: translateY"("59px")";
+	}
+}
+@keyframes cssload-wave-top {
+	50% {
+        border-top-color: var(--wl-color-dots);
+		transform: translateY"("59px")";
+	}
+}
+
+@-o-keyframes cssload-wave-top {
+	50% {
+        border-top-color: var(--wl-color-dots);
+		-o-transform: translateY"("59px")";
+	}
+}
+
+@-ms-keyframes cssload-wave-top {
+	50% {
+        border-top-color: var(--wl-color-dots);
+		-ms-transform: translateY"("59px")";
+	}
+}
+
+@-webkit-keyframes cssload-wave-top {
+	50% {
+        border-top-color: var(--wl-color-dots);
+		-webkit-transform: translateY"("59px")";
+	}
+}
+
+@-moz-keyframes cssload-wave-top {
+	50% {
+        border-top-color: var(--wl-color-dots);
+		-moz-transform: translateY"("59px")";
+	}
+}
