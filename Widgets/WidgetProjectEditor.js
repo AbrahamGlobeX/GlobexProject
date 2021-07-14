@@ -76,14 +76,18 @@ class ProjectEditor extends BaseObjectEditor {
     });
     this._mainContentLayout = this.drawLayout(mainLayout, "layoutVertical", {
       width: "100%",
-      height: "100%",
+      height: "auto", // auto
     });
+
     this._headerLayout = this.drawLayout(
       this.drawLayout(this._mainContentLayout, "layoutHorizontal", {
-        width: "100%",
+        width: "101%",
+        maxHeight: "12%"
       }),
       "layoutVertical",
-      { height: "100%" }
+      {
+        height: "100%",
+      }
     );
     this._contentLayout = this.drawLayout(
       this._mainContentLayout,
@@ -94,12 +98,34 @@ class ProjectEditor extends BaseObjectEditor {
     this.drawLeftWidget();
   }
   drawLeftWidget() {
-    this.drawLabel(this._leftLayout, "Edit mode", {
+    this.drawLabel(this._leftLayout, "Режим редактирования", {
       width: "100%",
       minHeight: "40px",
       maxHeight: "46px",
       "border-bottom": "2px solid rgb(170, 170, 170)",
     });
+
+    const projectLabel = this.drawLabel(this._leftLayout, "Проекты", {
+      width: "100%",
+      minHeight: "40px",
+      maxHeight: "50px",      
+      "border-bottom": "2px solid rgb(170, 170, 170)",
+    });
+
+    ReactComponent[projectLabel].fontSize = 30
+    ReactComponent[projectLabel].fontWeight = "bold"
+    ReactComponent[projectLabel].htmlElement.style.background = "grey"
+
+    this._allProjectLayout = this.drawLayout(
+      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
+      "layoutVertical",
+      { minHeight: "100%", maxHeight: "100%" }
+    );
+    this._workingProjectLayout = this.drawLayout(
+      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
+      "layoutVertical",
+      { minHeight: "100%", maxHeight: "100%" }
+    );
     this.drawButton(
       this.drawLayout(this._leftLayout, "layoutHorizontal", {
         width: "100%",
@@ -112,17 +138,6 @@ class ProjectEditor extends BaseObjectEditor {
         this.drawFormEditProject();
       }
     );
-    this._allProjectLayout = this.drawLayout(
-      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
-      "layoutVertical",
-      { minHeight: "100%", maxHeight: "100%" }
-    );
-    this._workingProjectLayout = this.drawLayout(
-      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
-      "layoutVertical",
-      { minHeight: "100%", maxHeight: "100%" }
-    );
-
     this.drawProjects(this._allProjectLayout, this._projects);
     //this.drawProjects(this._workingProjectLayout,this._projects);
   }
@@ -423,7 +438,7 @@ class ProjectEditor extends BaseObjectEditor {
     const nameLayout = this.drawLayout(this._headerLayout, "layoutHorizontal", {
       width: "100%",
       minHeigt: "50px",
-      maxHeight: "50px",
+      maxHeight: "100%",
       minHeight: "50px",
       overflow: "hidden",
       borderTop: "2px solid #aaa",
@@ -435,7 +450,7 @@ class ProjectEditor extends BaseObjectEditor {
 
     let headerText = this.drawLabel(
       nameLayout,
-      `Edit project "${project["meta"]["name"]}"`
+      `Редактирование проекта "${project["meta"]["name"]}"`
     );
     const switchGroupLayout = this.drawLayout(
       this._headerLayout,
@@ -448,20 +463,25 @@ class ProjectEditor extends BaseObjectEditor {
     const btnObject = this.drawButton(
       switchGroupLayout,
       "Объекты",
-      { color: "#123456" },
+      { color: "#123456" ,
+      maxWidth: "49.3%"
+    },
       () => {
         this.showObjects();
         this.widgetSetStyle(btnObject, { background: "grey" });
       }
     );
-    this.drawButton(
+    const rightButton = this.drawButton(
       switchGroupLayout,
       "Приложения",
       { color: "#123456" },
       () => {}
     );
+    ReactComponent[rightButton].htmlElement.style.marginLeft = "6px"
   }
   loadObjects(callback) {
+    debugger;
+
     const loadedClassificator = function () {
       MainClassification.loadClassification(
         this._currentProject["additional"]["classification"]["$oid"],
@@ -600,6 +620,7 @@ class ProjectEditor extends BaseObjectEditor {
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
           width: "99%",
+          maxHeight:"50px"
         }),
         "Добавить объект",
         { color: "#123456" },
@@ -1273,7 +1294,6 @@ class Classificator {
   }
   loadPrototype(category, callback) {
     const loaded = function (resultJSON) {
-      debugger;
       console.log("resultJSOn", resultJSON);
       const result = resultJSON.cursor.firstBatch;
       if (Array.isArray(result) && result.length == 0) {
@@ -1772,7 +1792,7 @@ class ObjectSystem extends BaseObjectEditor {
       maxHeight: "25px",
       minHeight: "25px",
     });
-    const headerTitle = this.drawLabel(newLayout, "Object", {
+    const headerTitle = this.drawLabel(newLayout, "Объект", {
       background: "rgb(156 155 155 / 80)",
       height: "25px",
     });
@@ -1879,11 +1899,12 @@ class ObjectSystem extends BaseObjectEditor {
       //this.drawLabel(layout,object["object"][prop]["value"]);
       //this.drawLabel(layout,this._objectProps[prop]["category"]);
     }
-
-    this.DrawEditObjectButton(parentLayout);
+    console.log("OHO", this);
+    debugger;
+    this.DrawEditObjectButton(parentLayout, object);
   }
 
-  DrawEditObjectButton(parentLayout) {
+  DrawEditObjectButton(parentLayout, object) {
     this.drawButton(
       parentLayout,
       "Редактировать",
