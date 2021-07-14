@@ -158,13 +158,19 @@ class ProjectEditor extends BaseObjectEditor {
         }
         this._currentProjectLayout = e.target.parentNode;
         this._currentProjectLayout.style.background = "#dbdbdb";
-
         this.openProject(projects[i]["_id"]["$oid"]);
+
+        
+
+        this.showObjects()
+
+
         console.log("e", e);
         console.log("this._currentProjectLayout", this._currentProjectLayout);
       };
     }
   }
+
   drawFormEditProject(project = undefined) {
     const dialog = this.drawDialog(-1);
     const mainLayout = this.drawLayout(dialog, "layoutVertical", {
@@ -480,8 +486,7 @@ class ProjectEditor extends BaseObjectEditor {
     ReactComponent[rightButton].htmlElement.style.marginLeft = "6px"
   }
   loadObjects(callback) {
-    debugger;
-
+        
     const loadedClassificator = function () {
       MainClassification.loadClassification(
         this._currentProject["additional"]["classification"]["$oid"],
@@ -517,6 +522,13 @@ class ProjectEditor extends BaseObjectEditor {
     }
     if (this._classLayout) {
       ReactComponent[this._classLayout].clearWidget();
+
+      this._classLayout = this.drawLayout(
+        this._centerLayout,
+        "layoutHorizontal",
+        { width: "100%" }
+      );
+
       //this._classLayout = undefined;
     } else {
       this._classLayout = this.drawLayout(
