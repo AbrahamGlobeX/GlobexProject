@@ -133,6 +133,9 @@ class BaseObjectEditor {
   drawDialog(parentID, styles = {}) {
     const dialog = new WidgetDialog();
     this.widgetSetStyle(dialog.id, styles);
+    if (parentID == -1) {
+      dialog.htmlElement.style.background = "black";
+    }
     if (parentID != -1) {
       ReactComponent[parentID].includeWidget(ReactComponent[dialog.id]);
     }

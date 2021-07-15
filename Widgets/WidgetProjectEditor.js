@@ -8,6 +8,7 @@ class ProjectEditor extends BaseObjectEditor {
     this._leftLayout = undefined;
     this._centerLayout = undefined;
     this._rightLayout = undefined;
+    this._currentProject = "";
 
     this._workingProjectLayout;
     this._allProjectLayout;
@@ -82,7 +83,7 @@ class ProjectEditor extends BaseObjectEditor {
     this._headerLayout = this.drawLayout(
       this.drawLayout(this._mainContentLayout, "layoutHorizontal", {
         width: "101%",
-        maxHeight: "12%"
+        maxHeight: "12%",
       }),
       "layoutVertical",
       {
@@ -108,13 +109,13 @@ class ProjectEditor extends BaseObjectEditor {
     const projectLabel = this.drawLabel(this._leftLayout, "Проекты", {
       width: "100%",
       minHeight: "40px",
-      maxHeight: "50px",      
+      maxHeight: "50px",
       "border-bottom": "2px solid rgb(170, 170, 170)",
     });
 
-    ReactComponent[projectLabel].fontSize = 30
-    ReactComponent[projectLabel].fontWeight = "bold"
-    ReactComponent[projectLabel].htmlElement.style.background = "grey"
+    ReactComponent[projectLabel].fontSize = 30;
+    ReactComponent[projectLabel].fontWeight = "bold";
+    ReactComponent[projectLabel].htmlElement.style.background = "grey";
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
@@ -145,8 +146,8 @@ class ProjectEditor extends BaseObjectEditor {
     for (let i = 0; i < projects.length; i++) {
       const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
         width: "90%",
-        minHeight: "60px",
-        maxHeight: "60px",
+        minHeight: "40px",
+        maxHeight: "40px",
         borderBottom: "1px solid black",
         margin: "0 auto",
       });
@@ -160,10 +161,7 @@ class ProjectEditor extends BaseObjectEditor {
         this._currentProjectLayout.style.background = "#dbdbdb";
         this.openProject(projects[i]["_id"]["$oid"]);
 
-        
-
-        this.showObjects()
-
+        this.showObjects();
 
         console.log("e", e);
         console.log("this._currentProjectLayout", this._currentProjectLayout);
@@ -422,9 +420,9 @@ class ProjectEditor extends BaseObjectEditor {
     );
   }
   openProject(projectID) {
+    if (this._currentProject != "") if (this._currentProject["_id"]["$oid"] === projectID) return;
     ReactComponent[this._headerLayout].clearWidget();
     ReactComponent[this._contentLayout].clearWidget();
-
     this._centerLayout = this.drawLayout(
       this._contentLayout,
       "layoutVertical",
@@ -469,9 +467,7 @@ class ProjectEditor extends BaseObjectEditor {
     const btnObject = this.drawButton(
       switchGroupLayout,
       "Объекты",
-      { color: "#123456" ,
-      maxWidth: "49.3%"
-    },
+      { color: "#123456", maxWidth: "49.3%" },
       () => {
         this.showObjects();
         this.widgetSetStyle(btnObject, { background: "grey" });
@@ -483,10 +479,9 @@ class ProjectEditor extends BaseObjectEditor {
       { color: "#123456" },
       () => {}
     );
-    ReactComponent[rightButton].htmlElement.style.marginLeft = "6px"
+    ReactComponent[rightButton].htmlElement.style.marginLeft = "6px";
   }
   loadObjects(callback) {
-        
     const loadedClassificator = function () {
       MainClassification.loadClassification(
         this._currentProject["additional"]["classification"]["$oid"],
@@ -521,22 +516,16 @@ class ProjectEditor extends BaseObjectEditor {
       });
     }
     if (this._classLayout) {
-      ReactComponent[this._classLayout].clearWidget();
-
-      this._classLayout = this.drawLayout(
-        this._centerLayout,
-        "layoutHorizontal",
-        { width: "100%" }
-      );
-
-      //this._classLayout = undefined;
-    } else {
-      this._classLayout = this.drawLayout(
-        this._centerLayout,
-        "layoutHorizontal",
-        { width: "100%" }
-      );
+      ReactComponent[this._classLayout].destroyWidget();
     }
+
+    this._classLayout = this.drawLayout(
+      this._centerLayout,
+      "layoutHorizontal",
+      { width: "100%" }
+    );
+
+    //this._classLayout = undefined;
     this.drawClassificator();
     this.drawClassification();
   }
@@ -632,7 +621,7 @@ class ProjectEditor extends BaseObjectEditor {
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
           width: "99%",
-          maxHeight:"50px"
+          maxHeight: "50px",
         }),
         "Добавить объект",
         { color: "#123456" },
@@ -762,17 +751,14 @@ class ProjectEditor extends BaseObjectEditor {
           project["_id"]["$oid"],
           project["additional"]["classificator"]["$oid"],
           () => {
-            //debugger;
             MainClassification.loadClassification(
               project["additional"]["classification"]["$oid"],
               project["_id"]["$oid"],
               () => {
-                //debugger;
                 MainObjects.loadObjects(
                   project["_id"]["$oid"],
                   project["project"]["object_list"],
                   () => {
-                    //debugger;
                     MainClassificator.drawTree(project["_id"]["$oid"]);
 
                     MainClassification.drawTree(project["_id"]["$oid"]);
@@ -977,7 +963,7 @@ class Classificator {
         continue;
       }
       _currentClass["layer"] = currentClassificator["layer"];
-      //debugger;
+      
       _currentClass["name"] = _predClass["layer"].find((item) => {
         if (item.hasOwnProperty("child_id")) {
           return (
@@ -1339,7 +1325,6 @@ class Classificator {
   }
   openPrototypeCreateForm(name, category) {
     this.loadPrototype(category, (prototype) => {
-      //debugger;
       if (prototype) {
         return APP.log("warn", "Данный прототип уже создан");
       }
@@ -1359,7 +1344,6 @@ class Classificator {
         const result = resultJSON.cursor.firstBatch[0];
         console.log("result", result);
 
-        debugger;
         this.drawFormWithMainTree();
         this.drawPatternsInMainClassificatorTree(result.layer);
       };
@@ -1484,12 +1468,10 @@ class Classificator {
   }
   checkAndAddPatternInProject(projectID, pattern) {
     try {
-      debugger;
       const categories = pattern["additional"]["category"][0].split(".");
       console.log("checkAndAddPatternInProject.categories", categories);
       let currentClassificator = this._classificator[projectID];
       const ids = [];
-      debugger;
       for (let category of categories) {
         if (!currentClassificator.hasOwnProperty(category)) {
           ids.push(category);
@@ -1519,7 +1501,6 @@ class Classificator {
           );
           console.log("this._classificator", this._classificator[projectID]);
 
-          debugger;
           console.log("pattern", pattern);
           const step = pattern["additional"]["category"][0]
             .split(".")
@@ -1911,8 +1892,6 @@ class ObjectSystem extends BaseObjectEditor {
       //this.drawLabel(layout,object["object"][prop]["value"]);
       //this.drawLabel(layout,this._objectProps[prop]["category"]);
     }
-    console.log("OHO", this);
-    debugger;
     this.DrawEditObjectButton(parentLayout, object);
   }
 
