@@ -1132,7 +1132,7 @@ class PatternEditorSystem extends BaseObjectEditor {
       () => {
         if (currentSearchOptionButton) {
           this.widgetSetStyle(currentSearchOptionButton, {
-            background: "none",
+            background: "#2bbbad",
           });
         }
         this.widgetSetStyle(objectBTNOption, { background: "grey" });
@@ -1149,7 +1149,7 @@ class PatternEditorSystem extends BaseObjectEditor {
       () => {
         if (currentSearchOptionButton) {
           this.widgetSetStyle(currentSearchOptionButton, {
-            background: "none",
+            background: "#2bbbad",
           });
         }
         this.widgetSetStyle(patternBTNOption, { background: "grey" });
