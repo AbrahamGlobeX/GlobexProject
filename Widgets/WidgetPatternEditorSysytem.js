@@ -69,7 +69,7 @@ class PatternEditorSystem extends BaseObjectEditor {
         const name = this.drawLabel(propertyLayout, property.name, { "maxWidth": "40%" });
         ReactComponent[name].controlHorizontalTextAlign(1);
         let widget;
-
+        
         if (mode === "view") {
             widget = await propertyTypes[property.category][property.valueType].getLabelWidget(property)
             ReactComponent[propertyLayout].includeWidget(widget);

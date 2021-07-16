@@ -15,6 +15,9 @@ class WidgetCheckBox extends BaseWidget {
     this.inputElement.type = "checkbox";
     this.inputElement.value = "None";
     this.inputElement.name = "check";
+    // this.inputElement.addEventListener('click', e => {
+    //   this.checked = this.inputElement.checked;
+    // });
     //this.inputElement.disabled = true;
 
     this.labelElement = document.createElement("label");
