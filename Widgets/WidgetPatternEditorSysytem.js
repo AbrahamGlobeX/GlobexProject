@@ -98,35 +98,7 @@ class PatternEditorSystem extends BaseObjectEditor {
           property.isSelect = checked;
           console.log("property", property);
         }
-<<<<<<< HEAD
-        const propertiesLayout = this.drawLayout(this.drawLayout(parentLayout, "layoutHorizontal", { "width": "100%" }), "layoutVertical", { "height": "200px" });
-        return propertiesLayout;
-    }
-
-
-    async drawPropertyItem(parentLayout, property, mode = "view") {
-        console.log("drawPropertyItem", property);
-        const propertyLayout = this.drawLayout(parentLayout, "layoutHorizontal", { "width": "90%", "marginLeft": "10%", "minHeight": "50px", "maxHeight": "50px" });
-        const name = this.drawLabel(propertyLayout, property.name, { "maxWidth": "40%" });
-        ReactComponent[name].controlHorizontalTextAlign(1);
-        let widget;
-        
-        if (mode === "view") {
-            widget = await propertyTypes[property.category][property.valueType].getLabelWidget(property)
-            ReactComponent[propertyLayout].includeWidget(widget);
-        } else {
-            widget = await propertyTypes[property.category][property.valueType].getInputWidget(property);
-            ReactComponent[propertyLayout].includeWidget(widget);
-
-            const checkbox = this.drawCheckbox(propertyLayout, { "maxWidth": "5%" }, (checked) => {
-                property.isSelect = checked;
-                console.log("property", property);
-            });
-
-            ReactComponent[checkbox].checked = property.isSelect;
-=======
       );
->>>>>>> 996e2a48a0b1c6f1ef7cf2fde45114b0ae7aa0a1
 
       ReactComponent[checkbox].checked = property.isSelect;
     }
