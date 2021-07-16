@@ -238,7 +238,6 @@ class BaseWidget {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   includeWidget(widget) {
     if (!widget) {
       return;
@@ -361,7 +360,6 @@ class BaseWidget {
     this.onCheckChildrens();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onCheckChildrens() {}
 
   removeChild(widget) {

@@ -1,211 +1,218 @@
 class WidgetDialog extends BaseWidget {
+  constructor() {
+    super();
+  }
 
-	constructor() {
-		super();
+  onCreate() {
+    // this.createDomElement("div");
+    this.addClassName("WidgetDialog");
 
-	}
+    this.dialogContent = document.createElement("div");
+    this.dialogContent.classList.add("WidgetDialogContent");
+    this.htmlElement.appendChild(this.dialogContent);
 
-	onCreate() {
-		// this.createDomElement("div");
-		this.addClassName("WidgetDialog");
+    this.headerElement = document.createElement("div");
+    this.headerElement.classList.add("WidgetDialogHeader");
+    this.dialogContent.appendChild(this.headerElement);
 
-		this.dialogContent = document.createElement("div");
-		this.dialogContent.classList.add("WidgetDialogContent");
-		this.htmlElement.appendChild(this.dialogContent);
+    this.dialogContentContainer = document.createElement("div");
+    this.dialogContentContainer.classList.add("WidgetDialogContentContainer");
+    this.dialogContent.appendChild(this.dialogContentContainer);
 
-		this.headerElement = document.createElement("div");
-		this.headerElement.classList.add("WidgetDialogHeader");
-		this.dialogContent.appendChild(this.headerElement);
+    this.buttonsContainer = document.createElement("div");
+    this.buttonsContainer.classList.add("WidgetDialogButtonsContainer");
+    this.dialogContent.appendChild(this.buttonsContainer);
+    this.buttonNames = {};
+    this.buttonCallback = {};
+  }
 
-		this.dialogContentContainer = document.createElement("div");
-		this.dialogContentContainer.classList.add("WidgetDialogContentContainer");
-		this.dialogContent.appendChild(this.dialogContentContainer);
+  eventHandler(eventType, eventObject) {
+    eventObject.persist();
+    console.log(
+      "eventHandler",
+      eventType,
+      eventObject.target.value,
+      eventObject.target
+    );
+    Module.Store.dispatch({
+      eventName: this.props.widgets[this.id].events[eventType],
+      value: eventObject,
+    });
+  }
 
-		this.buttonsContainer = document.createElement("div");
-		this.buttonsContainer.classList.add("WidgetDialogButtonsContainer");
-		this.dialogContent.appendChild(this.buttonsContainer);
-		this.buttonNames = {};
-		this.buttonCallback = {};
-	}
+  render() {
+    const widget = this.props.widgets[this.id];
 
-	eventHandler(eventType, eventObject) {
+    let eventAttributes = {};
 
-		eventObject.persist();
-		console.log('eventHandler', eventType, eventObject.target.value, eventObject.target);
-		Module.Store.dispatch({
-			'eventName': this.props.widgets[this.id].events[eventType],
-			'value': eventObject
-		});
-	}
+    for (let eventName in widget.events) {
+      eventAttributes[eventName] = (event) =>
+        this.eventHandler(eventName, event);
+    }
+    //#region
+    // return (
+    // 	// Base Dialog Html
+    // 	<div
+    // 		id={this.id}
+    // 		className="WidgetDialog"
+    // 		{...eventAttributes}
+    // 	>
+    // 		<div
+    // 			id={"contentDialog_" + this.id}
+    // 			className="WidgetDialogContent"
+    // 			{...widget.attributes}
+    // 		>
+    // 			<div
+    // 				id={"headerDialog_" + this.id}
+    // 				className="WidgetDialogHeader"
+    // 			>
+    // 			</div>
+    // 			<div
+    // 				id={"containerContentDialog_" + this.id}
+    // 				className="WidgetDialogContentContainer"
+    // 			>
+    // 			</div>
+    // 			<div
+    // 				id={"containerButtonsDialog_" + this.id}
+    // 				className="WidgetDialogButtonsContainer"
+    // 			>
+    // 			</div>
 
-	render() {
+    // 		</div>
+    // 	</div>
+    // );
+    //#endregion
+  }
 
-		const widget = this.props.widgets[this.id];
+  onComponentDidMount() {
+    //#region
+    // this.dialogContent = document.getElementById("contentDialog_" + this.id);
+    // this.headerElement = document.getElementById("headerDialog_" + this.id);
+    // this.dialogContentContainer = document.getElementById("containerContentDialog_" + this.id);
+    // this.buttonsContainer = document.getElementById("containerButtonsDialog_" + this.id);
+    // this.controlHeader("Header Dialog");
+    // this.buttonNames.push("OK");
+    // this.buttonNames.push("CLOSE");
+    // this.updateButtons();
+    //#endregion
+  }
 
-		let eventAttributes = {};
-		
-		
-		for (let eventName in widget.events) {
-			eventAttributes[eventName] = (event) => this.eventHandler(eventName, event);
-		}
-		
-		// return (
-		// 	// Base Dialog Html
-		// 	<div
-		// 		id={this.id}
-		// 		className="WidgetDialog"
-		// 		{...eventAttributes}
-		// 	>
-		// 		<div
-		// 			id={"contentDialog_" + this.id}
-		// 			className="WidgetDialogContent"
-		// 			{...widget.attributes}
-		// 		>
-		// 			<div
-		// 				id={"headerDialog_" + this.id}
-		// 				className="WidgetDialogHeader"
-		// 			>
-		// 			</div>
-		// 			<div
-		// 				id={"containerContentDialog_" + this.id}
-		// 				className="WidgetDialogContentContainer"
-		// 			>
-		// 			</div>
-		// 			<div
-		// 				id={"containerButtonsDialog_" + this.id}
-		// 				className="WidgetDialogButtonsContainer"
-		// 			>
-		// 			</div>
-					
-		// 		</div>
-		// 	</div>
-		// );
+  set minHeight(value) {
+    this._minHeight = value;
+    if (this.dialogContent) this.dialogContent.style.minHeight = this.minHeight;
+  }
 
-	}
-	
-	onComponentDidMount() {
+  get minHeight() {
+    return this._minHeight;
+  }
 
-		// this.dialogContent = document.getElementById("contentDialog_" + this.id);
-		// this.headerElement = document.getElementById("headerDialog_" + this.id);
-		// this.dialogContentContainer = document.getElementById("containerContentDialog_" + this.id);
-		// this.buttonsContainer = document.getElementById("containerButtonsDialog_" + this.id);
-		
-		// this.controlHeader("Header Dialog");
-		// this.buttonNames.push("OK");
-		// this.buttonNames.push("CLOSE");
-		// this.updateButtons();
-	}
+  set minWidth(value) {
+    this._minWidth = value;
+    if (this.dialogContent) this.dialogContent.style.minWidth = value;
+  }
 
-	set minHeight(value) {
-		this._minHeight = value;
-		if (this.dialogContent) this.dialogContent.style.minHeight = this.minHeight;
-	}
+  get minWidth() {
+    return this._minWidth;
+  }
 
-	get minHeight() { return this._minHeight; }
+  set height(value) {
+    this._height = value;
+    if (this.dialogContent) this.dialogContent.style.height = value;
+  }
 
-	set minWidth(value) {
-		this._minWidth = value;
-		if (this.dialogContent) this.dialogContent.style.minWidth = value;
-	}
+  get height() {
+    return this._height;
+  }
 
-	get minWidth() { return this._minWidth; }
+  set width(value) {
+    this._width = value;
+    if (this.dialogContent) this.dialogContent.style.width = value;
+  }
 
-	set height(value) {
-		this._height = value;
-		if (this.dialogContent) this.dialogContent.style.height = value;
-	}
+  get width() {
+    return this._width;
+  }
 
-	get height() { return this._height; }
+  appendChild(child) {
+    if (!this.contains(child)) {
+      this.dialogContentContainer.appendChild(child);
+    }
+  }
 
-	set width(value) {
-		this._width = value;
-		if (this.dialogContent) this.dialogContent.style.width = value;
-	}
+  onCheckChildrens() {
+    for (const id of this.children) {
+      const child = ReactComponent[id];
+      if (child && child.htmlElement) {
+        this.dialogContentContainer.appendChild(child.htmlElement);
+      }
+    }
+  }
 
-	get width() { return this._width; }
+  controlHeader(stateHeader) {
+    let newText = "";
 
-	appendChild(child) {
-		if (!this.contains(child)) {
-			this.dialogContentContainer.appendChild(child);
-		}
-	}
+    // try {
+    // 	newText = decodeURIComponent(escape(window.atob(stateHeader)));
+    // } catch (e) { console.log(this.type, " -> setState-> \"header\" DecodeError!"); return; }
+    newText = stateHeader;
 
-	onCheckChildrens() {
-		for (const id of this.children) {
-			const child = ReactComponent[id];
-			if (child && child.htmlElement) {
-				this.dialogContentContainer.appendChild(child.htmlElement);
-			}
-		}
-	}
+    if (this.header === newText) return;
+    this.header = newText;
+    this.headerElement.innerText = newText;
 
-	
-	controlHeader(stateHeader) {
-		let newText = "";
+    this.updateHeight();
+  }
 
-		// try {
-		// 	newText = decodeURIComponent(escape(window.atob(stateHeader)));
-		// } catch (e) { console.log(this.type, " -> setState-> \"header\" DecodeError!"); return; }
-		newText = stateHeader;
+  addDialogButton(nameButton, callback = null, param = null) {
+    this.buttonNames[nameButton] = nameButton;
+    this.buttonCallback[nameButton] = callback;
+    this.updateButtons();
+  }
 
-		if (this.header === newText) return;
-		this.header = newText;
-		this.headerElement.innerText = newText;
+  removeDialogButton(nameButton) {
+    if (this.buttonNames[nameButton]) delete this.buttonNames[nameButton];
+    else return;
+    this.updateButtons();
+  }
 
-		this.updateHeight();
-	}
+  updateButtons() {
+    for (let i = 0; i < this.buttonsContainer.childNodes.length; ++i) {
+      let btn = this.buttonsContainer.childNodes[i];
+      if (btn == null) continue;
+      btn.remove();
+      i--;
+    }
 
-	addDialogButton(nameButton, callback = null, param = null) {
-		this.buttonNames[nameButton] = nameButton;
-		this.buttonCallback[nameButton] = callback;
-		this.updateButtons();
-	}
+    for (let k in this.buttonNames) {
+      let btnText = k;
+      // try {
+      // 	btnText = decodeURIComponent(escape(window.atob(k)));
+      // } catch (e) {
+      // 	console.error("Fail decode DialogBtnName ->", e);
+      // }
 
-	removeDialogButton(nameButton) {
-		if(this.buttonNames[nameButton]) delete this.buttonNames[nameButton];
-		else return;
-		this.updateButtons();
-	}
+      let elem = document.createElement("div");
+      elem.className = "WidgetDialogButton";
+      elem.title = btnText;
+      elem.innerText = btnText;
+      elem.addEventListener(
+        "click",
+        function (event) {
+          this.buttonCallback[k]();
+        }.bind(this)
+      );
 
-	updateButtons() {
-		for (let i = 0; i < this.buttonsContainer.childNodes.length; ++i) {
-			let btn = this.buttonsContainer.childNodes[i];
-			if (btn == null) continue;
-			btn.remove();
-			i--;
-		}
+      this.buttonsContainer.appendChild(elem);
+    }
 
-		for (let k in this.buttonNames) {
-			let btnText = k;
-			// try {
-			// 	btnText = decodeURIComponent(escape(window.atob(k)));
-			// } catch (e) {
-			// 	console.error("Fail decode DialogBtnName ->", e);
-			// }
+    this.updateHeight();
+  }
 
-			let elem = document.createElement("div");
-			elem.className = "WidgetDialogButton";
-			elem.title = btnText;
-			elem.innerText = btnText;
-			elem.addEventListener("click",function (event){
-				this.buttonCallback[k]();
-			}.bind(this));
-
-			this.buttonsContainer.appendChild(elem);
-		}
-
-		this.updateHeight();
-
-	}
-
-
-	updateHeight() {
-		this.dialogContent.style.height = this.height + "px";
-		let h1 = this.headerElement.offsetHeight;
-		let h2 = this.buttonsContainer.offsetHeight;
-		this.dialogContentContainer.style.height = "calc(100% - " + (h1 + h2) + "px)"
-
-	}
-
-
+  updateHeight() {
+    this.dialogContent.style.height = this.height + "px";
+    let h1 = this.headerElement.offsetHeight;
+    let h2 = this.buttonsContainer.offsetHeight;
+    this.dialogContentContainer.style.height =
+      "calc(100% - " + (h1 + h2) + "px)";
+  }
 }

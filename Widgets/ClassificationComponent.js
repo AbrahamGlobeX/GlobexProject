@@ -189,20 +189,6 @@ class Classification {
 
     this._rightLayout = rightLayout;
 
-    /*this._classificationGroupListMenu = new ContextMenuList("Тест");
-        this._classificationGroupListMenu.addMenuItem("Пунт 1",-1,"",{},undefined);
-        this._classificationGroupListMenu.addMenuItem("Пунт 2",-1,"",{},undefined);
-        this._classificationGroupListMenu.addMenuItem("Пунт 3",-1,"",{},undefined);
-        this._classificationGroupListMenu.addMenuItem("Пунт 4",-1,"",{},undefined);
-        this._classificationGroupListMenu.addMenuItem("Пунт 5",-1,"",{},undefined);*/
-
-    /*this._classificationGroupListMenu2 = new ContextMenuList("Подменю 6");
-        this._classificationGroupListMenu2.addMenuItem("Пунт 2.1",-1,"",{},undefined);
-        this._classificationGroupListMenu2.addMenuItem("Пунт 2.2",-1,"",{},undefined);
-        this._classificationGroupListMenu2.addMenuItem("Пунт 2.3",-1,"",{},undefined);
-        this._classificationGroupListMenu2.addMenuItem("Пунт 2.4",-1,"",{},undefined);
-        this._classificationGroupListMenu2.addMenuItem("Пунт 2.5",-1,"",{},undefined);*/
-
     this._contextMenu.createMenu(this._classificationLoadedItemsName);
 
     this._contextMenu.createMenu(this._classificationMenuName);
@@ -447,7 +433,6 @@ class Classification {
   }
 
   drawTreeByClassificationWithObjects(projectID, data) {
-    console.log("data", data);
     const tree = new WidgetTree();
     if (data.length == 0) {
       const item = tree.createItemInTree(-1);
@@ -458,8 +443,10 @@ class Classification {
 
       return tree;
     }
+
     const localTreeItem = {};
     let allClassification = {};
+    
     data.forEach((item) => {
       if (
         item.hasOwnProperty("classification") &&
@@ -471,6 +458,7 @@ class Classification {
         );
       }
     });
+    debugger;
     allClassification = Object.keys(allClassification);
 
     if (allClassification.length == 0) {
@@ -482,17 +470,17 @@ class Classification {
 
       return tree;
     }
-
+    debugger;
     for (let classification of allClassification) {
       const path = classification.split(".");
       let localCurrentTreeItem = localTreeItem;
       let currentClassification = this._classification[projectID];
       let predNum = -1;
       for (let num of path) {
-        currentClassification = currentClassification[num];
+        currentClassification = currentClassification['1']
         if (!localCurrentTreeItem.hasOwnProperty(num)) {
           const item = tree.createItemInTree(predNum);
-          ReactComponent[item].text = currentClassification["name"]["ru"];
+          ReactComponent[item].text = currentClassification["name"]["rus"];
           localCurrentTreeItem[num] = { widget: item, parent: predNum };
           predNum = item;
         } else {
