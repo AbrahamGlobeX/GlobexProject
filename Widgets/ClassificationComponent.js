@@ -1,7 +1,7 @@
 class DrawFormWidgets extends BaseObjectEditor {
   constructor() {
-    super();
-    this._widgets = {};
+  super();
+  this._widgets = {};
   }
   drawComboBoxWithTitle(layout, title) {
     const comboBoxLayout = this.drawLayout(layout, "layoutHorizontal", {
@@ -13,7 +13,7 @@ class DrawFormWidgets extends BaseObjectEditor {
     const comboBox = this.drawComboBox(comboBoxLayout);
     return comboBox;
   }
-
+  
   drawCommonDialog(title, OKName, CancelName, callback, isSearched = false) {
     try {
       const dialog = this.drawDialog(-1);

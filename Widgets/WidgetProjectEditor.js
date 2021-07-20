@@ -1218,7 +1218,7 @@ class Classificator {
         this._contextMenu.setMenuItemCallback(
           this._classificatorMenuName,
           "Открыть прототип",
-          this.openPrototypeForm.bind(this, ids)
+          this.openPrototypeForm.bind(this, ids, "editproto")
         );
         this._contextMenu.setMenuItemCallback(
           this._classificatorMenuName,
@@ -1241,7 +1241,7 @@ class Classificator {
         this._contextMenu.setMenuItemCallback(
           this._classificatorMainMenuName,
           "Открыть прототип",
-          this.openPrototypeForm.bind(this, ids)
+          this.openPrototypeForm.bind(this, ids, "editproto")
         );
         this._contextMenu.setMenuItemCallback(
           this._classificatorMainMenuName,
@@ -1280,7 +1280,7 @@ class Classificator {
     APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
-  openPrototypeForm(category, mode = "view") {
+  openPrototypeForm(category, mode = "edit") {
     this.loadPrototype(category, (prototype) => {
       if (!prototype) {
         return APP.log("warn", "Данный прототип не создан");
@@ -1328,7 +1328,7 @@ class Classificator {
     try {
       const [layout, searchLayout] = this._drawFormWidgets.drawCommonDialog(
         "Общий классификатор",
-        "",
+        "Что?",
         "Отмена",
         () => {},
         true
@@ -1701,6 +1701,7 @@ class ObjectSystem extends BaseObjectEditor {
     };
     console.log("ObjectSystem.updateObject.req", sets);
     APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+    debugger;
     APP.dbWorker.sendUpdateRCRequest(
       "DOLMongoRequest",
       objectID,
