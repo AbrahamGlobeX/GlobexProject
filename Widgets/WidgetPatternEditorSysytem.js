@@ -1064,6 +1064,8 @@ class PatternEditorSystem extends BaseObjectEditor {
       ReactComponent[otherTree[id]["id"]].htmlElement.style.display = "";
     }
 
+      // Классификатор проекта
+
     if (this._searchMode == "pattern") {
       this.drawButton(
         this._searchBtnLayout,
@@ -1117,7 +1119,9 @@ class PatternEditorSystem extends BaseObjectEditor {
       minHeight: "50px",
       maxHeight: "50px",
     });
-    this.drawLabel(searchLayout, "Поиск");
+    
+    this.drawLabel(searchLayout, "Поиск по имени объекта");
+    
     ReactComponent[this.drawInput(searchLayout, "")].htmlElement.oninput =
       this.controlFindInput.bind(this);
     const searchOptionLayout = this.drawLayout(mainLayout, "layoutHorizontal", {
@@ -1180,6 +1184,7 @@ class PatternEditorSystem extends BaseObjectEditor {
   }
 
   controlFindInput(e) {
+    
     if (e.target.value.length <= 0) {
       this.switchSearchMode();
       return;
@@ -1187,10 +1192,14 @@ class PatternEditorSystem extends BaseObjectEditor {
     ReactComponent[this._searchTreeLayout].clearWidget();
 
     if (this._searchMode == "object") {
-      const data = MainObjects.find(e.target.value);
+       const data = searchByName(Object.values(Object.values(MainObjects)[7]), e.target.value)
+      //MainObjects.find(e.target.value);
+      
+      let result = []
+      data.forEach(item => result.push({classification: item.additional.classification, name: item.meta.name}))
 
       const tree =
-        MainClassification.drawTreeByClassificationsWithObjects(data);
+        MainClassification.drawTreeByClassificationsWithObjects(result);
 
       for (let id of Object.keys(tree)) {
         const layout = this.drawLayout(
@@ -1201,7 +1210,11 @@ class PatternEditorSystem extends BaseObjectEditor {
         ReactComponent[layout].includeWidget(tree[id]);
       }
     } else {
-      const data = MainClassificator.find(e.target.value);
+      console.log('Main Classificator:', MainClassificator);
+      console.log('MainClassificator find', MainClassificator.find(e.target.value))
+      const data = searchByName(Object.values(MainClassificator)[5],e.target.value)
+
+      console.log('Mainclassificator data', Object.values(MainClassificator)[5]);
 
       const tree = MainClassificator.drawClassificatorTreesByItems(data);
 

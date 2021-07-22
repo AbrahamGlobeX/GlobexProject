@@ -458,7 +458,6 @@ class Classification {
         );
       }
     });
-    debugger;
     allClassification = Object.keys(allClassification);
 
     if (allClassification.length == 0) {
@@ -470,7 +469,6 @@ class Classification {
 
       return tree;
     }
-    debugger;
     for (let classification of allClassification) {
       const path = classification.split(".");
       let localCurrentTreeItem = localTreeItem;

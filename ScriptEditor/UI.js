@@ -407,13 +407,17 @@ class UI {
     }
     // COPY
     if (event.ctrlKey && event.keyCode === keyCodeC) {
-      event.preventDefault();
-      APP.Logic.copy(this.focused);
+      if (document.getElementById("root").style.display == "none") {
+        event.preventDefault();
+        APP.Logic.copy(this.focused);
+    }
     }
     // PASTE
     if (event.ctrlKey && event.keyCode === keyCodeV) {
-      event.preventDefault();
-      APP.Logic.paste(this.moveEvent);
+      if (document.getElementById("root").style.display == "none") {
+        event.preventDefault();
+        APP.Logic.paste(this.moveEvent);
+      }
     }
   }
 
