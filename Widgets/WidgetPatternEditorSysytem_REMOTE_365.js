@@ -648,27 +648,27 @@ class PatternEditorSystem extends BaseObjectEditor {
                         console.log("pattern - after: ", pattern);
                         const updated = function (resultJSON) {
                             console.log("ObjectSystem.updatePrototype.updated", resultJSON);
-                        };
-                        const sets = {
+                          };
+                          const sets = {
                             $set: {
-                                additional: pattern.additional,
-                                schema: pattern.schema,
+                              additional: pattern.additional,
+                              schema: pattern.schema,
                             },
-                        };
-                        console.log("ObjectSystem.updatePrototype.req", sets);
-                        APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
-                        debugger;
-                        APP.dbWorker.sendUpdateRCRequest(
+                          };
+                          console.log("ObjectSystem.updatePrototype.req", sets);
+                          APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+                          debugger;
+                          APP.dbWorker.sendUpdateRCRequest(
                             "DOLMongoRequest",
                             pattern._id["$oid"],
                             JSON.stringify(sets),
                             "patterns"
-                        );
+                          );
                     }
                 }
             );
 
-
+            
             this.drawButton(
                 btnLayout,
                 mode === "view" ? "Закрыть" : "Отмена",
