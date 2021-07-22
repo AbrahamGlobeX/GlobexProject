@@ -130,7 +130,7 @@ class ProjectEditor extends BaseObjectEditor {
         margin: "0 auto",
       });
       ReactComponent[
-        this.drawLabel(projectLayout, projects[i]["meta"]["name"])
+        this.drawLabel(projectLayout, projects[i]["meta"]["name"], {userSelect: "none"})
       ].htmlElement.onclick = (e) => {
         if (this._currentProjectLayout) {
           this._currentProjectLayout.style.background = "none";
