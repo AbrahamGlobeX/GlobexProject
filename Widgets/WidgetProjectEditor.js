@@ -16,6 +16,8 @@ class ProjectEditor extends BaseObjectEditor {
     this._currentProjectLayout = undefined;
 
     this._projects = undefined;
+    this._openedProject = [];
+    this._openProjectLayout = "";
 
     this._contextMenu = new NewContextMenu();
 
@@ -77,7 +79,7 @@ class ProjectEditor extends BaseObjectEditor {
     });
     this._mainContentLayout = this.drawLayout(mainLayout, "layoutVertical", {
       width: "100%",
-      height: "auto", 
+      height: "auto",
     });
 
     this._headerLayout = this.drawLayout(
@@ -99,7 +101,6 @@ class ProjectEditor extends BaseObjectEditor {
     this.drawLeftWidget();
   }
   drawLeftWidget() {
-    console.log('Draw left widget', this["_currentProject"])
     this.drawLabel(this._leftLayout, "Режим редактирования", {
       width: "100%",
       minHeight: "40px",
@@ -113,30 +114,42 @@ class ProjectEditor extends BaseObjectEditor {
       maxHeight: "50px",
       background: "#26a69a",
       margin: "6px 0 0 0",
-      "border-bottom": "2px solid rgb(170, 170, 170)"
+      "border-bottom": "2px solid rgb(170, 170, 170)",
     });
 
     ReactComponent[projectLabel].fontSize = 30;
     ReactComponent[projectLabel].fontWeight = "bold";
 
-    
-this.drawLabel(this._leftLayout, "Открытые проекты",{
-  maxHeight: "50px",
-  minWidth: "100%",
-  border: "1x solid black"
+    this._openProjectLayout = this.drawLabel(this._leftLayout, "Открытые проекты", {
+      maxHeight: "50px",
+      minWidth: "100%",
+      border: "1x solid black",
+    });
 
-});
+    this._openProjectLayout =  this.drawLayout(this._leftLayout, "layoutVertical", { width: "100%" }),
+      "layoutVertical",
+      { minHeight: "100%", maxHeight: "100%" }
+  
+    this.drawProjects(this._openProjectLayout, this._openedProject);
+
+    // PASTE HERE
+
+    const myProjectLabel = this.drawLabel(this._leftLayout, "Мои проекты", {
+      maxHeight: "50px",
+      minWidth: "100%",
+      background: "#26a69a",
+      border: "1x solid black",
+    });
+
+    ReactComponent[myProjectLabel].fontSize = 40;
+    ReactComponent[myProjectLabel].fontWeight = "bold";
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
       "layoutVertical",
       { minHeight: "100%", maxHeight: "100%" }
     );
-    this._workingProjectLayout = this.drawLayout(
-      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
-      "layoutVertical",
-      { minHeight: "100%", maxHeight: "100%" }
-    );
+
     this.drawButton(
       this.drawLayout(this._leftLayout, "layoutHorizontal", {
         width: "100%",
@@ -150,35 +163,47 @@ this.drawLabel(this._leftLayout, "Открытые проекты",{
       }
     );
     this.drawProjects(this._allProjectLayout, this._projects);
+    // END PASTE
   }
 
   // Открытые проекты
 
   drawProjects(layout, projects) {
-    for (let i = 0; i < projects.length; i++) {
-      const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
-        width: "90%",
-        minHeight: "40px",
-        maxHeight: "40px",
-        borderBottom: "1px solid black",
-        margin: "0 auto",
-        background: "#D9EDF7"
-      });
-      ReactComponent[
-        this.drawLabel(projectLayout, projects[i]["meta"]["name"])
-      ].htmlElement.onclick = (e) => {
-        if (this._currentProjectLayout) {
-          this._currentProjectLayout.style.background = "none";
-        }
-        this._currentProjectLayout = e.target.parentNode;
-        this._currentProjectLayout.style.background = "#dbdbdb";
-        this.openProject(projects[i]["_id"]["$oid"]);
+    if (projects !== undefined && projects.length > 0) {
+      for (let i = 0; i < projects.length; i++) {
+        const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
+          width: "90%",
+          minHeight: "40px",
+          maxHeight: "40px",
+          borderBottom: "1px solid black",
+          margin: "0 auto",
+          background: "#D9EDF7",
+        });
+        ReactComponent[
+          this.drawLabel(projectLayout, projects[i]["meta"]["name"])
+        ].htmlElement.onclick = (e) => {
+          if (this._currentProjectLayout) {
+            this._currentProjectLayout.style.background = "none";
+          }
+          debugger;
+          //  Проверка на наличие этого компонента
+          console.log('Test the opened project',  this._openedProject, this._openedProject.length);
 
-        this.showObjects();
+          if ((this._openedProject.length <= 0) || (this._openedProject.find(proj => proj.meta.name !== projects[i].meta.name))){
+            this._openedProject.push(projects[i]);
+            ReactComponent[this._leftLayout].clearWidget();
+            this.drawLeftWidget();
+          }         
+          this._currentProjectLayout = e.target.parentNode;
+          this._currentProjectLayout.style.background = "#dbdbdb";
+          this.openProject(projects[i]["_id"]["$oid"]);
 
-        console.log("e", e);
-        console.log("this._currentProjectLayout", this._currentProjectLayout);
-      };
+          this.showObjects();
+
+          console.log("e", e);
+          console.log("this._currentProjectLayout", this._currentProjectLayout);
+        };
+      }
     }
   }
 
@@ -1818,7 +1843,6 @@ class ObjectSystem extends BaseObjectEditor {
   showObjectInfo(layout, projectID, id) {
     ReactComponent[layout].clearWidget();
     const object = this.findObjectByID(projectID, id);
-    console.log("showObjectInfo", object);
     this.showObjectTitle(layout, object, projectID);
     this.showObjectProperties(layout, object, projectID);
   }
