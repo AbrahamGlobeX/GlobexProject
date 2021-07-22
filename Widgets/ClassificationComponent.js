@@ -212,7 +212,7 @@ class Classification {
       -1,
       "main",
       {},
-      undefined
+      this.formEditGroup.bind(this)
     );
 
     this._contextMenu.createMenu(this._classificationItemsName);
@@ -730,7 +730,7 @@ class Classification {
     APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
-  formEditGroup(group = undefined) {
+  formEditGroup(group = undefined) { debugger;
     console.log("group", group);
     let languageValues;
     let currentParentClassification = -1;
