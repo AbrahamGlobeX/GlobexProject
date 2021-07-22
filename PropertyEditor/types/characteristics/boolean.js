@@ -17,4 +17,26 @@ class Characteristics_BooleanType extends BasePropertyType{
         widget.includeWidget(checkbox);
         this.widget = widget;
     }
+
+    static async getInputWidget(property) {
+        const widget = new WidgetLayoutHorizontal();
+        const input = new WidgetCheckBox();
+        input.checked = property.value;
+        input.inputElement.onchange = (e) => {
+            property.value = e.target.checked;
+        }
+
+        widget.includeWidget(input);
+        return widget;
+    }
+	
+	static async getLabelWidget(property) {
+        const widget = new WidgetLayoutHorizontal();
+        const input = new WidgetCheckBox();
+        input.checked = property.value;
+        input.inputElement.disabled = true;
+
+        widget.includeWidget(input);
+        return widget;
+    }
 }

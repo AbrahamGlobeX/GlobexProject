@@ -77,7 +77,7 @@ class ProjectEditor extends BaseObjectEditor {
     });
     this._mainContentLayout = this.drawLayout(mainLayout, "layoutVertical", {
       width: "100%",
-      height: "auto", // auto
+      height: "auto", 
     });
 
     this._headerLayout = this.drawLayout(
@@ -99,6 +99,7 @@ class ProjectEditor extends BaseObjectEditor {
     this.drawLeftWidget();
   }
   drawLeftWidget() {
+    console.log('Draw left widget', this["_currentProject"])
     this.drawLabel(this._leftLayout, "Режим редактирования", {
       width: "100%",
       minHeight: "40px",
@@ -110,12 +111,21 @@ class ProjectEditor extends BaseObjectEditor {
       width: "100%",
       minHeight: "40px",
       maxHeight: "50px",
-      "border-bottom": "2px solid rgb(170, 170, 170)",
+      background: "#26a69a",
+      margin: "6px 0 0 0",
+      "border-bottom": "2px solid rgb(170, 170, 170)"
     });
 
     ReactComponent[projectLabel].fontSize = 30;
     ReactComponent[projectLabel].fontWeight = "bold";
-    ReactComponent[projectLabel].htmlElement.style.background = "grey";
+
+    
+this.drawLabel(this._leftLayout, "Открытые проекты",{
+  maxHeight: "50px",
+  minWidth: "100%",
+  border: "1x solid black"
+
+});
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
@@ -140,8 +150,10 @@ class ProjectEditor extends BaseObjectEditor {
       }
     );
     this.drawProjects(this._allProjectLayout, this._projects);
-    //this.drawProjects(this._workingProjectLayout,this._projects);
   }
+
+  // Открытые проекты
+
   drawProjects(layout, projects) {
     for (let i = 0; i < projects.length; i++) {
       const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
@@ -150,6 +162,7 @@ class ProjectEditor extends BaseObjectEditor {
         maxHeight: "40px",
         borderBottom: "1px solid black",
         margin: "0 auto",
+        background: "#D9EDF7"
       });
       ReactComponent[
         this.drawLabel(projectLayout, projects[i]["meta"]["name"])
@@ -370,6 +383,8 @@ class ProjectEditor extends BaseObjectEditor {
         $oid: resultJSON["inserted_id"]["$oid"],
       };
       project["additional"]["classificatorObject"] = classificator;
+      debugger;
+      console.log("Классификатор проекта", classificator);
 
       APP.dbWorker.responseDOLMongoRequest = createdProject.bind(this);
 
@@ -420,7 +435,8 @@ class ProjectEditor extends BaseObjectEditor {
     );
   }
   openProject(projectID) {
-    if (this._currentProject != "") if (this._currentProject["_id"]["$oid"] === projectID) return;
+    if (this._currentProject != "")
+      if (this._currentProject["_id"]["$oid"] === projectID) return;
     ReactComponent[this._headerLayout].clearWidget();
     ReactComponent[this._contentLayout].clearWidget();
     this._centerLayout = this.drawLayout(
@@ -448,13 +464,12 @@ class ProjectEditor extends BaseObjectEditor {
       borderTop: "2px solid #aaa",
       borderBottom: "2px solid #aaa",
     });
-    // this.drawLabel(nameLayout, "Название проекта");
 
     // VIEW TITLE //
 
     let headerText = this.drawLabel(
       nameLayout,
-      `Редактирование проекта "${project["meta"]["name"]}"`
+      `Редактирование проекта "${project.meta.name}"`
     );
     const switchGroupLayout = this.drawLayout(
       this._headerLayout,
@@ -535,6 +550,19 @@ class ProjectEditor extends BaseObjectEditor {
       "layoutVertical",
       { height: "100%" }
     );
+
+    // Кнопка 'Классификатор GlobeXY'
+    this.drawButton(
+      classificatorLayout,
+      "Классификатор GlobeXY",
+      {
+        minWidth: "100%",
+        maxHeight: "30px",
+        background: "grey",
+        color: "black",
+      },
+      () => {}
+    );
     // this.drawLabel(
     //   this.drawLayout(classificatorLayout, "layoutHorizontal", {
     //     width: "100%",
@@ -567,6 +595,21 @@ class ProjectEditor extends BaseObjectEditor {
       (e) => {
         e.preventDefault();
         MainClassificator.showContextMenu(e, "mainView");
+      }
+    );
+    // Кнопка "Добавить объект"
+
+    this.drawButton(
+      this.drawLayout(classificatorLayout, "layoutHorizontal", {
+        width: "99%",
+        maxHeight: "50px",
+      }),
+      "Добавить объект",
+      { color: "#123456" },
+      () => {
+        const editor = new PatternEditorSystem(this);
+        editor.callbackCreateObject = this.callbackCreateObject.bind(this);
+        editor.drawFormObjectsWithPatterns();
       }
     );
   }
@@ -618,12 +661,13 @@ class ProjectEditor extends BaseObjectEditor {
         }
       );
 
+      // Кнопка 'Редактировать группу' работает как кнопка 'Добавить объект'
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
           width: "99%",
           maxHeight: "50px",
         }),
-        "Добавить объект",
+        "Редактировать группу",
         { color: "#123456" },
         () => {
           const editor = new PatternEditorSystem(this);
@@ -963,7 +1007,7 @@ class Classificator {
         continue;
       }
       _currentClass["layer"] = currentClassificator["layer"];
-      
+
       _currentClass["name"] = _predClass["layer"].find((item) => {
         if (item.hasOwnProperty("child_id")) {
           return (
@@ -1776,7 +1820,7 @@ class ObjectSystem extends BaseObjectEditor {
     const object = this.findObjectByID(projectID, id);
     console.log("showObjectInfo", object);
     this.showObjectTitle(layout, object, projectID);
-    this.showObjectProperties(layout, object);
+    this.showObjectProperties(layout, object, projectID);
   }
 
   showObjectTitle(layout, object) {
@@ -1840,7 +1884,7 @@ class ObjectSystem extends BaseObjectEditor {
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
 
-  async showObjectProperties(parentLayout, object) {
+  async showObjectProperties(parentLayout, object, projectID) {
     console.log("this._objectProps", this._objectProps);
     const propsLayout = this.drawLayout(
       this.drawLayout(parentLayout, "layoutHorizontal", { width: "100%" }),
@@ -1892,13 +1936,13 @@ class ObjectSystem extends BaseObjectEditor {
       //this.drawLabel(layout,object["object"][prop]["value"]);
       //this.drawLabel(layout,this._objectProps[prop]["category"]);
     }
-    this.DrawEditObjectButton(parentLayout, object);
+    this.DrawEditObjectButton(parentLayout, object, projectID);
   }
 
-  DrawEditObjectButton(parentLayout, object) {
+  DrawEditObjectButton(parentLayout, object, projectID) {
     this.drawButton(
       parentLayout,
-      "Редактировать",
+      "Редактировать объект",
       {
         color: "#123456",
         width: "100%",
@@ -1921,3 +1965,114 @@ class ObjectSystem extends BaseObjectEditor {
     );
   }
 }
+
+//#region SearchEngine
+
+/**
+ *function to find the name of an object or project
+ *@return {Array} Array of objects that have that keyword in name
+ */
+function searchByName(data, searchKeyword) {
+  const arrayToFonSearch = convertToArray(Object.values(data));
+  console.log("array to search", arrayToFonSearch);
+  let objectsToOutput;
+  if (!searchKeyword.trim()) {
+    objectsToOutput = [];
+  } else {
+    objectsToOutput = BigDataSearch(arrayToFonSearch, searchKeyword);
+  }
+  return objectsToOutput;
+}
+
+/**
+ * function to find the name of an object or project
+ *
+ * @param {Array} arrayToSearch the array in which we are looking
+ * @param {String} keywords the words we are looking for
+ * @return {Array} search results
+ */
+function BigDataSearch(arrayToSearch, keywords) {
+  keywords = keywords.trim().replace(/ +/g, " ").split(" ");
+  keywords.forEach((keyword) => {
+    arrayToSearch = arrayToSearch.filter((el) =>
+      el.meta.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+  });
+  // let result = []
+  // arrayToSearch.forEach(item => result.push({classification: item.additional.classification, name: item.meta.name}))
+  return arrayToSearch;
+}
+
+/**
+ *convert an array of arrays to one array
+ *
+ * @param {Array} array
+ * @return {Array} result array
+ */
+function convertToArray(array) {
+  let result = [];
+  array.forEach((el) => {
+    result = result.concat(el);
+  });
+  return result;
+}
+
+/**
+ *
+ *  Search property by name or name+value
+ * @param {Array} array The array in which we are looking for the property
+ * @param {String} propName The name of the property we are looking for
+ * @param {String} propValue The value of the property we are looking for
+ * @param {String} comparison The value of the comparison > < >= etc
+ * @return {Array} Array of objects id
+ */
+function searchProperty(array, propName, propValue = null, comparison = "=") {
+  // Checking fields for emptiness
+  const searchArray = convertToArray(Object.values(array));
+  if (searchArray.length === 0 || !propName.trim()) {
+    document.getElementById("result2").innerText = "";
+    return console.log("bad request");
+  }
+
+  isNaN(propValue) ? propValue.toLowerCase() : (propValue = Number(propValue));
+
+  const result = [];
+  searchArray.map((obj) => {
+    Object.keys(obj.object).map((prop) => {
+      if (prop.toLowerCase().includes(propName.toLowerCase())) {
+        if (propValue && comparison) {
+          switch (comparison) {
+            case "=":
+              if (propValue == obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case ">":
+              if (propValue > obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case "<":
+              if (propValue < obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case ">=":
+              if (propValue >= obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case "<=":
+              if (propValue <= obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            default:
+              return;
+          }
+        }
+        return result.push(obj);
+      }
+    });
+  });
+
+  let result2 = [];
+  result2 = result.map((el) => (result2 += el.meta.name + " "));
+}
+
+//#endregion
