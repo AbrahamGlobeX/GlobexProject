@@ -66,7 +66,6 @@ class DBWorker {
 		if (!dataJson) {
 			console.error("Cant parse socket request to JSON!", dataStr);
 		}
-
 		// Check on error
 		if (dataJson.error) {
 			console.error("Socket error request!", dataStr);

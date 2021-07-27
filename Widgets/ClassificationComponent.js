@@ -300,6 +300,7 @@ class Classification {
     APP.dbWorker.responseDOLMongoRequest = loadedClassification.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", request);
   }
+
   drawTree(projectID) {
     try {
       this._tree[projectID] = new WidgetTree();
@@ -308,9 +309,10 @@ class Classification {
       this._classificationGroupListMoveMenu.clearItems();
       this._classificationGroupListDeleteMenu.clearItems();
       const drawItem = function (id, parentID, element, predParentID, pID) {
+        console.log("ELEMENT!!!!!!!!!!", element);
         const name =
           parentID === -1
-            ? "Классификация текущего проекта"
+            ? `${element.name.ru}`
             : element.name["ru"] + " ( группа )";
         predParentID = parentID;
         const item = this._tree[projectID].createItemInTree(parentID, () => {});
@@ -323,7 +325,7 @@ class Classification {
           undefined
         );
 
-        if (parentID != -1) {
+        if (parentID != -1) {          
           this._classificationGroupListAddMenu.addMenuItem(
             name.replace(" ( группа )", ""),
             -1,
@@ -434,9 +436,10 @@ class Classification {
 
   drawTreeByClassificationWithObjects(projectID, data) {
     const tree = new WidgetTree();
+    
     if (data.length == 0) {
       const item = tree.createItemInTree(-1);
-      ReactComponent[item].text = "Классификация проекта";
+      ReactComponent[item].text = "Классификация проекта";  
 
       const item2 = tree.createItemInTree(item);
       ReactComponent[item2].text = "Ничего не найдено";
@@ -446,7 +449,7 @@ class Classification {
 
     const localTreeItem = {};
     let allClassification = {};
-    
+
     data.forEach((item) => {
       if (
         item.hasOwnProperty("classification") &&
@@ -475,10 +478,11 @@ class Classification {
       let currentClassification = this._classification[projectID];
       let predNum = -1;
       for (let num of path) {
-        currentClassification = currentClassification['1']
+        currentClassification = currentClassification["1"];
         if (!localCurrentTreeItem.hasOwnProperty(num)) {
           const item = tree.createItemInTree(predNum);
-          ReactComponent[item].text = currentClassification["name"]["rus"];
+          console.log('current classification',currentClassification)
+          ReactComponent[item].text = currentClassification["name"]["ru"];
           localCurrentTreeItem[num] = { widget: item, parent: predNum };
           predNum = item;
         } else {
@@ -510,6 +514,7 @@ class Classification {
   drawTreeByClassificationsWithObjects(data) {
     const tree = {};
     for (let id of Object.keys(this._classification)) {
+      console.log('ID from drawTreeByClassificationsWithObjects', id);
       tree[id] = this.drawTreeByClassificationWithObjects(id, data);
     }
     return tree;

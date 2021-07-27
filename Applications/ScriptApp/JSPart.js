@@ -897,6 +897,14 @@ class JSPart {
       }
     };
 
+    /**
+     *  Функция для создание layout
+     *
+     * @param {String} parentLayoutID
+     * @param {*} type layoutVertical/layoutHorizontal
+     * @param {string} [style={ width: "700px", height: "50px" }]
+     * @return {String} ID of created layout
+     */
     let DrawLayout = function (
       parentLayoutID,
       type,

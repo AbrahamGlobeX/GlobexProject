@@ -1196,7 +1196,7 @@ class PatternEditorSystem extends BaseObjectEditor {
       //MainObjects.find(e.target.value);
       
       let result = []
-      data.forEach(item => result.push({classification: item.additional.classification, name: item.meta.name}))
+      data.forEach(item => result.push({name: item.meta.name, classification: item.additional.classification}))
 
       const tree =
         MainClassification.drawTreeByClassificationsWithObjects(result);

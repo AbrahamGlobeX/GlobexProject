@@ -17,7 +17,10 @@ class ProjectEditor extends BaseObjectEditor {
 
     this._projects = undefined;
     this._openedProject = [];
+    this._mineProjects = [];
     this._openProjectLayout = "";
+
+    this._leftLayoutVisible = true;
 
     this._contextMenu = new NewContextMenu();
 
@@ -120,19 +123,27 @@ class ProjectEditor extends BaseObjectEditor {
     ReactComponent[projectLabel].fontSize = 30;
     ReactComponent[projectLabel].fontWeight = "bold";
 
-    this._openProjectLayout = this.drawLabel(this._leftLayout, "Открытые проекты", {
-      maxHeight: "50px",
-      minWidth: "100%",
-      border: "1x solid black",
-    });
+    this._openProjectLayout = this.drawLabel(
+      this._leftLayout,
+      "Открытые проекты",
+      {
+        maxHeight: "50px",
+        minWidth: "100%",
+        border: "1x solid black",
+      }
+    );
 
-    this._openProjectLayout =  this.drawLayout(this._leftLayout, "layoutVertical", { width: "100%" }),
+    (this._openProjectLayout = this.drawLayout(
+      this._leftLayout,
       "layoutVertical",
-      { minHeight: "100%", maxHeight: "100%" }
-  
+      { width: "100%" }
+    )),
+      "layoutVertical",
+      { minHeight: "100%", maxHeight: "100%" };
+
     this.drawProjects(this._openProjectLayout, this._openedProject);
 
-    // PASTE HERE
+    // Мои проекты
 
     const myProjectLabel = this.drawLabel(this._leftLayout, "Мои проекты", {
       maxHeight: "50px",
@@ -142,7 +153,27 @@ class ProjectEditor extends BaseObjectEditor {
     });
 
     ReactComponent[myProjectLabel].fontSize = 40;
-    ReactComponent[myProjectLabel].fontWeight = "bold";
+    ReactComponent[myProjectLabel].fontWeight = "bold";    
+
+    // поле для поиска
+    const searchProjectInput = this.drawInput(this._leftLayout,'',{
+      maxHeight: '30px',
+      minWidth: '100%',
+    })
+       
+    // поиск в моих проектах
+    this._mineProjects = this._projects;
+    ReactComponent[searchProjectInput].htmlElement.oninput = (e) => {
+      if(e.target.value.length > 0) {
+        this._mineProjects = searchByName(this._projects, e.target.value)
+      } else {
+        this._mineProjects = this._projects
+      }
+
+      ReactComponent[this._allProjectLayout].clearWidget();
+      this.drawProjects(this._allProjectLayout, this._mineProjects );
+    }
+    
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
@@ -156,14 +187,13 @@ class ProjectEditor extends BaseObjectEditor {
         minHeight: "50px",
         maxHeight: "50px",
       }),
-      "Создать проект",
+      "Создать новый проект",
       { color: "#123456" },
       () => {
         this.drawFormEditProject();
       }
     );
-    this.drawProjects(this._allProjectLayout, this._projects);
-    // END PASTE
+    this.drawProjects(this._allProjectLayout, this._mineProjects || this._projects);
   }
 
   // Открытые проекты
@@ -185,15 +215,17 @@ class ProjectEditor extends BaseObjectEditor {
           if (this._currentProjectLayout) {
             this._currentProjectLayout.style.background = "none";
           }
-          debugger;
-          //  Проверка на наличие этого компонента
-          console.log('Test the opened project',  this._openedProject, this._openedProject.length);
 
-          if ((this._openedProject.length <= 0) || (this._openedProject.find(proj => proj.meta.name !== projects[i].meta.name))){
+          //  Проверка на наличие проекта в открытых проектах и добавление проекта, если он отсутствует
+          if (
+            this._openedProject.length <= 0 ||
+            this._openedProject.indexOf(projects[i]) === -1
+          ) {
             this._openedProject.push(projects[i]);
             ReactComponent[this._leftLayout].clearWidget();
             this.drawLeftWidget();
-          }         
+          }
+
           this._currentProjectLayout = e.target.parentNode;
           this._currentProjectLayout.style.background = "#dbdbdb";
           this.openProject(projects[i]["_id"]["$oid"]);
@@ -804,8 +836,6 @@ class ProjectEditor extends BaseObjectEditor {
       const loadProject = function (index) {
         if (index >= this._projects.length) {
           console.log("current project", this._currentProject["_id"]["$oid"]);
-          console.log("classification", MainClassification._classification);
-          console.log("classificator", MainClassificator._classificator);
           console.log("objects", MainObjects._objects);
           return callback();
         }
@@ -995,6 +1025,7 @@ class Classificator {
     };
     const rootID = Object.keys(this._classificator[projectID])[0];
     getID.bind(this, rootID, this._classificator[projectID][rootID])();
+    console.log('Classificator PROJECT', ids);
     return Object.keys(ids);
   }
   fillClassificatorWithCommon(projectID, common) {
@@ -1212,7 +1243,9 @@ class Classificator {
     }
     return buildTree;
   }
+
   drawClassificatorTreeByItems(classificator) {
+    
     const treeItem = {};
     const tree = new WidgetTree();
     if (Object.keys(classificator).length == 0) {
@@ -1251,11 +1284,12 @@ class Classificator {
         )();
       }
     };
-    const rootID = Object.keys(classificator)[0];
+    const rootID = Object.keys(classificator)[0];    
     drawItem.bind(this, rootID, -1, classificator[rootID], -1, -1)();
 
     return tree;
   }
+
   drawClassificatorTreesByItems(items) {
     const trees = {};
     for (let id of Object.keys(items)) {
@@ -1263,6 +1297,7 @@ class Classificator {
     }
     return trees;
   }
+
   showContextMenu(
     e,
     mode,
@@ -1822,7 +1857,8 @@ class ObjectSystem extends BaseObjectEditor {
         if (this._objectProps.hasOwnProperty(prop)) {
         } else {
           if (object["object"][prop].hasOwnProperty("prop_ref")) {
-            req[prop] = object["object"][prop]["prop_ref"]["$oid"];
+            if (object["object"][prop]["prop_ref"]["$oid"])
+              req[prop] = object["object"][prop]["prop_ref"]["$oid"];
             this._objectProps[prop] =
               object["object"][prop]["prop_ref"]["$oid"];
           }
@@ -1997,7 +2033,13 @@ class ObjectSystem extends BaseObjectEditor {
  *@return {Array} Array of objects that have that keyword in name
  */
 function searchByName(data, searchKeyword) {
-  const arrayToFonSearch = convertToArray(Object.values(data));
+  let arrayToFonSearch
+  if (!data.isArray) {
+    arrayToFonSearch = convertToArray(Object.values(data));
+  } else {
+    arrayToFonSearch = data
+  }
+
   console.log("array to search", arrayToFonSearch);
   let objectsToOutput;
   if (!searchKeyword.trim()) {
@@ -2005,6 +2047,8 @@ function searchByName(data, searchKeyword) {
   } else {
     objectsToOutput = BigDataSearch(arrayToFonSearch, searchKeyword);
   }
+  
+  console.log("objectsToOutput", objectsToOutput);
   return objectsToOutput;
 }
 
@@ -2100,3 +2144,24 @@ function searchProperty(array, propName, propValue = null, comparison = "=") {
 }
 
 //#endregion
+ 
+window.addEventListener('resize', (e) => {
+  // console.log('resize',e);
+})
+
+function move(){
+	const viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+	if (viewport_width <= 992) {
+		if (!item.classList.contains('done')) {
+			parent.insertBefore(item, parent.children[2]);
+			item.classList.add('done');
+		}
+	} else {
+		if (item.classList.contains('done')) {
+			parent_original.insertBefore(item, parent_original.children[2]);
+			item.classList.remove('done');
+		}
+	}
+}
+
+//#region Adaptive
