@@ -5,6 +5,7 @@ class ProjectEditor extends BaseObjectEditor {
   constructor() {
     super();
 
+
     this._leftLayout = undefined;
     this._centerLayout = undefined;
     this._rightLayout = undefined;
@@ -19,6 +20,8 @@ class ProjectEditor extends BaseObjectEditor {
     this._openedProject = [];
     this._mineProjects = [];
     this._openProjectLayout = "";
+
+    this._classificatorArray = [];
 
     this._leftLayoutVisible = true;
 
@@ -718,7 +721,7 @@ class ProjectEditor extends BaseObjectEditor {
         }
       );
 
-      // Кнопка 'Редактировать группу' работает как кнопка 'Добавить объект'
+      // Кнопка 'Редактировать группу' работает как кнопка 'Сравнить объекты'
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
           width: "99%",
@@ -726,11 +729,15 @@ class ProjectEditor extends BaseObjectEditor {
         }),
         "Редактировать группу",
         { color: "#123456" },
-        () => {
-          const editor = new PatternEditorSystem(this);
-          editor.callbackCreateObject = this.callbackCreateObject.bind(this);
-          editor.drawFormObjectsWithPatterns();
+        () => { 
+          // import WidgetCompareTable from './WidgetCompareTable'
+          const compareobj = new CompareTable(this._allProjectLayout)
         }
+        // () => {
+        //   const editor = new PatternEditorSystem(this);
+        //   editor.callbackCreateObject = this.callbackCreateObject.bind(this);
+        //   editor.drawFormObjectsWithPatterns();
+        // }
       );
     } catch (e) {
       console.error("drawClassification", e);
@@ -1245,10 +1252,11 @@ class Classificator {
   }
 
   drawClassificatorTreeByItems(classificator) {
-    
+    console.log('Draw classificator ', classificator);
     const treeItem = {};
     const tree = new WidgetTree();
     if (Object.keys(classificator).length == 0) {
+      console.log('Enter undefined', Object.keys(classificator));
       const item = tree.createItemInTree(-1);
       ReactComponent[item].text = "Классификатор проекта";
 
@@ -1258,31 +1266,28 @@ class Classificator {
       return tree;
     }
     const drawItem = function (id, parentID, element, predParentID, pID) {
-      const name =
-        parentID === -1
-          ? "Классификатор проекта"
-          : element.name + " ( прототип )";
+      const name = element + " ( прототип )";
       predParentID = parentID;
-      const item = tree.createItemInTree(parentID, () => {});
+      const item = tree.createItemInTree(0, () => {});
       ReactComponent[item].text = name;
 
       treeItem[id] = {
         widget: item,
         parent: predParentID,
-        name: parentID === -1 ? "Классификатор проекта" : element.name,
+        name:  element,
         parentID: pID,
         id: id,
       };
-      for (let childID of Object.keys(element.childrens)) {
-        drawItem.bind(
-          this,
-          childID,
-          item,
-          element.childrens[childID],
-          predParentID,
-          id
-        )();
-      }
+     // for (let childID of Object.keys(element.childrens)) {
+        // drawItem.bind(
+        //   this,
+        //   id,
+        //   item,
+        //   element,
+        //   predParentID,
+        //   id
+        // )();
+     // }
     };
     const rootID = Object.keys(classificator)[0];    
     drawItem.bind(this, rootID, -1, classificator[rootID], -1, -1)();
@@ -2033,6 +2038,7 @@ class ObjectSystem extends BaseObjectEditor {
  *@return {Array} Array of objects that have that keyword in name
  */
 function searchByName(data, searchKeyword) {
+  debugger;
   let arrayToFonSearch
   if (!data.isArray) {
     arrayToFonSearch = convertToArray(Object.values(data));
@@ -2040,7 +2046,6 @@ function searchByName(data, searchKeyword) {
     arrayToFonSearch = data
   }
 
-  console.log("array to search", arrayToFonSearch);
   let objectsToOutput;
   if (!searchKeyword.trim()) {
     objectsToOutput = [];
@@ -2048,7 +2053,6 @@ function searchByName(data, searchKeyword) {
     objectsToOutput = BigDataSearch(arrayToFonSearch, searchKeyword);
   }
   
-  console.log("objectsToOutput", objectsToOutput);
   return objectsToOutput;
 }
 
@@ -2099,11 +2103,12 @@ function searchProperty(array, propName, propValue = null, comparison = "=") {
   const searchArray = convertToArray(Object.values(array));
   if (searchArray.length === 0 || !propName.trim()) {
     document.getElementById("result2").innerText = "";
-    return console.log("bad request");
   }
 
+  // преобразование к строке в нижнем регистре или к числу для дальнейшего сравнения
   isNaN(propValue) ? propValue.toLowerCase() : (propValue = Number(propValue));
 
+  // сравнение значения свойства с требуемым 
   const result = [];
   searchArray.map((obj) => {
     Object.keys(obj.object).map((prop) => {
@@ -2143,7 +2148,48 @@ function searchProperty(array, propName, propValue = null, comparison = "=") {
   result2 = result.map((el) => (result2 += el.meta.name + " "));
 }
 
-//#endregion
+function convertClassificatorToArray(classificator) {
+  debugger;
+  console.log('Enter a converter');
+  let result;
+  result = classificator._classificator;
+  result = Object.values(result);
+  result.forEach((el) => {
+    const child = Object.values(el)[0];
+    getChildrens(child);
+  });
+}
+
+function getChildrens(obj) { 
+  console.log('Enter get children');
+  if (Object.values(obj.childrens).length > 0) {
+    Object.values(obj.childrens).forEach((child) => {
+      return getChildrens( child);
+    });
+  } else {
+    debugger;
+    console.log('Classificator array', this);
+    this._classificatorArray.push(obj.name.ru || obj.name);
+    return obj;
+  }
+}
+
+function searchClassificatorByName(classifiactors, searcher) {
+  debugger;
+  console.log('Enter a searcher');
+  convertClassificatorToArray(classifiactors);
+
+  let arrayToSearch;
+  const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
+
+  keywords.forEach((keyword) => {
+    arrayToSearch = this._classificatorArray.filter(el => el.toLowerCase().includes(keyword.toLowerCase()))  
+  });
+  return this._classificatorArray;
+}
+
+
+//#region Adaptive mb in future
  
 window.addEventListener('resize', (e) => {
   // console.log('resize',e);
@@ -2164,4 +2210,4 @@ function move(){
 	}
 }
 
-//#region Adaptive
+//#endregion

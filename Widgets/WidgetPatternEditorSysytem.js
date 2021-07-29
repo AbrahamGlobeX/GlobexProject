@@ -10,8 +10,11 @@ class PatternEditorSystem extends BaseObjectEditor {
     this._selectedPatterns = {};
     this._selectedProperties = {};
     this._ownCreatingPattern = {};
+    this._classificatorArray = [];
 
     this._loadedClassification = {};
+
+    this._classificatorArray = [];
 
     this._loadedPatternsLayout;
     this._loadedPatterns = {};
@@ -1148,7 +1151,7 @@ class PatternEditorSystem extends BaseObjectEditor {
     currentSearchOptionButton = objectBTNOption;
     const patternBTNOption = this.drawButton(
       searchOptionLayout,
-      "Прототип",
+      "Прототипы",
       { color: "#123456" },
       () => {
         if (currentSearchOptionButton) {
@@ -1212,20 +1215,79 @@ class PatternEditorSystem extends BaseObjectEditor {
     } else {
       console.log('Main Classificator:', MainClassificator);
       console.log('MainClassificator find', MainClassificator.find(e.target.value))
-      const data = searchByName(Object.values(MainClassificator)[5],e.target.value)
+      const data = this.searchClassificatorByName(MainClassificator,  e.target.value)
 
-      console.log('Mainclassificator data', Object.values(MainClassificator)[5]);
+      const resultData = {}      
 
-      const tree = MainClassificator.drawClassificatorTreesByItems(data);
+      data.forEach(element => {
+        resultData[element.id] = {name: element.name, childrens: element.childrens}
+      });
+
+      console.log('Mainclassificator data', data);
+      console.log('Mainclassificator resultData', resultData);
+      const tree = MainClassificator.drawClassificatorTreesByItems(resultData);
+
+
+      console.log('Tree Object.keys()', tree);
 
       for (let id of Object.keys(tree)) {
-        const layout = this.drawLayout(
-          this._searchTreeLayout,
-          "layoutHorizontal",
-          { width: "100%" }
-        );
-        ReactComponent[layout].includeWidget(tree[id]);
+        const lbl = this.drawLabel(this._searchTreeLayout, tree[id].htmlElement.innerText)
+        ReactComponent[lbl].htmlElement.style.minWidth = '100%'
+        ReactComponent[lbl].htmlElement.style.maxHeight = '50px'
+        ReactComponent[lbl].htmlElement.style.borderBottom = '1px solid black'
+        ReactComponent[lbl].htmlElement.style.cursor = 'pointer'
+        ReactComponent[lbl].htmlElement.onmouseover = () => {
+          ReactComponent[lbl].className = 'elementMouseOver'
+          ReactComponent[lbl].htmlElement.style.background = '#D9EDF7'
+        }
+        ReactComponent[lbl].htmlElement.onmouseout = () => {
+          ReactComponent[lbl].htmlElement.style.background = '#FFF'
+        } 
       }
+
+      // for (let id of Object.keys(tree)) {
+      //   const layout = this.drawLayout(
+      //     this._searchTreeLayout,
+      //     "layoutHorizontal",
+      //     { width: "100%" }
+      //   );
+      //   ReactComponent[layout].includeWidget(tree[id]);
+      // }
     }
+  }
+
+  convertClassificatorToArray(classificator) {
+    let result;
+    result = classificator._classificator;
+    result = Object.values(result);
+    result.forEach((el) => {
+      const child = Object.values(el)[0];
+      this.getChildrens(child);
+    });
+  }
+  
+  getChildrens(obj, keys = null) { 
+    const objKey = Object.keys(Object.values(obj)[0])[0];
+    if (Object.values(obj.childrens).length > 0) {      
+      Object.values(obj.childrens).forEach((child) => {
+        return this.getChildrens(child, objKey);
+      });
+    } else {
+      this._classificatorArray.push({name: obj.name.ru || obj.name, id: keys});
+      return obj;
+    }
+  }
+  
+  searchClassificatorByName(classifiactors, searcher) {
+    this.convertClassificatorToArray(classifiactors);
+  
+    let arrayToSearch;
+    const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
+  
+    keywords.forEach((keyword) => {
+      arrayToSearch = this._classificatorArray.filter(el => el.name.toLowerCase().includes(keyword.toLowerCase()))  
+    });
+    console.log('this._classificatorArray', this._classificatorArray);
+    return arrayToSearch;
   }
 }

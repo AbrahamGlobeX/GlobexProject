@@ -58,7 +58,6 @@ class JSPart {
       textContent: "header on/off",
       headerText: "header",
 
-      // textContent: 'hgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',
       attributes: {
         // type : 'checkbox',
         style: {

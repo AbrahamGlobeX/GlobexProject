@@ -309,7 +309,6 @@ class Classification {
       this._classificationGroupListMoveMenu.clearItems();
       this._classificationGroupListDeleteMenu.clearItems();
       const drawItem = function (id, parentID, element, predParentID, pID) {
-        console.log("ELEMENT!!!!!!!!!!", element);
         const name =
           parentID === -1
             ? `${element.name.ru}`
@@ -436,15 +435,16 @@ class Classification {
 
   drawTreeByClassificationWithObjects(projectID, data) {
     const tree = new WidgetTree();
-    
+
     if (data.length == 0) {
-      const item = tree.createItemInTree(-1);
-      ReactComponent[item].text = "Классификация проекта";  
+      return
+      // const item = tree.createItemInTree(-1);
+      // ReactComponent[item].text = "Классификация проекта";  
 
-      const item2 = tree.createItemInTree(item);
-      ReactComponent[item2].text = "Ничего не найдено";
+      // const item2 = tree.createItemInTree(item);
+      // ReactComponent[item2].text = "Ничего не найдено";
 
-      return tree;
+      // return tree;
     }
 
     const localTreeItem = {};
@@ -464,13 +464,14 @@ class Classification {
     allClassification = Object.keys(allClassification);
 
     if (allClassification.length == 0) {
-      const item = tree.createItemInTree(-1);
-      ReactComponent[item].text = "Классификация проекта";
+      return
+      // const item = tree.createItemInTree(-1);
+      // ReactComponent[item].text = "Классификация проекта";
 
-      const item2 = tree.createItemInTree(item);
-      ReactComponent[item2].text = "Ничего не найдено";
+      // const item2 = tree.createItemInTree(item);
+      // ReactComponent[item2].text = "Ничего не найдено";
 
-      return tree;
+      // return tree;
     }
     for (let classification of allClassification) {
       const path = classification.split(".");
@@ -481,8 +482,7 @@ class Classification {
         currentClassification = currentClassification["1"];
         if (!localCurrentTreeItem.hasOwnProperty(num)) {
           const item = tree.createItemInTree(predNum);
-          console.log('current classification',currentClassification)
-          ReactComponent[item].text = currentClassification["name"]["ru"];
+          ReactComponent[item].text = currentClassification.name.ru;
           localCurrentTreeItem[num] = { widget: item, parent: predNum };
           predNum = item;
         } else {
@@ -514,7 +514,6 @@ class Classification {
   drawTreeByClassificationsWithObjects(data) {
     const tree = {};
     for (let id of Object.keys(this._classification)) {
-      console.log('ID from drawTreeByClassificationsWithObjects', id);
       tree[id] = this.drawTreeByClassificationWithObjects(id, data);
     }
     return tree;

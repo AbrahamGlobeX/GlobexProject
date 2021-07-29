@@ -25,5 +25,6 @@ const widgetsComponentsTypes = {
 	spinBox: WidgetSpinBox,
 	checkBox: WidgetCheckBox,
 	geoMap: WidgetGeoMap,
-	Frame: WidgetFrame
+	Frame: WidgetFrame,
+	CompareT: CompareTable
 }
