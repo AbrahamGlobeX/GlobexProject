@@ -18,7 +18,7 @@
 .horizontalLayout {
   min-width: 130px;
   max-width: 150px;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .selectedObjectProperty {

@@ -431,7 +431,7 @@ const comparableObjects = [
   objToCompare4,
 ];
 
-//TODO: prevent-default scroll
+//TODO: Оставить шапку наверху при скроле
 
 //#endregion
 
@@ -628,8 +628,8 @@ class CompareTable extends BaseObjectEditor {
         ReactComponent[hLayout].htmlElement.addEventListener(
           "mousewheel",
           (e) => {
-            console.log("Scroll checkbox", e);
-            this.scrollFunction(e.target.parentElement.parentElement.parentElement, e.offsetY);
+            e.preventDefault()
+            this.scrollFunction(e.target.parentElement.parentElement.parentElement, e.deltaY);
           }
         );
         continue;
@@ -642,7 +642,8 @@ class CompareTable extends BaseObjectEditor {
       ReactComponent[hLayout].htmlElement.addEventListener(
         "mousewheel",
         (e) => {
-          console.log("mouse wheel", e);
+          e.preventDefault()
+          this.scrollFunction(e.target.parentElement.parentElement.parentElement, e.deltaY);
         }
       );
 
@@ -1114,24 +1115,9 @@ class CompareTable extends BaseObjectEditor {
     ReactComponent[widget].clearWidget();
   }
 
-  /**
-   *Метод для перемещения элемента массива
-   *
-   * @param {Array} array массив,в котором перемещаем элемент
-   * @param {Integer} oldIndex элемент массива для перемещения
-   * @param {Integer} newIndex новая позиция элмента
-   * @return {Array} массив с перемещенным элементом
-   * @memberof CompareTable
-   */
   moveObjInArray(oldId, newId) {
-    // Преобразвание индексов в целые десятичные числа
 
     if (oldId == newId) return;
-
-    console.log("before change", this._comparedObjects);
-
-    console.log("OldId", oldId);
-    console.log("newId", newId);
 
     const oldIndex = this._comparedObjects.indexOf(
       this._comparedObjects.find((el) => el._id.$oid == oldId)
@@ -1139,9 +1125,6 @@ class CompareTable extends BaseObjectEditor {
     const newIndex = this._comparedObjects.indexOf(
       this._comparedObjects.find((el) => el._id.$oid == newId)
     );
-
-    console.log("oldIndex", oldIndex);
-    console.log("newIndex", newIndex);
 
     if (oldIndex < newIndex)
       this._comparedObjects.splice(
@@ -1156,28 +1139,13 @@ class CompareTable extends BaseObjectEditor {
         0,
         this._comparedObjects.splice(oldIndex, 1)[0]
       );
-
-    console.log("after change", this._comparedObjects);
-
-    // array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
-
-    // Изменение прототипа массиваА
-    // Array.prototype.move = function(from,to){
-    //   this.splice(to,0,this.splice(from,1)[0]);
-    //   return this;
-    // };
   }
 
   scrollFunction(element, offset) {
-    // this._bodyLayout
-
-    console.log("Scrolling", element, offset);
-
+    let off = element.scrollTop + offset
     for (let i = 0; i < ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes.length; i++){
-      console.log(ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i]);
-      ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i].scrollTo(0, offset)
-    }
-
-    console.log('react component',ReactComponent[this._bodyLayout])
+      const el = ReactComponent[ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i].id]
+      ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i].scrollTo(0, off)
+    }    
   }
 }
