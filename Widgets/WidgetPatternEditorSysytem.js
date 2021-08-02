@@ -7,15 +7,18 @@ class PatternEditorSystem extends BaseObjectEditor {
         this._findStr = "";
         this._ownPatterns = {};
 
-        this._selectedPatterns = {};
-        this._selectedProperties = {};
-        this._ownCreatingPattern = {};
+    this._selectedPatterns = {};
+    this._selectedProperties = {};
+    this._ownCreatingPattern = {};
+    this._classificatorArray = [];
 
         this._loadedClassification = {};
 
-        this._loadedPatternsLayout;
-        this._loadedPatterns = {};
-        this._selectedPatternsLayout;
+    this._classificatorArray = [];
+
+    this._loadedPatternsLayout;
+    this._loadedPatterns = {};
+    this._selectedPatternsLayout;
 
         this._createdClassification;
 
@@ -1118,9 +1121,8 @@ class PatternEditorSystem extends BaseObjectEditor {
             }
             seperated[properties[propertyName]["category"]][propertyName] =
                 properties[propertyName];
+          }
         }
-        return seperated;
-    }
 
     switchSearchMode() {
         ReactComponent[this._searchTreeLayout].clearWidget();
@@ -1139,6 +1141,8 @@ class PatternEditorSystem extends BaseObjectEditor {
             ReactComponent[layout2].includeWidget(otherTree[id]);
             ReactComponent[otherTree[id]["id"]].htmlElement.style.display = "";
         }
+
+
 
         if (this._searchMode == "pattern") {
             this.drawButton(
@@ -1217,78 +1221,146 @@ class PatternEditorSystem extends BaseObjectEditor {
                 this.switchSearchMode();
             }
         );
-        currentSearchOptionButton = objectBTNOption;
-        const patternBTNOption = this.drawButton(
-            searchOptionLayout,
-            "Прототип",
-            { color: "#123456" },
-            () => {
-                if (currentSearchOptionButton) {
-                    this.widgetSetStyle(currentSearchOptionButton, {
-                        background: "#2bbbad",
-                    });
-                }
-                this.widgetSetStyle(patternBTNOption, { background: "grey" });
-                currentSearchOptionButton = patternBTNOption;
-                this._searchMode = "pattern";
-                this.switchSearchMode();
-            }
-        );
-        this._searchLayout = this.drawLayout(
-            this.drawLayout(mainLayout, "layoutHorizontal", { width: "100%" }),
-            "layoutVertical",
-            { height: "100%" }
-        );
-        this._searchTreeLayout = this.drawLayout(
-            this.drawLayout(this._searchLayout, "layoutHorizontal", {
-                width: "100%",
-            }),
-            "layoutVertical",
-            { height: "400px" }
-        );
-        this._searchBtnLayout = this.drawLayout(
-            this._searchLayout,
-            "layoutHorizontal",
-            { width: "100%", minHeight: "50px", maxHeight: "50px" }
-        );
-        this._searchMode = "object";
+
+    currentSearchOptionButton = objectBTNOption;
+    const patternBTNOption = this.drawButton(
+      searchOptionLayout,
+      "Прототипы",
+      { color: "#123456" },
+      () => {
+        if (currentSearchOptionButton) {
+          this.widgetSetStyle(currentSearchOptionButton, {
+            background: "#2bbbad",
+          });
+        }
+        this.widgetSetStyle(patternBTNOption, { background: "grey" });
+        currentSearchOptionButton = patternBTNOption;
+        this._searchMode = "pattern";
         this.switchSearchMode();
+      }
+    );
+    this._searchLayout = this.drawLayout(
+      this.drawLayout(mainLayout, "layoutHorizontal", { width: "100%" }),
+      "layoutVertical",
+      { height: "100%" }
+    );
+    this._searchTreeLayout = this.drawLayout(
+      this.drawLayout(this._searchLayout, "layoutHorizontal", {
+        width: "100%",
+      }),
+      "layoutVertical",
+      { height: "400px" }
+    );
+    this._searchBtnLayout = this.drawLayout(
+      this._searchLayout,
+      "layoutHorizontal",
+      { width: "100%", minHeight: "50px", maxHeight: "50px" }
+    );
+    this._searchMode = "object";
+    this.switchSearchMode();
+  }
+
+  controlFindInput(e) {
+    
+    if (e.target.value.length <= 0) {
+      this.switchSearchMode();
+      return;
     }
 
-    controlFindInput(e) {
-        if (e.target.value.length <= 0) {
-            this.switchSearchMode();
-            return;
+    if (this._searchMode == "object") {
+       const data = searchByName(Object.values(Object.values(MainObjects)[7]), e.target.value)
+      //MainObjects.find(e.target.value);
+      
+      let result = []
+      data.forEach(item => result.push({name: item.meta.name, classification: item.additional.classification}))
+
+      const tree =
+        MainClassification.drawTreeByClassificationsWithObjects(result);
+
+      for (let id of Object.keys(tree)) {
+        const layout = this.drawLayout(
+          this._searchTreeLayout,
+          "layoutHorizontal",
+          { width: "100%" }
+        );
+        ReactComponent[layout].includeWidget(tree[id]);
+      }
+    } else {
+      console.log('Main Classificator:', MainClassificator);
+      console.log('MainClassificator find', MainClassificator.find(e.target.value))
+      const data = this.searchClassificatorByName(MainClassificator,  e.target.value)
+
+      const resultData = {}      
+
+      data.forEach(element => {
+        resultData[element.id] = {name: element.name, childrens: element.childrens}
+      });
+
+      console.log('Mainclassificator data', data);
+      console.log('Mainclassificator resultData', resultData);
+      const tree = MainClassificator.drawClassificatorTreesByItems(resultData);
+
+
+      console.log('Tree Object.keys()', tree);
+
+      for (let id of Object.keys(tree)) {
+        const lbl = this.drawLabel(this._searchTreeLayout, tree[id].htmlElement.innerText)
+        ReactComponent[lbl].htmlElement.style.minWidth = '100%'
+        ReactComponent[lbl].htmlElement.style.maxHeight = '50px'
+        ReactComponent[lbl].htmlElement.style.borderBottom = '1px solid black'
+        ReactComponent[lbl].htmlElement.style.cursor = 'pointer'
+        ReactComponent[lbl].htmlElement.onmouseover = () => {
+          ReactComponent[lbl].className = 'elementMouseOver'
+          ReactComponent[lbl].htmlElement.style.background = '#D9EDF7'
         }
-        ReactComponent[this._searchTreeLayout].clearWidget();
+        ReactComponent[lbl].htmlElement.onmouseout = () => {
+          ReactComponent[lbl].htmlElement.style.background = '#FFF'
+        } 
+      }
 
-        if (this._searchMode == "object") {
-            const data = MainObjects.find(e.target.value);
-
-            const tree =
-                MainClassification.drawTreeByClassificationsWithObjects(data);
-
-            for (let id of Object.keys(tree)) {
-                const layout = this.drawLayout(
-                    this._searchTreeLayout,
-                    "layoutHorizontal",
-                    { width: "100%" }
-                );
-                ReactComponent[layout].includeWidget(tree[id]);
-            }
-        } else {
-            const data = MainClassificator.find(e.target.value);
-
-            const tree = MainClassificator.drawClassificatorTreesByItems(data);
-
-            for (let id of Object.keys(tree)) {
-                const layout = this.drawLayout(
-                    this._searchTreeLayout,
-                    "layoutHorizontal",
-                    { width: "100%" }
-                );
-                ReactComponent[layout].includeWidget(tree[id]);
-            }
-        }
+      // for (let id of Object.keys(tree)) {
+      //   const layout = this.drawLayout(
+      //     this._searchTreeLayout,
+      //     "layoutHorizontal",
+      //     { width: "100%" }
+      //   );
+      //   ReactComponent[layout].includeWidget(tree[id]);
+      // }
     }
+  }
+
+  convertClassificatorToArray(classificator) {
+    let result;
+    result = classificator._classificator;
+    result = Object.values(result);
+    result.forEach((el) => {
+      const child = Object.values(el)[0];
+      this.getChildrens(child);
+    });
+  }
+  
+  getChildrens(obj, keys = null) { 
+    const objKey = Object.keys(Object.values(obj)[0])[0];
+    if (Object.values(obj.childrens).length > 0) {      
+      Object.values(obj.childrens).forEach((child) => {
+        return this.getChildrens(child, objKey);
+      });
+    } else {
+      this._classificatorArray.push({name: obj.name.ru || obj.name, id: keys});
+      return obj;
+    }
+  }
+  
+  searchClassificatorByName(classifiactors, searcher) {
+    this.convertClassificatorToArray(classifiactors);
+  
+    let arrayToSearch;
+    const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
+  
+    keywords.forEach((keyword) => {
+      arrayToSearch = this._classificatorArray.filter(el => el.name.toLowerCase().includes(keyword.toLowerCase()))  
+    });
+    console.log('this._classificatorArray', this._classificatorArray);
+    return arrayToSearch;
+  }
 }

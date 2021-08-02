@@ -300,6 +300,7 @@ class Classification {
     APP.dbWorker.responseDOLMongoRequest = loadedClassification.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", request);
   }
+
   drawTree(projectID) {
     try {
       this._tree[projectID] = new WidgetTree();
@@ -310,7 +311,7 @@ class Classification {
       const drawItem = function (id, parentID, element, predParentID, pID) {
         const name =
           parentID === -1
-            ? "Классификация текущего проекта"
+            ? `${element.name.ru}`
             : element.name["ru"] + " ( группа )";
         predParentID = parentID;
         const item = this._tree[projectID].createItemInTree(parentID, () => {});
@@ -323,7 +324,7 @@ class Classification {
           undefined
         );
 
-        if (parentID != -1) {
+        if (parentID != -1) {          
           this._classificationGroupListAddMenu.addMenuItem(
             name.replace(" ( группа )", ""),
             -1,
@@ -434,19 +435,21 @@ class Classification {
 
   drawTreeByClassificationWithObjects(projectID, data) {
     const tree = new WidgetTree();
+
     if (data.length == 0) {
-      const item = tree.createItemInTree(-1);
-      ReactComponent[item].text = "Классификация проекта";
+      return
+      // const item = tree.createItemInTree(-1);
+      // ReactComponent[item].text = "Классификация проекта";  
 
-      const item2 = tree.createItemInTree(item);
-      ReactComponent[item2].text = "Ничего не найдено";
+      // const item2 = tree.createItemInTree(item);
+      // ReactComponent[item2].text = "Ничего не найдено";
 
-      return tree;
+      // return tree;
     }
 
     const localTreeItem = {};
     let allClassification = {};
-    
+
     data.forEach((item) => {
       if (
         //item.classification?.hasOwnProperty(projectID)
@@ -459,29 +462,28 @@ class Classification {
         );
       }
     });
-    debugger;
     allClassification = Object.keys(allClassification);
 
     if (allClassification.length == 0) {
-      const item = tree.createItemInTree(-1);
-      ReactComponent[item].text = "Классификация проекта";
+      return
+      // const item = tree.createItemInTree(-1);
+      // ReactComponent[item].text = "Классификация проекта";
 
-      const item2 = tree.createItemInTree(item);
-      ReactComponent[item2].text = "Ничего не найдено";
+      // const item2 = tree.createItemInTree(item);
+      // ReactComponent[item2].text = "Ничего не найдено";
 
-      return tree;
+      // return tree;
     }
-    debugger;
     for (let classification of allClassification) {
       const path = classification.split(".");
       let localCurrentTreeItem = localTreeItem;
       let currentClassification = this._classification[projectID];
       let predNum = -1;
       for (let num of path) {
-        currentClassification = currentClassification['1']
+        currentClassification = currentClassification["1"];
         if (!localCurrentTreeItem.hasOwnProperty(num)) {
           const item = tree.createItemInTree(predNum);
-          ReactComponent[item].text = currentClassification["name"]["rus"];
+          ReactComponent[item].text = currentClassification.name.ru;
           localCurrentTreeItem[num] = { widget: item, parent: predNum };
           predNum = item;
         } else {

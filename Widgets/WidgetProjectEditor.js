@@ -5,6 +5,7 @@ class ProjectEditor extends BaseObjectEditor {
   constructor() {
     super();
 
+
     this._leftLayout = undefined;
     this._centerLayout = undefined;
     this._rightLayout = undefined;
@@ -18,6 +19,13 @@ class ProjectEditor extends BaseObjectEditor {
     this._protoVerifyObject = {};
 
     this._projects = undefined;
+    this._openedProject = [];
+    this._mineProjects = [];
+    this._openProjectLayout = "";
+
+    this._classificatorArray = [];
+
+    this._leftLayoutVisible = true;
 
     this._contextMenu = new NewContextMenu();
 
@@ -80,7 +88,7 @@ class ProjectEditor extends BaseObjectEditor {
     });
     this._mainContentLayout = this.drawLayout(mainLayout, "layoutVertical", {
       width: "100%",
-      height: "auto", // auto
+      height: "auto",
     });
 
     this._headerLayout = this.drawLayout(
@@ -113,62 +121,127 @@ class ProjectEditor extends BaseObjectEditor {
       width: "100%",
       minHeight: "40px",
       maxHeight: "50px",
+      background: "#26a69a",
+      margin: "6px 0 0 0",
       "border-bottom": "2px solid rgb(170, 170, 170)",
     });
 
     ReactComponent[projectLabel].fontSize = 30;
     ReactComponent[projectLabel].fontWeight = "bold";
-    ReactComponent[projectLabel].htmlElement.style.background = "grey";
+
+    this._openProjectLayout = this.drawLabel(
+      this._leftLayout,
+      "Открытые проекты",
+      {
+        maxHeight: "50px",
+        minWidth: "100%",
+        border: "1x solid black",
+      }
+    );
+
+    (this._openProjectLayout = this.drawLayout(
+      this._leftLayout,
+      "layoutVertical",
+      { width: "100%" }
+    )),
+      "layoutVertical",
+      { minHeight: "100%", maxHeight: "100%" };
+
+    this.drawProjects(this._openProjectLayout, this._openedProject);
+
+    // Мои проекты
+
+    const myProjectLabel = this.drawLabel(this._leftLayout, "Мои проекты", {
+      maxHeight: "50px",
+      minWidth: "100%",
+      background: "#26a69a",
+      border: "1x solid black",
+    });
+
+    ReactComponent[myProjectLabel].fontSize = 40;
+    ReactComponent[myProjectLabel].fontWeight = "bold";    
+
+    // поле для поиска
+    const searchProjectInput = this.drawInput(this._leftLayout,'',{
+      maxHeight: '30px',
+      minWidth: '100%',
+    })
+       
+    // поиск в моих проектах
+    this._mineProjects = this._projects;
+    ReactComponent[searchProjectInput].htmlElement.oninput = (e) => {
+      if(e.target.value.length > 0) {
+        this._mineProjects = searchByName(this._projects, e.target.value)
+      } else {
+        this._mineProjects = this._projects
+      }
+
+      ReactComponent[this._allProjectLayout].clearWidget();
+      this.drawProjects(this._allProjectLayout, this._mineProjects );
+    }
+    
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
       "layoutVertical",
       { minHeight: "100%", maxHeight: "100%" }
     );
-    this._workingProjectLayout = this.drawLayout(
-      this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
-      "layoutVertical",
-      { minHeight: "100%", maxHeight: "100%" }
-    );
+
     this.drawButton(
       this.drawLayout(this._leftLayout, "layoutHorizontal", {
         width: "100%",
         minHeight: "50px",
         maxHeight: "50px",
       }),
-      "Создать проект",
+      "Создать новый проект",
       { color: "#123456" },
       () => {
         this.drawFormEditProject();
       }
     );
-    this.drawProjects(this._allProjectLayout, this._projects);
-    //this.drawProjects(this._workingProjectLayout,this._projects);
+    this.drawProjects(this._allProjectLayout, this._mineProjects || this._projects);
   }
+
+  // Открытые проекты
+
   drawProjects(layout, projects) {
-    for (let i = 0; i < projects.length; i++) {
-      const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
-        width: "90%",
-        minHeight: "40px",
-        maxHeight: "40px",
-        borderBottom: "1px solid black",
-        margin: "0 auto",
-      });
-      ReactComponent[
-        this.drawLabel(projectLayout, projects[i]["meta"]["name"], {userSelect: "none"})
-      ].htmlElement.onclick = (e) => {
-        if (this._currentProjectLayout) {
-          this._currentProjectLayout.style.background = "none";
-        }
-        this._currentProjectLayout = e.target.parentNode;
-        this._currentProjectLayout.style.background = "#dbdbdb";
-        this.openProject(projects[i]["_id"]["$oid"]);
+    if (projects !== undefined && projects.length > 0) {
+      for (let i = 0; i < projects.length; i++) {
+        const projectLayout = this.drawLayout(layout, "layoutHorizontal", {
+          width: "90%",
+          minHeight: "40px",
+          maxHeight: "40px",
+          borderBottom: "1px solid black",
+          margin: "0 auto",
+          background: "#D9EDF7",
+        });
+        ReactComponent[
+          this.drawLabel(projectLayout, projects[i]["meta"]["name"])
+        ].htmlElement.onclick = (e) => {
+          if (this._currentProjectLayout) {
+            this._currentProjectLayout.style.background = "none";
+          }
 
-        this.showObjects();
+          //  Проверка на наличие проекта в открытых проектах и добавление проекта, если он отсутствует
+          if (
+            this._openedProject.length <= 0 ||
+            this._openedProject.indexOf(projects[i]) === -1
+          ) {
+            this._openedProject.push(projects[i]);
+            ReactComponent[this._leftLayout].clearWidget();
+            this.drawLeftWidget();
+          }
 
-        console.log("e", e);
-        console.log("this._currentProjectLayout", this._currentProjectLayout);
-      };
+          this._currentProjectLayout = e.target.parentNode;
+          this._currentProjectLayout.style.background = "#dbdbdb";
+          this.openProject(projects[i]["_id"]["$oid"]);
+
+          this.showObjects();
+
+          console.log("e", e);
+          console.log("this._currentProjectLayout", this._currentProjectLayout);
+        };
+      }
     }
   }
 
@@ -373,6 +446,8 @@ class ProjectEditor extends BaseObjectEditor {
         $oid: resultJSON["inserted_id"]["$oid"],
       };
       project["additional"]["classificatorObject"] = classificator;
+      debugger;
+      console.log("Классификатор проекта", classificator);
 
       APP.dbWorker.responseDOLMongoRequest = createdProject.bind(this);
 
@@ -423,7 +498,8 @@ class ProjectEditor extends BaseObjectEditor {
     );
   }
   openProject(projectID) {
-    if (this._currentProject != "") if (this._currentProject["_id"]["$oid"] === projectID) return;
+    if (this._currentProject != "")
+      if (this._currentProject["_id"]["$oid"] === projectID) return;
     ReactComponent[this._headerLayout].clearWidget();
     ReactComponent[this._contentLayout].clearWidget();
     this._centerLayout = this.drawLayout(
@@ -451,13 +527,12 @@ class ProjectEditor extends BaseObjectEditor {
       borderTop: "2px solid #aaa",
       borderBottom: "2px solid #aaa",
     });
-    // this.drawLabel(nameLayout, "Название проекта");
 
     // VIEW TITLE //
 
     let headerText = this.drawLabel(
       nameLayout,
-      `Редактирование проекта "${project["meta"]["name"]}"`
+      `Редактирование проекта "${project.meta.name}"`
     );
     const switchGroupLayout = this.drawLayout(
       this._headerLayout,
@@ -538,6 +613,19 @@ class ProjectEditor extends BaseObjectEditor {
       "layoutVertical",
       { height: "100%" }
     );
+
+    // Кнопка 'Классификатор GlobeXY'
+    this.drawButton(
+      classificatorLayout,
+      "Классификатор GlobeXY",
+      {
+        minWidth: "100%",
+        maxHeight: "30px",
+        background: "grey",
+        color: "black",
+      },
+      () => {}
+    );
     // this.drawLabel(
     //   this.drawLayout(classificatorLayout, "layoutHorizontal", {
     //     width: "100%",
@@ -570,6 +658,21 @@ class ProjectEditor extends BaseObjectEditor {
       (e) => {
         e.preventDefault();
         MainClassificator.showContextMenu(e, "mainView");
+      }
+    );
+    // Кнопка "Добавить объект"
+
+    this.drawButton(
+      this.drawLayout(classificatorLayout, "layoutHorizontal", {
+        width: "99%",
+        maxHeight: "50px",
+      }),
+      "Добавить объект",
+      { color: "#123456" },
+      () => {
+        const editor = new PatternEditorSystem(this);
+        editor.callbackCreateObject = this.callbackCreateObject.bind(this);
+        editor.drawFormObjectsWithPatterns();
       }
     );
   }
@@ -621,18 +724,23 @@ class ProjectEditor extends BaseObjectEditor {
         }
       );
 
+      // Кнопка 'Редактировать группу' работает как кнопка 'Сравнить объекты'
       this.drawButton(
         this.drawLayout(classificationLayout, "layoutHorizontal", {
           width: "99%",
           maxHeight: "50px",
         }),
-        "Добавить объект",
+        "Редактировать группу",
         { color: "#123456" },
-        () => {
-          const editor = new PatternEditorSystem(this);
-          editor.callbackCreateObject = this.callbackCreateObject.bind(this);
-          editor.drawFormObjectsWithPatterns();
+        () => { 
+          // import WidgetCompareTable from './WidgetCompareTable'
+          const compareobj = new CompareTable(this._allProjectLayout)
         }
+        // () => {
+        //   const editor = new PatternEditorSystem(this);
+        //   editor.callbackCreateObject = this.callbackCreateObject.bind(this);
+        //   editor.drawFormObjectsWithPatterns();
+        // }
       );
     } catch (e) {
       console.error("drawClassification", e);
@@ -738,8 +846,6 @@ class ProjectEditor extends BaseObjectEditor {
       const loadProject = function (index) {
         if (index >= this._projects.length) {
           console.log("current project", this._currentProject["_id"]["$oid"]);
-          console.log("classification", MainClassification._classification);
-          console.log("classificator", MainClassificator._classificator);
           console.log("objects", MainObjects._objects);
           return callback();
         }
@@ -937,6 +1043,7 @@ class Classificator {
     };
     const rootID = Object.keys(this._classificator[projectID])[0];
     getID.bind(this, rootID, this._classificator[projectID][rootID])();
+    console.log('Classificator PROJECT', ids);
     return Object.keys(ids);
   }
   fillClassificatorWithCommon(projectID, common) {
@@ -974,7 +1081,7 @@ class Classificator {
         continue;
       }
       _currentClass["layer"] = currentClassificator["layer"];
-      
+
       _currentClass["name"] = _predClass["layer"].find((item) => {
         if (item.hasOwnProperty("child_id")) {
           return (
@@ -1154,10 +1261,13 @@ class Classificator {
     }
     return buildTree;
   }
+
   drawClassificatorTreeByItems(classificator) {
+    console.log('Draw classificator ', classificator);
     const treeItem = {};
     const tree = new WidgetTree();
     if (Object.keys(classificator).length == 0) {
+      console.log('Enter undefined', Object.keys(classificator));
       const item = tree.createItemInTree(-1);
       ReactComponent[item].text = "Классификатор проекта";
 
@@ -1167,37 +1277,35 @@ class Classificator {
       return tree;
     }
     const drawItem = function (id, parentID, element, predParentID, pID) {
-      const name =
-        parentID === -1
-          ? "Классификатор проекта"
-          : element.name + " ( прототип )";
+      const name = element + " ( прототип )";
       predParentID = parentID;
-      const item = tree.createItemInTree(parentID, () => {});
+      const item = tree.createItemInTree(0, () => {});
       ReactComponent[item].text = name;
 
       treeItem[id] = {
         widget: item,
         parent: predParentID,
-        name: parentID === -1 ? "Классификатор проекта" : element.name,
+        name:  element,
         parentID: pID,
         id: id,
       };
-      for (let childID of Object.keys(element.childrens)) {
-        drawItem.bind(
-          this,
-          childID,
-          item,
-          element.childrens[childID],
-          predParentID,
-          id
-        )();
-      }
+     // for (let childID of Object.keys(element.childrens)) {
+        // drawItem.bind(
+        //   this,
+        //   id,
+        //   item,
+        //   element,
+        //   predParentID,
+        //   id
+        // )();
+     // }
     };
-    const rootID = Object.keys(classificator)[0];
+    const rootID = Object.keys(classificator)[0];    
     drawItem.bind(this, rootID, -1, classificator[rootID], -1, -1)();
 
     return tree;
   }
+
   drawClassificatorTreesByItems(items) {
     const trees = {};
     for (let id of Object.keys(items)) {
@@ -1205,6 +1313,7 @@ class Classificator {
     }
     return trees;
   }
+
   showContextMenu(
     e,
     mode,
@@ -1820,9 +1929,8 @@ class ObjectSystem extends BaseObjectEditor {
   showObjectInfo(layout, projectID, id) {
     ReactComponent[layout].clearWidget();
     const object = this.findObjectByID(projectID, id);
-    console.log("showObjectInfo", object);
     this.showObjectTitle(layout, object, projectID);
-    this.showObjectProperties(layout, object);
+    this.showObjectProperties(layout, object, projectID);
   }
 
   showObjectTitle(layout, object) {
@@ -1901,7 +2009,7 @@ class ObjectSystem extends BaseObjectEditor {
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
 
-  async showObjectProperties(parentLayout, object) {
+  async showObjectProperties(parentLayout, object, projectID) {
     console.log("this._objectProps", this._objectProps);
     const propsLayout = this.drawLayout(
       this.drawLayout(parentLayout, "layoutHorizontal", { width: "100%" }),
@@ -1953,13 +2061,13 @@ class ObjectSystem extends BaseObjectEditor {
       //this.drawLabel(layout,object["object"][prop]["value"]);
       //this.drawLabel(layout,this._objectProps[prop]["category"]);
     }
-    this.DrawEditObjectButton(parentLayout, object);
+    this.DrawEditObjectButton(parentLayout, object, projectID);
   }
 
-  DrawEditObjectButton(parentLayout, object) {
+  DrawEditObjectButton(parentLayout, object, projectID) {
     this.drawButton(
       parentLayout,
-      "Редактировать",
+      "Редактировать объект",
       {
         color: "#123456",
         width: "100%",
@@ -1982,3 +2090,184 @@ class ObjectSystem extends BaseObjectEditor {
     );
   }
 }
+
+//#region SearchEngine
+
+/**
+ *function to find the name of an object or project
+ *@return {Array} Array of objects that have that keyword in name
+ */
+function searchByName(data, searchKeyword) {
+  debugger;
+  let arrayToFonSearch
+  if (!data.isArray) {
+    arrayToFonSearch = convertToArray(Object.values(data));
+  } else {
+    arrayToFonSearch = data
+  }
+
+  let objectsToOutput;
+  if (!searchKeyword.trim()) {
+    objectsToOutput = [];
+  } else {
+    objectsToOutput = BigDataSearch(arrayToFonSearch, searchKeyword);
+  }
+  
+  return objectsToOutput;
+}
+
+/**
+ * function to find the name of an object or project
+ *
+ * @param {Array} arrayToSearch the array in which we are looking
+ * @param {String} keywords the words we are looking for
+ * @return {Array} search results
+ */
+function BigDataSearch(arrayToSearch, keywords) {
+  keywords = keywords.trim().replace(/ +/g, " ").split(" ");
+  keywords.forEach((keyword) => {
+    arrayToSearch = arrayToSearch.filter((el) =>
+      el.meta.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+  });
+  // let result = []
+  // arrayToSearch.forEach(item => result.push({classification: item.additional.classification, name: item.meta.name}))
+  return arrayToSearch;
+}
+
+/**
+ *convert an array of arrays to one array
+ *
+ * @param {Array} array
+ * @return {Array} result array
+ */
+function convertToArray(array) {
+  let result = [];
+  array.forEach((el) => {
+    result = result.concat(el);
+  });
+  return result;
+}
+
+/**
+ *
+ *  Search property by name or name+value
+ * @param {Array} array The array in which we are looking for the property
+ * @param {String} propName The name of the property we are looking for
+ * @param {String} propValue The value of the property we are looking for
+ * @param {String} comparison The value of the comparison > < >= etc
+ * @return {Array} Array of objects id
+ */
+function searchProperty(array, propName, propValue = null, comparison = "=") {
+  // Checking fields for emptiness
+  const searchArray = convertToArray(Object.values(array));
+  if (searchArray.length === 0 || !propName.trim()) {
+    document.getElementById("result2").innerText = "";
+  }
+
+  // преобразование к строке в нижнем регистре или к числу для дальнейшего сравнения
+  isNaN(propValue) ? propValue.toLowerCase() : (propValue = Number(propValue));
+
+  // сравнение значения свойства с требуемым 
+  const result = [];
+  searchArray.map((obj) => {
+    Object.keys(obj.object).map((prop) => {
+      if (prop.toLowerCase().includes(propName.toLowerCase())) {
+        if (propValue && comparison) {
+          switch (comparison) {
+            case "=":
+              if (propValue == obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case ">":
+              if (propValue > obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case "<":
+              if (propValue < obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case ">=":
+              if (propValue >= obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            case "<=":
+              if (propValue <= obj.object[prop].value.toLowerCase())
+                return result.push(obj);
+              break;
+            default:
+              return;
+          }
+        }
+        return result.push(obj);
+      }
+    });
+  });
+
+  let result2 = [];
+  result2 = result.map((el) => (result2 += el.meta.name + " "));
+}
+
+function convertClassificatorToArray(classificator) {
+  debugger;
+  console.log('Enter a converter');
+  let result;
+  result = classificator._classificator;
+  result = Object.values(result);
+  result.forEach((el) => {
+    const child = Object.values(el)[0];
+    getChildrens(child);
+  });
+}
+
+function getChildrens(obj) { 
+  console.log('Enter get children');
+  if (Object.values(obj.childrens).length > 0) {
+    Object.values(obj.childrens).forEach((child) => {
+      return getChildrens( child);
+    });
+  } else {
+    debugger;
+    console.log('Classificator array', this);
+    this._classificatorArray.push(obj.name.ru || obj.name);
+    return obj;
+  }
+}
+
+function searchClassificatorByName(classifiactors, searcher) {
+  debugger;
+  console.log('Enter a searcher');
+  convertClassificatorToArray(classifiactors);
+
+  let arrayToSearch;
+  const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
+
+  keywords.forEach((keyword) => {
+    arrayToSearch = this._classificatorArray.filter(el => el.toLowerCase().includes(keyword.toLowerCase()))  
+  });
+  return this._classificatorArray;
+}
+
+
+//#region Adaptive mb in future
+ 
+window.addEventListener('resize', (e) => {
+  // console.log('resize',e);
+})
+
+function move(){
+	const viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+	if (viewport_width <= 992) {
+		if (!item.classList.contains('done')) {
+			parent.insertBefore(item, parent.children[2]);
+			item.classList.add('done');
+		}
+	} else {
+		if (item.classList.contains('done')) {
+			parent_original.insertBefore(item, parent_original.children[2]);
+			item.classList.remove('done');
+		}
+	}
+}
+
+//#endregion

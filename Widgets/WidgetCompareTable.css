@@ -1,0 +1,55 @@
+/* Header */
+
+/* title */
+.header__title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  background-color: lightcyan;
+}
+
+/* title buttons */
+.header__title__buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Body */
+.horizontalLayout {
+  min-width: 130px;
+  max-width: 150px;
+  overflow: hidden;
+}
+
+.selectedObjectProperty {
+  opacity: 0.6;
+}
+
+.checkedComparedpropertyOrObject {
+  background-color: rgb(38, 166, 154) !important;
+}
+
+.checkedComparePropertyLayout {
+  box-sizing: border-box;
+  background-color: rgb(247, 250, 252);
+  width: 100%;
+}
+
+.tableHeaderButtons {
+  cursor: pointer;
+  background-color: rgb(198, 232, 243);
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+/* Footer */
+
+/* Buttons */
+
+.footer__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}

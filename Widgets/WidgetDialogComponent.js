@@ -106,6 +106,24 @@ class WidgetDialog extends BaseWidget {
     return this._minHeight;
   }
 
+  set overflow(value) {
+    this._overflow = value;
+    if (this.dialogContent) this.dialogContentContainer.style.overflow = this._overflow;
+  }
+
+  get overflow() {
+    return this._overflow;
+  }
+
+  set containerHeight(value) {
+    this._containerHeight = value;
+    if (this.dialogContent) this.dialogContentContainer.style.height = this._containerHeight;
+  }
+
+  get containerHeight() {
+    return this._containerHeight;
+  }
+
   set minWidth(value) {
     this._minWidth = value;
     if (this.dialogContent) this.dialogContent.style.minWidth = value;

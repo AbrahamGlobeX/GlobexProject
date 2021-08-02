@@ -29,8 +29,8 @@ class Characteristics_BooleanType extends BasePropertyType{
         widget.includeWidget(input);
         return widget;
     }
-
-    static async getLabelWidget(property) {
+	
+	static async getLabelWidget(property) {
         const widget = new WidgetLayoutHorizontal();
         const input = new WidgetCheckBox();
         input.checked = property.value;
@@ -39,5 +39,4 @@ class Characteristics_BooleanType extends BasePropertyType{
         widget.includeWidget(input);
         return widget;
     }
-
 }
