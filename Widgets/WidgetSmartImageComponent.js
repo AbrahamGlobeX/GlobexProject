@@ -23,6 +23,8 @@ class WidgetSmartImage extends BaseWidget {
 		this.table = "";
 		this.abs = false;
 		this.cp = 1;
+		this.imageSize = {};
+		this.proportions = 0;
 		this.exPointers = [];
 		this.list = "";
 		this.treeNum = "";
@@ -89,11 +91,22 @@ class WidgetSmartImage extends BaseWidget {
 		this.viewLay.includeWidget(this.imgLay);
 
 		this.htmlImage = document.createElement('div');
-		this.htmlImage.style.width = "500px";
-		this.htmlImage.style.height = "300px";
 		this.imgLay.htmlElement.appendChild(this.htmlImage);
+		this.sizeImage = document.createElement('img');
+		console.log(this.htmlImage);
+		this.imageData = '/data/textures/sborka.jpg';
+		console.log(this.sizeImage);
+
+		
+
+		//let img = new Image();
+
+		this.sizeImage.onload = this.imageHandlerr.bind(this);
+		//this.htmlImage.style.width = "500px";
+		//this.htmlImage.style.height = "300px";
+		
 		this.htmlImage.oncontextmenu = this.showContextMenu.bind(this);
-		this.position = 2;
+		//this.position = 2;
 
 		this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		this.svg.classList.add("smartSvg");
@@ -218,20 +231,22 @@ class WidgetSmartImage extends BaseWidget {
 		this.gridsHeight = this.svg.clientHeight - 80;
 
 		
-		this.imageData = '/data/textures/sborka.jpg';
+		
 		//this.htmlImage.setAttribute("href", this.imageData);
 		this.btnData = { btnArray: [] };
 		this.visibleBtn = true;
 		document.addEventListener('contextmenu', event => event.preventDefault());
 
 		window.addEventListener('resize', event => {
+
+			this.htmlImage.style.backgroundSize = "cover";
 			
 			if (ReactComponent["w_1"].htmlElement.parentNode.parentNode.style.display != "none") {
 				this.oldX = this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2);
 				this.oldY = this.htmlImage.style.height.substring(0, this.htmlImage.style.height.length - 2);
 				this.htmlImage.style.height = this.imgLay.htmlElement.clientHeight + 'px';
-				this.htmlImage.style.width = this.imgLay.htmlElement.clientWidth + 'px';
-				ReactComponent[this.nameLabel].htmlElement.style.maxWidth = this.svg.clientHeight * 1.507 + 'px';
+				this.htmlImage.style.width = this.imgLay.htmlElement.clientHeight * this.proportions + 'px';
+				ReactComponent[this.nameLabel].htmlElement.style.maxWidth = this.svg.clientHeight * this.proportions + 'px';
 				for (let i = 0; i < this.btnData.btnArray.length; i++) {
 
 					let offsetX = (1 + (this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2) - this.oldX) / this.oldX);
@@ -634,6 +649,15 @@ class WidgetSmartImage extends BaseWidget {
 		//=-= удаление из массива
 	}
 
+	imageHandlerr() {
+		const size = {
+			width: this.sizeImage.width,
+			height: this.sizeImage.height
+		}
+		this.imageSize = size;
+		this.proportions = this.imageSize.width/this.imageSize.height;
+	}
+
 	deletePointers(btn = this.target) {
 		for (let i = 0; i < btn.tempBtn.length; i++) {
 			let l = btn.tempBtn[i].currentLine;
@@ -871,10 +895,10 @@ class WidgetSmartImage extends BaseWidget {
 		layout.htmlElement.style.overflow = "hidden";
 		dialog.includeWidget(layout);
 		dialog.addDialogButton("Закрыть", () => { this.deleteElement(dialog.id); });
-
+		debugger;
 		if (check) this.target = this.btnData.btnArray[this.btnData.btnArray.length - 1];
-
-		for (let i = 0; i < this.currentLayerObject.Comp.length; i++) {
+		console.log(this);
+		if (this.currentLayerObject.Comp) for (let i = 0; i < this.currentLayerObject.Comp.length; i++) {
 
 			const main = new widgetsComponentsTypes["button"];
 			layout.includeWidget(main);
@@ -900,16 +924,7 @@ class WidgetSmartImage extends BaseWidget {
 		newobj.htmlElement.style.maxHeight = "50px";
 		newobj.text = "Создать новый объект"
 		newobj.htmlElement.addEventListener("click", e => {
-			this.deleteElement(dialog.id);
-			this.refreshTable(0);
-			const dialog2 = new widgetsComponentsTypes["dialog"];
-			dialog2.dialogContent.style.width = "700px";
-			dialog2.dialogContent.style.height = "700px";
-			const layout = new widgetsComponentsTypes["layoutVertical"];
-			layout.htmlElement.style.width = "100%";
-			layout.htmlElement.style.height = "100%";
-			dialog2.includeWidget(layout);
-			dialog2.addDialogButton("Закрыть", () => { this.deleteElement(dialog2.id); });
+			this.createLinkObject(dialog.id);
 		});
 
 	}
@@ -941,7 +956,7 @@ class WidgetSmartImage extends BaseWidget {
 		const otherTree = MainClassification.getAllClassificationTree("showList", (info) => {
 			if(info && info.hasOwnProperty("id")){
 				valueID = info.id;
-				console.log("valueID", valueID)
+				console.log("valueID", valueID);
 			}
 		});
 		for (let id of Object.keys(otherTree)) {
@@ -962,36 +977,41 @@ class WidgetSmartImage extends BaseWidget {
 	}
 
 	loadLinkObject(dialog, id, sub = false) {
-		let load = function (resultJson) {
-			ReactComponent["w_1"].currentLayerObject = resultJson.cursor.firstBatch[0].object;
-			ReactComponent["w_1"].layerObjects[ReactComponent["w_1"].name] = resultJson.cursor.firstBatch[0].object;
-			if (resultJson.cursor.firstBatch[0].object["Composition"].length > 0) {
-				ReactComponent["w_1"].currentLayerObject.Comp = [];
-				for (let i = 0; i < resultJson.cursor.firstBatch[0].object["Composition"].length; i++) {
-					const filer = '{"_id": {"$oid": "' + resultJson.cursor.firstBatch[0].object["Composition"][i].id + '"}}';
-					APP.dbWorker.responseDOLMongoRequest = subLoad;
-					APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", filer, false);
-				}
-			}
-			// const dialog = new widgetsComponentsTypes["dialog"];
-			// dialog.dialogContent.style.width = "700px";
-			// dialog.dialogContent.style.height = "900px";
-			// const label = new widgetsComponentsTypes["label"];
-			// dialog.includeWidget(input);
-			// label.inputElement.value = this.name;
-			// label.headerElement.textContent = "Введите id объекта";
-			// label.headerElement.style.fontSize = "15px";
-			// dialog.addDialogButton("Закрыть", () => {this.deleteElement(dialog.id);});
-			// dialog.addDialogButton("Загрузить", () => {this.loadLinkObject(dialog.id, input.inputElement.value);});
-			// dialog.addDialogButton("Создать новый объект", () => {this.createLinkObject(dialog.id);});
-		}
-		let subLoad = function (resultJson) {
-			ReactComponent["w_1"].currentLayerObject.Comp.push(resultJson.cursor.firstBatch[0]);
-		}
-		const filer = '{"_id": {"$oid": "' + id + '"}}';
-		APP.dbWorker.responseDOLMongoRequest = load;
-		APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", filer, false);
-		if (dialog) this.deleteElement(dialog);
+
+
+		console.log(MainClassification._objectSystem._objects[MainClassification._projectID]);
+
+
+		// let load = function (resultJson) {
+		// 	ReactComponent["w_1"].currentLayerObject = resultJson.cursor.firstBatch[0].object;
+		// 	ReactComponent["w_1"].layerObjects[ReactComponent["w_1"].name] = resultJson.cursor.firstBatch[0].object;
+		// 	if (resultJson.cursor.firstBatch[0].object["Composition"].length > 0) {
+		// 		ReactComponent["w_1"].currentLayerObject.Comp = [];
+		// 		for (let i = 0; i < resultJson.cursor.firstBatch[0].object["Composition"].length; i++) {
+		// 			const filer = '{"_id": {"$oid": "' + resultJson.cursor.firstBatch[0].object["Composition"][i].id + '"}}';
+		// 			APP.dbWorker.responseDOLMongoRequest = subLoad;
+		// 			APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", filer, false);
+		// 		}
+		// 	}
+		// 	// const dialog = new widgetsComponentsTypes["dialog"];
+		// 	// dialog.dialogContent.style.width = "700px";
+		// 	// dialog.dialogContent.style.height = "900px";
+		// 	// const label = new widgetsComponentsTypes["label"];
+		// 	// dialog.includeWidget(input);
+		// 	// label.inputElement.value = this.name;
+		// 	// label.headerElement.textContent = "Введите id объекта";
+		// 	// label.headerElement.style.fontSize = "15px";
+		// 	// dialog.addDialogButton("Закрыть", () => {this.deleteElement(dialog.id);});
+		// 	// dialog.addDialogButton("Загрузить", () => {this.loadLinkObject(dialog.id, input.inputElement.value);});
+		// 	// dialog.addDialogButton("Создать новый объект", () => {this.createLinkObject(dialog.id);});
+		// }
+		// let subLoad = function (resultJson) {
+		// 	ReactComponent["w_1"].currentLayerObject.Comp.push(resultJson.cursor.firstBatch[0]);
+		// }
+		// const filer = '{"_id": {"$oid": "' + id + '"}}';
+		// APP.dbWorker.responseDOLMongoRequest = load;
+		// APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", filer, false);
+		// if (dialog) this.deleteElement(dialog);
 	}
 
 	createLinkObject(dialog) { // NIKOLAYS 
@@ -1015,6 +1035,22 @@ class WidgetSmartImage extends BaseWidget {
 		MainClassificator._callbackCreateObject = this._savedCallbackCreateObject;
 		window.oncontextmenu = this.showContextMenu.bind(this);
 		this.htmlImage.oncontextmenu = this.showContextMenu.bind(this);
+		this.target.obj = args.object;
+		if (this.currentLayerObject.Comp) this.currentLayerObject.Comp.push(args);
+		else this.currentLayerObject.Comp = [args];
+		let updArr = []; debugger;
+		for(let i = 0; i < this.currentLayerObject.Comp.length; i++) {
+			updArr.push(this.currentLayerObject.Comp[i]._id["$oid"]);
+		}
+
+		const sets = {
+			"$set": {
+				"Comp" : updArr
+			}
+		}
+		APP.dbWorker.sendUpdateRCRequest("DOLMongoRequest", this.currentLayerObject._id["$oid"], JSON.stringify(sets));
+
+
 	}
 	cancelCreateObject(){
 		MainClassificator._callbackCreateObject = this._savedCallbackCreateObject;
@@ -1083,7 +1119,6 @@ class WidgetSmartImage extends BaseWidget {
 		lowBtn2.style.display = "none";
 		lay.htmlElement.appendChild(lowBtn2);
 		this.exPointers.push(lowBtn2);
-
 
 		lay.svg.appendChild(lowBtn2);
 		this.exPointers.push(lowBtn2);
@@ -2381,6 +2416,9 @@ class WidgetSmartImage extends BaseWidget {
 
 		if (this.firstIn && (document.getElementById("root").style.display != "none")) {
 			//this.linkObject(); // NIKOLAYS
+			this.htmlImage.style.backgroundSize = "cover";
+			// this.htmlImage.style.height = this.imgLay.htmlElement.clientHeight + 'px';
+			// this.htmlImage.style.width = this.imgLay.htmlElement.clientHeight * this.proportions + 'px';
 			this.firstIn = false;
 		}
 
@@ -2586,7 +2624,10 @@ class WidgetSmartImage extends BaseWidget {
 		}
 	}
 	set imageData(value) {
-		if (value === this._imageData) return;	
+		if (value === this._imageData) return;
+		this.sizeImage.setAttribute('src', value);
+		console.log(this.sizeImage.clientWidth);
+		console.log(this.sizeImage.clientHeight);	
 		this._imageData = value;
 		this.htmlImage.style.background = "url(" + this.imageData + ")";
 	}
@@ -2594,7 +2635,7 @@ class WidgetSmartImage extends BaseWidget {
 	get imageData() {
 		return this._imageData;
 	}
-	onGenerateContent(content, docData) {
+	onGenerateContent(content = null, docData = null) {
 		const htmlImage = this.htmlImage;
 		const imageSize = htmlImage.getBoundingClientRect();
 		let imgData = getStyle(htmlImage, 'background-image');
@@ -2650,11 +2691,11 @@ class WidgetSmartImage extends BaseWidget {
 		// ToSize 	= 3, // по размеру
 		// Repeat 	= 4  // замостить
 		this._position = value;
-		if (value == 0) this.htmlImage.style.backgroundSize = "100% 100%";
-		if (value == 1) { this.htmlImage.style.backgroundSize = ""; this.htmlImage.style.backgroundRepeat = "no-repeat"; }
-		if (value == 2) this.htmlImage.style.backgroundSize = "cover";
-		if (value == 3) this.htmlImage.style.backgroundSize = "contain";
-		if (value == 4) { this.htmlImage.style.backgroundSize = ""; this.htmlImage.style.backgroundRepeat = "repeat" }
+		//if (value == 0) this.htmlImage.style.backgroundSize = "100% 100%";
+		//if (value == 1) { this.htmlImage.style.backgroundSize = ""; this.htmlImage.style.backgroundRepeat = "no-repeat"; }
+		//if (value == 2) this.htmlImage.style.backgroundSize = "cover";
+		//if (value == 3) this.htmlImage.style.backgroundSize = "contain";
+		//if (value == 4) { this.htmlImage.style.backgroundSize = ""; this.htmlImage.style.backgroundRepeat = "repeat" }
 	}
 	get position() { return this._position; }
 

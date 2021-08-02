@@ -460,8 +460,9 @@ class Classification {
     }
     const localTreeItem = {};
     let allClassification = {};
-    data.forEach((item) => {
+    data.forEach((item) => { 
       if (
+        //item.classification?.hasOwnProperty(projectID)
         item.hasOwnProperty("classification") &&
         item["classification"] &&
         item["classification"].hasOwnProperty(projectID)
@@ -1069,11 +1070,10 @@ class Classification {
       },
       undefined
     );
-
     ReactComponent[item].text =
       this._objectSystem.getObjectName(this._projectID, objectID) +
       " ( объект )";
-    this._objectTreeItem[projectID][objectID].push({ group: id, widget: item });
+    this._objectTreeItem[this._projectID][objectID].push({ group: id, widget: item });
   }
   moveObjectToClassificationGroup(info) {
     console.log("moveObjectToClassificationGroup");

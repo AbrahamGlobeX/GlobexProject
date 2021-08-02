@@ -14,6 +14,8 @@ class ProjectEditor extends BaseObjectEditor {
 
     this._currentProjectLayout = undefined;
 
+    this._protoVerifyObject = {};
+
     this._projects = undefined;
 
     this._contextMenu = new NewContextMenu();
@@ -30,6 +32,7 @@ class ProjectEditor extends BaseObjectEditor {
       this._rightLayout
     );
   }
+
   loadOwnProjects(handler) {
     const request = '{"meta.owner" : {"$oid" : "' + APP.owner + '"}}';
     const loadedProjects = function (resultJSON) {
@@ -1306,7 +1309,6 @@ class Classificator {
   }
   openPrototypeCreateForm(name, category) {
     this.loadPrototype(category, (prototype) => {
-      debugger;
       if (prototype) {
         return APP.log("warn", "Данный прототип уже создан");
       }
@@ -1768,9 +1770,10 @@ class ObjectSystem extends BaseObjectEditor {
         if (this._objectProps.hasOwnProperty(prop)) {
         } else {
           if (object["object"][prop].hasOwnProperty("prop_ref")) {
-            req[prop] = object["object"][prop]["prop_ref"]["$oid"];
+            if (object["object"][prop]["prop_ref"]["$oid"]) {req[prop] = object["object"][prop]["prop_ref"]["$oid"];
             this._objectProps[prop] =
               object["object"][prop]["prop_ref"]["$oid"];
+          }
           }
         }
       }
@@ -1816,6 +1819,7 @@ class ObjectSystem extends BaseObjectEditor {
         console.log("object", object);
         this.loadPrototype(object["additional"]["category"][0], (pattern) => {
           const editor = new PatternEditorSystem(this);
+          MainClassificator._editor = editor;
           editor.openObjectFormEdit(object, this._objectProps, pattern, () => {
             console.log("object", object);
             this.loadObjectProperties(projectID, () => {
@@ -1847,7 +1851,7 @@ class ObjectSystem extends BaseObjectEditor {
       console.log("resultJSOn", resultJSON);
       const result = resultJSON.cursor.firstBatch;
       if (Array.isArray(result) && result.length == 0) {
-        return APP.log("warn", "Данный прототип не создан");
+        return APP.log("warn", "Данный прототип не создан"); //asd
       }
       return callback(result[0]);
     };

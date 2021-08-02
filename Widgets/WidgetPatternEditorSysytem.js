@@ -85,11 +85,13 @@ class PatternEditorSystem extends BaseObjectEditor {
                 property.valueType
             ].getLabelWidget(property);
             ReactComponent[propertyLayout].includeWidget(widget);
+            
         } else {
             widget = await propertyTypes[property.category][
                 property.valueType
             ].getInputWidget(property);
             ReactComponent[propertyLayout].includeWidget(widget);
+            if (!property._userID) widget.htmlElement.parentElement.style.backgroundColor = '#a3e9a4'; 
 
             const checkbox = this.drawCheckbox(
                 propertyLayout,
@@ -234,7 +236,6 @@ class PatternEditorSystem extends BaseObjectEditor {
         });
     }
     openObjectFormEdit(object, props, pattern, callback) {
-        debugger;
         console.log("openObjectFoenEdit", object);
         console.log("openObjectFoenEdit", props);
 
@@ -291,27 +292,30 @@ class PatternEditorSystem extends BaseObjectEditor {
                 const newMainLayout = this.drawLayout(newDialog, "layoutVertical", {
                     minWidth: "90vw",
                 });
-                this.smartWidget = new WidgetSmartImage();
-                this.smartWidget.projectObject = this.$external._projectSystem;
-                this.smartWidget.height = "90vh";
+                console.log("this ", this);
+                MainClassificator.smartWidget = new WidgetSmartImage();
+                MainClassificator.smartWidget.projectObject = this.$external._projectSystem;
+                MainClassificator.smartWidget.mainObject = object;//si f
+                MainClassificator.smartWidget.currentLayerObject = object;
+                MainClassificator.smartWidget.height = "90vh";
 
                 const contentLayout = this.drawLayout(
                     newMainLayout,
                     "layoutHorizontal",
                     { width: "100%" }
                 );
-                ReactComponent[contentLayout].includeWidget(this.smartWidget);
+                ReactComponent[contentLayout].includeWidget(MainClassificator.smartWidget);
                 const btnLayout = this.drawLayout(newMainLayout, "layoutHorizontal", {
                     width: "100%",
                 });
                 this.drawButton(btnLayout, "Сохранить", { color: "#123456" }, () => {
                     ReactComponent[newDialog].destroyWidget();
-                    this.smartWidget = undefined;
+                    MainClassificator.smartWidget = undefined;
                     window.oncontextmenu = undefined;
                 });
                 this.drawButton(btnLayout, "Отменить", { color: "#123456" }, () => {
                     ReactComponent[newDialog].destroyWidget();
-                    this.smartWidget = undefined;
+                    MainClassificator.smartWidget = undefined;
                     window.oncontextmenu = undefined;
                 });
             }
@@ -514,6 +518,16 @@ class PatternEditorSystem extends BaseObjectEditor {
             this.createCategories(patternName);
             this._selectedPattern = pattern;
 
+            
+            console.log(this._selectedPattern);
+            Object.keys(this._selectedPattern['schema']["unverified"]).forEach(key => {
+                if (this._selectedPattern['schema']["unverified"][key].userID) if (APP.owner == this._selectedPattern['schema']["unverified"][key].userID && !this._selectedPattern['schema']["properties"].hasOwnProperty(key)) {
+                    this._selectedPattern['schema']['properties'][key] = this._selectedPattern['schema']["unverified"][key];
+                }
+            });
+
+            
+
             console.log();
 
             const l1 = CategoryWithProperties.seperatedPropertiesByGroup(
@@ -626,6 +640,7 @@ class PatternEditorSystem extends BaseObjectEditor {
                             this._selectedPropertiesNewVersion = {};
                         });
                     } else if (mode === "editproto") {
+                        console.log(this._categoriesWithList);
                         let propsArray = this._categoriesWithList[pattern.meta.name].Characteristics._list;
                         console.log("pattern - before: ", pattern);
                         pattern.schema.properties = {};
@@ -644,31 +659,38 @@ class PatternEditorSystem extends BaseObjectEditor {
                             if (propsArray[i]._valueType) pattern.schema.properties[propsArray[i]._name].type_value = propsArray[i]._valueType;
                             if (propsArray[i]._unitType) pattern.schema.properties[propsArray[i]._name].unit_type = propsArray[i]._unitType;
                             if (propsArray[i]._wiki) pattern.schema.properties[propsArray[i]._name].wiki = propsArray[i]._wiki;
+                            if (pattern.schema.unverified[propsArray[i]._name]) delete pattern.schema.unverified[propsArray[i]._name];
+                            if (!propsArray[i].isSelect) {
+                                pattern.schema.unverified[propsArray[i]._name] = pattern.schema.properties[propsArray[i]._name];
+                                delete pattern.schema.properties[propsArray[i]._name];
+                                pattern.schema.unverified[propsArray[i]._name].userID = 'admin';
+                            }
                         }
                         console.log("pattern - after: ", pattern);
+                        debugger;
                         const updated = function (resultJSON) {
                             console.log("ObjectSystem.updatePrototype.updated", resultJSON);
-                          };
-                          const sets = {
+                        };
+                        const sets = {
                             $set: {
-                              additional: pattern.additional,
-                              schema: pattern.schema,
+                                additional: pattern.additional,
+                                schema: pattern.schema,
                             },
-                          };
-                          console.log("ObjectSystem.updatePrototype.req", sets);
-                          APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
-                          debugger;
-                          APP.dbWorker.sendUpdateRCRequest(
+                        };
+                        console.log("ObjectSystem.updatePrototype.req", sets);
+                        APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+                        debugger;
+                        APP.dbWorker.sendUpdateRCRequest(
                             "DOLMongoRequest",
                             pattern._id["$oid"],
                             JSON.stringify(sets),
                             "patterns"
-                          );
+                        );
                     }
                 }
             );
 
-            
+
             this.drawButton(
                 btnLayout,
                 mode === "view" ? "Закрыть" : "Отмена",
@@ -953,9 +975,14 @@ class PatternEditorSystem extends BaseObjectEditor {
                     if (property.propRef) {
                         propObject["prop_ref"] = property.propRef;
                     }
-                    sets["schema.properties." + property.name] = propObject;
-                    this._selectedPattern["schema"]["properties"][property.name] =
-                        propObject;
+                    if (APP.owner === '60222cadb4a8ca0008411e05') {
+                        sets["schema.properties." + property.name] = propObject;
+                        this._selectedPattern["schema"]["properties"][property.name] = propObject;
+                    } else {
+                        sets["schema.unverified." + property.name] = propObject;
+                        this._selectedPattern["schema"]["unverified"][property.name] = propObject;
+                        this._selectedPattern["schema"]["unverified"][property.name]['userID'] = APP.owner;
+                    }
                 }
             }
             APP.dbWorker.responseDOLMongoRequest = inserted.bind(this);
@@ -991,6 +1018,7 @@ class PatternEditorSystem extends BaseObjectEditor {
                         current_unit: property.unit,
                         current_system: "SI",
                         wiki: property.wiki,
+                        userID: APP.owner,
                     };
                     if (property.propRef) {
                         sets["schema.unverified." + property.name]["prop_ref"] =
