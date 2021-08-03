@@ -53,9 +53,11 @@ class WidgetTreeItem extends BaseWidget {
       "click",
       function (event) {
         if (!this._fakeHtmlIcon) {
+          console.log('Expand', event);
           this.tree.addSelectedItem(this, event.ctrlKey);
           this.expanded = !this.expanded;
         } else {
+          console.log('Unexpand', event);
           if (!this._fakeHandlerIsCallback) {
             Module.Store.dispatch({
               eventName: this._fakeHandler,
@@ -70,6 +72,7 @@ class WidgetTreeItem extends BaseWidget {
     this.htmlContainer.addEventListener(
       "click",
       function (event) {
+        console.log('Choose tree', event);
         this.tree.addSelectedItem(this, event.ctrlKey);
         if (this._callback) this._callback();
       }.bind(this)
@@ -379,6 +382,9 @@ class WidgetTreeItem extends BaseWidget {
     if (this.childrenItems.length != 0) {
       this.htmlElement.classList.add("Parent");
       this.htmlElement.classList.remove("NoParent");
+      // this.htmlElement.addEventListener('click', e => {
+      //   console.log('Parents', e);
+      // })
 
       for (let i = 0; i < this.childrenItems.length; ++i) {
         if (this.tree.items.get(this.children[i]))
@@ -391,7 +397,7 @@ class WidgetTreeItem extends BaseWidget {
     }
 
     this.htmlElement.style.visibility = null;
-    this.expanded = this.expanded;
+    this.expanded = this.expanded;  // WTF?
   }
 
   setSelected(select) {

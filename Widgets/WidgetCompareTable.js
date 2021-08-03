@@ -431,7 +431,9 @@ const comparableObjects = [
   objToCompare4,
 ];
 
-//TODO: Оставить шапку наверху при скроле
+//TODO: Оставить шапку наверху при скрол
+//TODO: Привязка изменения при Drag-N-Drop
+//TODO: Привязка изменений при прокрутке
 
 //#endregion
 
