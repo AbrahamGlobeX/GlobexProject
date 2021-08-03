@@ -16,6 +16,8 @@ class ProjectEditor extends BaseObjectEditor {
 
     this._currentProjectLayout = undefined;
 
+    this._protoVerifyObject = {};
+
     this._projects = undefined;
     this._openedProject = [];
     this._mineProjects = [];
@@ -39,6 +41,7 @@ class ProjectEditor extends BaseObjectEditor {
       this._rightLayout
     );
   }
+
   loadOwnProjects(handler) {
     const request = '{"meta.owner" : {"$oid" : "' + APP.owner + '"}}';
     const loadedProjects = function (resultJSON) {
@@ -967,6 +970,14 @@ class Classificator {
       {},
       undefined
     );
+    this._contextMenu.addMenuItem(
+      this._classificatorMainMenuName,
+      "Добавить категорию",
+      -1,
+      "main",
+      {},
+      undefined
+    );
   }
   setProjectID(projectID) {
     this._projectID = projectID;
@@ -1360,7 +1371,7 @@ class Classificator {
         this._contextMenu.setMenuItemCallback(
           this._classificatorMenuName,
           "Открыть прототип",
-          this.openPrototypeForm.bind(this, ids)
+          this.openPrototypeForm.bind(this, ids, "editproto")
         );
         this._contextMenu.setMenuItemCallback(
           this._classificatorMenuName,
@@ -1383,12 +1394,17 @@ class Classificator {
         this._contextMenu.setMenuItemCallback(
           this._classificatorMainMenuName,
           "Открыть прототип",
-          this.openPrototypeForm.bind(this, ids)
+          this.openPrototypeForm.bind(this, ids, "editproto")
         );
         this._contextMenu.setMenuItemCallback(
           this._classificatorMainMenuName,
           "Создать объект",
           this.openPrototypeForm.bind(this, ids, "edit")
+        );
+        this._contextMenu.setMenuItemCallback(
+          this._classificatorMainMenuName,
+          "Добавить категорию",
+          this.addInMainClassificator.bind(this, finded.info.name, ids, finded.info.id)
         );
         this._contextMenu.showMenu(
           this._classificatorMainMenuName,
@@ -1421,7 +1437,7 @@ class Classificator {
     APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
-  openPrototypeForm(category, mode = "view") {
+  openPrototypeForm(category, mode = "edit") {
     this.loadPrototype(category, (prototype) => {
       if (!prototype) {
         return APP.log("warn", "Данный прототип не создан");
@@ -1463,13 +1479,41 @@ class Classificator {
       console.error("Classificator.loadMainClassificator", e);
     }
   }
+
+  addInMainClassificator(info, ids, addInMainId, asd = 123, nameRU = "name", nameEN = "nam", descRU = "na", descEN = "n") {
+    const loadedClass = function (resultJSON) { debugger;
+      if (resultJSON.cursor.firstBatch.length == 0) {
+
+      } else {
+        let res = resultJSON.cursor.firstBatch[0];
+        res.layer.push({name: {ru: nameRU, en: nameEN}, description: {ru: descRU, en: descEN}, leaf_id: ""})
+        const saved = function(result){
+          console.log("result",result);
+      }
+      const sets = {
+          "$set": {
+              "layer" : res.layer
+          }
+      }
+      APP.dbWorker.responseDOLMongoRequest = saved;
+      APP.dbWorker.sendUpdateRCRequest("DOLMongoRequest", res._id["$oid"], JSON.stringify(sets));
+      }
+    }
+    const request = '{"_id" : {"$oid" : "' + addInMainId + '"}}';
+    console.log("loadClass", request);
+    APP.dbWorker.responseDOLMongoRequest = loadedClass.bind(this);
+    APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "objects", request);
+  }
+
   drawFormWithMainTree() {
     try {
       const [layout, searchLayout] = this._drawFormWidgets.drawCommonDialog(
         "Общий классификатор",
         "",
         "Отмена",
-        () => {},
+        () => {
+          
+        },
         true
       );
       this._drawFormWidgets.drawSearch(searchLayout, (e) => {});
@@ -1837,6 +1881,7 @@ class ObjectSystem extends BaseObjectEditor {
     };
     console.log("ObjectSystem.updateObject.req", sets);
     APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+    debugger;
     APP.dbWorker.sendUpdateRCRequest(
       "DOLMongoRequest",
       objectID,
@@ -1862,10 +1907,10 @@ class ObjectSystem extends BaseObjectEditor {
         if (this._objectProps.hasOwnProperty(prop)) {
         } else {
           if (object["object"][prop].hasOwnProperty("prop_ref")) {
-            if (object["object"][prop]["prop_ref"]["$oid"])
-              req[prop] = object["object"][prop]["prop_ref"]["$oid"];
+            if (object["object"][prop]["prop_ref"]["$oid"]) {req[prop] = object["object"][prop]["prop_ref"]["$oid"];
             this._objectProps[prop] =
               object["object"][prop]["prop_ref"]["$oid"];
+          }
           }
         }
       }
@@ -1925,7 +1970,7 @@ class ObjectSystem extends BaseObjectEditor {
       console.log("resultJSOn", resultJSON);
       const result = resultJSON.cursor.firstBatch;
       if (Array.isArray(result) && result.length == 0) {
-        return APP.log("warn", "Данный прототип не создан");
+        return APP.log("warn", "Данный прототип не создан"); //asd
       }
       return callback(result[0]);
     };

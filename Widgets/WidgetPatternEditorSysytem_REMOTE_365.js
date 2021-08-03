@@ -7,18 +7,15 @@ class PatternEditorSystem extends BaseObjectEditor {
         this._findStr = "";
         this._ownPatterns = {};
 
-    this._selectedPatterns = {};
-    this._selectedProperties = {};
-    this._ownCreatingPattern = {};
-    this._classificatorArray = [];
+        this._selectedPatterns = {};
+        this._selectedProperties = {};
+        this._ownCreatingPattern = {};
 
         this._loadedClassification = {};
 
-    this._classificatorArray = [];
-
-    this._loadedPatternsLayout;
-    this._loadedPatterns = {};
-    this._selectedPatternsLayout;
+        this._loadedPatternsLayout;
+        this._loadedPatterns = {};
+        this._selectedPatternsLayout;
 
         this._createdClassification;
 
@@ -88,13 +85,11 @@ class PatternEditorSystem extends BaseObjectEditor {
                 property.valueType
             ].getLabelWidget(property);
             ReactComponent[propertyLayout].includeWidget(widget);
-            
         } else {
             widget = await propertyTypes[property.category][
                 property.valueType
             ].getInputWidget(property);
             ReactComponent[propertyLayout].includeWidget(widget);
-            if (!property._userID) widget.htmlElement.parentElement.style.backgroundColor = '#a3e9a4'; 
 
             const checkbox = this.drawCheckbox(
                 propertyLayout,
@@ -239,6 +234,7 @@ class PatternEditorSystem extends BaseObjectEditor {
         });
     }
     openObjectFormEdit(object, props, pattern, callback) {
+        debugger;
         console.log("openObjectFoenEdit", object);
         console.log("openObjectFoenEdit", props);
 
@@ -295,30 +291,27 @@ class PatternEditorSystem extends BaseObjectEditor {
                 const newMainLayout = this.drawLayout(newDialog, "layoutVertical", {
                     minWidth: "90vw",
                 });
-                console.log("this ", this);
-                MainClassificator.smartWidget = new WidgetSmartImage();
-                MainClassificator.smartWidget.projectObject = this.$external._projectSystem;
-                MainClassificator.smartWidget.mainObject = object;//si f
-                MainClassificator.smartWidget.currentLayerObject = object;
-                MainClassificator.smartWidget.height = "90vh";
+                this.smartWidget = new WidgetSmartImage();
+                this.smartWidget.projectObject = this.$external._projectSystem;
+                this.smartWidget.height = "90vh";
 
                 const contentLayout = this.drawLayout(
                     newMainLayout,
                     "layoutHorizontal",
                     { width: "100%" }
                 );
-                ReactComponent[contentLayout].includeWidget(MainClassificator.smartWidget);
+                ReactComponent[contentLayout].includeWidget(this.smartWidget);
                 const btnLayout = this.drawLayout(newMainLayout, "layoutHorizontal", {
                     width: "100%",
                 });
                 this.drawButton(btnLayout, "Сохранить", { color: "#123456" }, () => {
                     ReactComponent[newDialog].destroyWidget();
-                    MainClassificator.smartWidget = undefined;
+                    this.smartWidget = undefined;
                     window.oncontextmenu = undefined;
                 });
                 this.drawButton(btnLayout, "Отменить", { color: "#123456" }, () => {
                     ReactComponent[newDialog].destroyWidget();
-                    MainClassificator.smartWidget = undefined;
+                    this.smartWidget = undefined;
                     window.oncontextmenu = undefined;
                 });
             }
@@ -521,16 +514,6 @@ class PatternEditorSystem extends BaseObjectEditor {
             this.createCategories(patternName);
             this._selectedPattern = pattern;
 
-            
-            console.log(this._selectedPattern);
-            Object.keys(this._selectedPattern['schema']["unverified"]).forEach(key => {
-                if (this._selectedPattern['schema']["unverified"][key].userID) if (APP.owner == this._selectedPattern['schema']["unverified"][key].userID && !this._selectedPattern['schema']["properties"].hasOwnProperty(key)) {
-                    this._selectedPattern['schema']['properties'][key] = this._selectedPattern['schema']["unverified"][key];
-                }
-            });
-
-            
-
             console.log();
 
             const l1 = CategoryWithProperties.seperatedPropertiesByGroup(
@@ -643,7 +626,6 @@ class PatternEditorSystem extends BaseObjectEditor {
                             this._selectedPropertiesNewVersion = {};
                         });
                     } else if (mode === "editproto") {
-                        console.log(this._categoriesWithList);
                         let propsArray = this._categoriesWithList[pattern.meta.name].Characteristics._list;
                         console.log("pattern - before: ", pattern);
                         pattern.schema.properties = {};
@@ -662,38 +644,31 @@ class PatternEditorSystem extends BaseObjectEditor {
                             if (propsArray[i]._valueType) pattern.schema.properties[propsArray[i]._name].type_value = propsArray[i]._valueType;
                             if (propsArray[i]._unitType) pattern.schema.properties[propsArray[i]._name].unit_type = propsArray[i]._unitType;
                             if (propsArray[i]._wiki) pattern.schema.properties[propsArray[i]._name].wiki = propsArray[i]._wiki;
-                            if (pattern.schema.unverified[propsArray[i]._name]) delete pattern.schema.unverified[propsArray[i]._name];
-                            if (!propsArray[i].isSelect) {
-                                pattern.schema.unverified[propsArray[i]._name] = pattern.schema.properties[propsArray[i]._name];
-                                delete pattern.schema.properties[propsArray[i]._name];
-                                pattern.schema.unverified[propsArray[i]._name].userID = 'admin';
-                            }
                         }
                         console.log("pattern - after: ", pattern);
-                        debugger;
                         const updated = function (resultJSON) {
                             console.log("ObjectSystem.updatePrototype.updated", resultJSON);
-                        };
-                        const sets = {
+                          };
+                          const sets = {
                             $set: {
-                                additional: pattern.additional,
-                                schema: pattern.schema,
+                              additional: pattern.additional,
+                              schema: pattern.schema,
                             },
-                        };
-                        console.log("ObjectSystem.updatePrototype.req", sets);
-                        APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
-                        debugger;
-                        APP.dbWorker.sendUpdateRCRequest(
+                          };
+                          console.log("ObjectSystem.updatePrototype.req", sets);
+                          APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+                          debugger;
+                          APP.dbWorker.sendUpdateRCRequest(
                             "DOLMongoRequest",
                             pattern._id["$oid"],
                             JSON.stringify(sets),
                             "patterns"
-                        );
+                          );
                     }
                 }
             );
 
-
+            
             this.drawButton(
                 btnLayout,
                 mode === "view" ? "Закрыть" : "Отмена",
@@ -978,14 +953,9 @@ class PatternEditorSystem extends BaseObjectEditor {
                     if (property.propRef) {
                         propObject["prop_ref"] = property.propRef;
                     }
-                    if (APP.owner === '60222cadb4a8ca0008411e05') {
-                        sets["schema.properties." + property.name] = propObject;
-                        this._selectedPattern["schema"]["properties"][property.name] = propObject;
-                    } else {
-                        sets["schema.unverified." + property.name] = propObject;
-                        this._selectedPattern["schema"]["unverified"][property.name] = propObject;
-                        this._selectedPattern["schema"]["unverified"][property.name]['userID'] = APP.owner;
-                    }
+                    sets["schema.properties." + property.name] = propObject;
+                    this._selectedPattern["schema"]["properties"][property.name] =
+                        propObject;
                 }
             }
             APP.dbWorker.responseDOLMongoRequest = inserted.bind(this);
@@ -1021,7 +991,6 @@ class PatternEditorSystem extends BaseObjectEditor {
                         current_unit: property.unit,
                         current_system: "SI",
                         wiki: property.wiki,
-                        userID: APP.owner,
                     };
                     if (property.propRef) {
                         sets["schema.unverified." + property.name]["prop_ref"] =
@@ -1121,8 +1090,9 @@ class PatternEditorSystem extends BaseObjectEditor {
             }
             seperated[properties[propertyName]["category"]][propertyName] =
                 properties[propertyName];
-          }
         }
+        return seperated;
+    }
 
     switchSearchMode() {
         ReactComponent[this._searchTreeLayout].clearWidget();
@@ -1141,8 +1111,6 @@ class PatternEditorSystem extends BaseObjectEditor {
             ReactComponent[layout2].includeWidget(otherTree[id]);
             ReactComponent[otherTree[id]["id"]].htmlElement.style.display = "";
         }
-
-
 
         if (this._searchMode == "pattern") {
             this.drawButton(
@@ -1221,146 +1189,78 @@ class PatternEditorSystem extends BaseObjectEditor {
                 this.switchSearchMode();
             }
         );
-
-    currentSearchOptionButton = objectBTNOption;
-    const patternBTNOption = this.drawButton(
-      searchOptionLayout,
-      "Прототипы",
-      { color: "#123456" },
-      () => {
-        if (currentSearchOptionButton) {
-          this.widgetSetStyle(currentSearchOptionButton, {
-            background: "#2bbbad",
-          });
-        }
-        this.widgetSetStyle(patternBTNOption, { background: "grey" });
-        currentSearchOptionButton = patternBTNOption;
-        this._searchMode = "pattern";
-        this.switchSearchMode();
-      }
-    );
-    this._searchLayout = this.drawLayout(
-      this.drawLayout(mainLayout, "layoutHorizontal", { width: "100%" }),
-      "layoutVertical",
-      { height: "100%" }
-    );
-    this._searchTreeLayout = this.drawLayout(
-      this.drawLayout(this._searchLayout, "layoutHorizontal", {
-        width: "100%",
-      }),
-      "layoutVertical",
-      { height: "400px" }
-    );
-    this._searchBtnLayout = this.drawLayout(
-      this._searchLayout,
-      "layoutHorizontal",
-      { width: "100%", minHeight: "50px", maxHeight: "50px" }
-    );
-    this._searchMode = "object";
-    this.switchSearchMode();
-  }
-
-  controlFindInput(e) {
-    
-    if (e.target.value.length <= 0) {
-      this.switchSearchMode();
-      return;
-    }
-
-    if (this._searchMode == "object") {
-       const data = searchByName(Object.values(Object.values(MainObjects)[7]), e.target.value)
-      //MainObjects.find(e.target.value);
-      
-      let result = []
-      data.forEach(item => result.push({name: item.meta.name, classification: item.additional.classification}))
-
-      const tree =
-        MainClassification.drawTreeByClassificationsWithObjects(result);
-
-      for (let id of Object.keys(tree)) {
-        const layout = this.drawLayout(
-          this._searchTreeLayout,
-          "layoutHorizontal",
-          { width: "100%" }
+        currentSearchOptionButton = objectBTNOption;
+        const patternBTNOption = this.drawButton(
+            searchOptionLayout,
+            "Прототип",
+            { color: "#123456" },
+            () => {
+                if (currentSearchOptionButton) {
+                    this.widgetSetStyle(currentSearchOptionButton, {
+                        background: "#2bbbad",
+                    });
+                }
+                this.widgetSetStyle(patternBTNOption, { background: "grey" });
+                currentSearchOptionButton = patternBTNOption;
+                this._searchMode = "pattern";
+                this.switchSearchMode();
+            }
         );
-        ReactComponent[layout].includeWidget(tree[id]);
-      }
-    } else {
-      console.log('Main Classificator:', MainClassificator);
-      console.log('MainClassificator find', MainClassificator.find(e.target.value))
-      const data = this.searchClassificatorByName(MainClassificator,  e.target.value)
+        this._searchLayout = this.drawLayout(
+            this.drawLayout(mainLayout, "layoutHorizontal", { width: "100%" }),
+            "layoutVertical",
+            { height: "100%" }
+        );
+        this._searchTreeLayout = this.drawLayout(
+            this.drawLayout(this._searchLayout, "layoutHorizontal", {
+                width: "100%",
+            }),
+            "layoutVertical",
+            { height: "400px" }
+        );
+        this._searchBtnLayout = this.drawLayout(
+            this._searchLayout,
+            "layoutHorizontal",
+            { width: "100%", minHeight: "50px", maxHeight: "50px" }
+        );
+        this._searchMode = "object";
+        this.switchSearchMode();
+    }
 
-      const resultData = {}      
-
-      data.forEach(element => {
-        resultData[element.id] = {name: element.name, childrens: element.childrens}
-      });
-
-      console.log('Mainclassificator data', data);
-      console.log('Mainclassificator resultData', resultData);
-      const tree = MainClassificator.drawClassificatorTreesByItems(resultData);
-
-
-      console.log('Tree Object.keys()', tree);
-
-      for (let id of Object.keys(tree)) {
-        const lbl = this.drawLabel(this._searchTreeLayout, tree[id].htmlElement.innerText)
-        ReactComponent[lbl].htmlElement.style.minWidth = '100%'
-        ReactComponent[lbl].htmlElement.style.maxHeight = '50px'
-        ReactComponent[lbl].htmlElement.style.borderBottom = '1px solid black'
-        ReactComponent[lbl].htmlElement.style.cursor = 'pointer'
-        ReactComponent[lbl].htmlElement.onmouseover = () => {
-          ReactComponent[lbl].className = 'elementMouseOver'
-          ReactComponent[lbl].htmlElement.style.background = '#D9EDF7'
+    controlFindInput(e) {
+        if (e.target.value.length <= 0) {
+            this.switchSearchMode();
+            return;
         }
-        ReactComponent[lbl].htmlElement.onmouseout = () => {
-          ReactComponent[lbl].htmlElement.style.background = '#FFF'
-        } 
-      }
+        ReactComponent[this._searchTreeLayout].clearWidget();
 
-      // for (let id of Object.keys(tree)) {
-      //   const layout = this.drawLayout(
-      //     this._searchTreeLayout,
-      //     "layoutHorizontal",
-      //     { width: "100%" }
-      //   );
-      //   ReactComponent[layout].includeWidget(tree[id]);
-      // }
-    }
-  }
+        if (this._searchMode == "object") {
+            const data = MainObjects.find(e.target.value);
 
-  convertClassificatorToArray(classificator) {
-    let result;
-    result = classificator._classificator;
-    result = Object.values(result);
-    result.forEach((el) => {
-      const child = Object.values(el)[0];
-      this.getChildrens(child);
-    });
-  }
-  
-  getChildrens(obj, keys = null) { 
-    const objKey = Object.keys(Object.values(obj)[0])[0];
-    if (Object.values(obj.childrens).length > 0) {      
-      Object.values(obj.childrens).forEach((child) => {
-        return this.getChildrens(child, objKey);
-      });
-    } else {
-      this._classificatorArray.push({name: obj.name.ru || obj.name, id: keys});
-      return obj;
+            const tree =
+                MainClassification.drawTreeByClassificationsWithObjects(data);
+
+            for (let id of Object.keys(tree)) {
+                const layout = this.drawLayout(
+                    this._searchTreeLayout,
+                    "layoutHorizontal",
+                    { width: "100%" }
+                );
+                ReactComponent[layout].includeWidget(tree[id]);
+            }
+        } else {
+            const data = MainClassificator.find(e.target.value);
+
+            const tree = MainClassificator.drawClassificatorTreesByItems(data);
+
+            for (let id of Object.keys(tree)) {
+                const layout = this.drawLayout(
+                    this._searchTreeLayout,
+                    "layoutHorizontal",
+                    { width: "100%" }
+                );
+                ReactComponent[layout].includeWidget(tree[id]);
+            }
+        }
     }
-  }
-  
-  searchClassificatorByName(classifiactors, searcher) {
-    this.convertClassificatorToArray(classifiactors);
-  
-    let arrayToSearch;
-    const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
-  
-    keywords.forEach((keyword) => {
-      arrayToSearch = this._classificatorArray.filter(el => el.name.toLowerCase().includes(keyword.toLowerCase()))  
-    });
-    console.log('this._classificatorArray', this._classificatorArray);
-    return arrayToSearch;
-  }
 }

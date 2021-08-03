@@ -1,5 +1,5 @@
 class Property {
-    constructor(category, propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit) {
+    constructor(category, propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit, userID = undefined) {
         this._category = category;
         this._name = name;
         this._lang = lang;
@@ -11,6 +11,7 @@ class Property {
         this._propRef = propRef;
         this._unit = unit;
         this._isSelect = isSelect;
+        if (userID) this._userID = userID;
     }
 
     //#region GetSet
@@ -115,14 +116,14 @@ class CategoryWithProperties {
     }
     addProperties(properties, checked = false) {
 
-        for (let name of Object.keys(properties)) {
+        for (let name of Object.keys(properties)) { 
             this.addProperty(properties[name]["prop_ref"] || properties[name]["pid"], name, properties[name]["lang"], properties[name]["description"],
                 properties[name]["wiki"], properties[name]["type_value"], properties[name].hasOwnProperty("value") ? properties[name]["value"] : properties[name]["average_default"], checked,
-                properties[name]["unit_type"], "");
+                properties[name]["unit_type"], "", properties[name].userID);
         }
     }
-    addProperty(propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit) {
-        const property = new Property(this._name["en"], propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit);
+    addProperty(propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit, userID = undefined) {
+        const property = new Property(this._name["en"], propRef, name, lang, desc, wiki, valueType, value, isSelect, unitType, unit, userID);
         this._list.push(property);
         return property;
     }
