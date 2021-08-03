@@ -1943,25 +1943,10 @@ class ObjectSystem extends BaseObjectEditor {
       background: "rgb(156 155 155 / 80)",
       height: "25px",
     });
-    this.drawButton(
-      editButtonLayout,
-      "Редактировать",
-      { color: "#123456" },
-      () => {
-        console.log("object", object);
-        this.loadPrototype(object["additional"]["category"][0], (pattern) => {
-          const editor = new PatternEditorSystem(this);
-          MainClassificator._editor = editor;
-          editor.openObjectFormEdit(object, this._objectProps, pattern, () => {
-            console.log("object", object);
-            this.loadObjectProperties(projectID, () => {
-              this.updateObject(projectID, object["_id"]["$oid"]);
-              this.showObjectInfo(layout, projectID, object["_id"]["$oid"]);
-            });
-          });
-        });
-      }
-    );
+
+    ReactComponent[headerTitle].fontWeight = "bold";
+    ReactComponent[headerTitle].fontSize = 20;
+
     const nameLayout = this.drawLayout(layout, "layoutHorizontal", {
       width: "100%",
       maxHeight: "50px",
