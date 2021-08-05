@@ -736,7 +736,7 @@ class ProjectEditor extends BaseObjectEditor {
         "Редактировать группу",
         { color: "#123456" },
         () => {
-          // import WidgetCompareTable from './WidgetCompareTable'
+          // import WidgetCompareTableComponent from './WidgetCompareTableComponent'
           const compareobj = new CompareTable(this._allProjectLayout);
         }
         // () => {
