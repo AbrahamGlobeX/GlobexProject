@@ -1,3 +1,5 @@
+let dragObject = {};
+
 class WidgetTreeItem extends BaseWidget {
   constructor() {
     super();
@@ -37,6 +39,7 @@ class WidgetTreeItem extends BaseWidget {
     this._fakeHtmlIcon = false;
     this._fakeHandler = null;
     this._callback = undefined;
+    this._callbackdragstart = undefined;
     this._info = {};
 
     // this.htmlContainer.addEventListener('mouseenter', e => {
@@ -53,17 +56,16 @@ class WidgetTreeItem extends BaseWidget {
       "click",
       function (event) {
         if (!this._fakeHtmlIcon) {
-          console.log('Expand', event);
           this.tree.addSelectedItem(this, event.ctrlKey);
           this.expanded = !this.expanded;
         } else {
-          console.log('Unexpand', event);
           if (!this._fakeHandlerIsCallback) {
             Module.Store.dispatch({
               eventName: this._fakeHandler,
               value: this.id,
             });
           } else {
+            console.log("_fakeHandler");
             this._fakeHandler();
           }
         }
@@ -72,11 +74,44 @@ class WidgetTreeItem extends BaseWidget {
     this.htmlContainer.addEventListener(
       "click",
       function (event) {
-        console.log('Choose tree', event);
         this.tree.addSelectedItem(this, event.ctrlKey);
         if (this._callback) this._callback();
       }.bind(this)
     );
+    this.htmlContainer.setAttribute("draggable", true);
+
+    // this.htmlContainer.addEventListener(
+    //   "dragstart",
+    //   function (event) {
+    //     this.tree.addSelectedItem(this, event.ctrlKey);
+    //     if (this._callbackdragstart) this._callbackdragstart();
+    //   }.bind(this)
+    // );
+
+    // this.htmlContainer.classList.add('draggable')
+
+    this.htmlContainer.addEventListener("dragstart", (e) => {
+      e.target.classList.add("forDraggingOnly");
+      console.log("dragstart");
+    });
+
+    this.htmlContainer.addEventListener("dragend", (e) => {
+      e.target.classList.remove("forDraggingOnly");
+      console.log("dragend");
+    });
+
+    this.htmlContainer.onmousedown = (e) => {
+      if (e.which != 1) return;
+
+      const elem = e.target.closest(".draggable");
+
+      if (!elem) return;
+
+      dragObject.elem = elem;
+
+      dragObject.downX = e.pageX;
+      dragObject.downY = e.pageY;
+    };
 
     // this.childrenDiv = document.createElement("div");
 
@@ -397,7 +432,7 @@ class WidgetTreeItem extends BaseWidget {
     }
 
     this.htmlElement.style.visibility = null;
-    this.expanded = this.expanded;  // WTF?
+    this.expanded = this.expanded; // WTF?
   }
 
   setSelected(select) {
@@ -532,6 +567,14 @@ class WidgetTreeItem extends BaseWidget {
   get callback() {
     return this._callback;
   }
+
+  set callbackdragstart(dragstart) {
+    this._callbackdragstart = dragstart;
+  }
+  get callbackdragstart() {
+    return this._callbackdragstart;
+  }
+
   set info(value) {
     this._info = value;
   }
@@ -633,12 +676,18 @@ class WidgetTree extends BaseWidget {
     }
   }
 
-  createItemInTree(parentId, callback = undefined, info = undefined) {
+  createItemInTree(
+    parentId,
+    callback = undefined,
+    info = undefined,
+    callbackdragstart = undefined
+  ) {
     let sourceItem = new WidgetTreeItem();
     this.addItem(sourceItem);
     sourceItem.parentId = parentId;
     sourceItem.callback = callback;
     sourceItem.info = info;
+    sourceItem.callbackdragstart = callbackdragstart;
     return sourceItem.id;
   }
 

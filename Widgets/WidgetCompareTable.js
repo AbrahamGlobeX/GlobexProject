@@ -431,22 +431,26 @@ const comparableObjects = [
   objToCompare4,
 ];
 
-//TODO: Оставить шапку наверху при скрол
-//TODO: Привязка изменения при Drag-N-Drop
-//TODO: Привязка изменений при прокрутке
-
 //#endregion
 
 class CompareTable extends BaseObjectEditor {
-  constructor(parentID, comparedObjects = comparableObjects) {
+  constructor(parentID, comparedObjects = []) {
     super();
-    this._comparedObjects = comparedObjects.map((el) => {
-      Object.keys(el.object).forEach((item) => {
-        el.object[item].checked = false;
-      });
-      el.checked = false;
-      return el;
-    });
+    debugger;
+    this._comparedObjects = ObjectsToCompare;
+    if (comparedObjects.length !== 0) {
+      this._comparedObjects = this._comparedObjects.concat(
+        comparedObjects.map((el) => {
+          Object.keys(el.object).forEach((item) => {
+            el.object[item].checked = false;
+          });
+          el.checked = false;
+          return el;
+        })
+      );
+    } else {
+      this._comparedObjects = comparableObjects;
+    }
     this._allProperties = [];
     this._parentId = parentID;
     this._displayDiffProps = false;
@@ -454,6 +458,10 @@ class CompareTable extends BaseObjectEditor {
     this._bodyLayout;
     this._bodyTableLayout;
     this._bodyCheckboxLayout;
+    this._widgetTitle;
+    this._headerlayout;
+
+    this._Offset = 0;
 
     this._diffProperties = this.getAllProperties();
 
@@ -482,6 +490,8 @@ class CompareTable extends BaseObjectEditor {
       maxHeight: "15%",
     });
 
+    this._headerlayout = headerLayout;
+
     // Wiget title
     const widgetTitle = this.drawLabel(
       headerLayout,
@@ -491,6 +501,8 @@ class CompareTable extends BaseObjectEditor {
         maxHeight: "30%",
       }
     );
+
+    this._widgetTitle = widgetTitle;
 
     ReactComponent[widgetTitle].htmlElement.firstChild.className +=
       " header__title";
@@ -521,16 +533,18 @@ class CompareTable extends BaseObjectEditor {
       }
     );
 
-    // Widget button "Добавить товары к сравнению"
+    // Widget button "Добавить объекты к сравнению"
     const widgetTitleButtonAddToCompare = this.drawButton(
       widgetTitleButtonsLayout,
-      "Добавить товары к сравнению",
+      "Добавить объекты к сравнению",
       {
         maxHeight: "100px",
         maxWidth: "45%",
       },
       () => {
-        console.error("NOT IMPLEMENT EXCEPTION");
+        debugger;
+        ObjectsToCompare = this._comparedObjects;
+        this.destroyWidject(dialogWindow);
       }
     );
 
@@ -601,6 +615,7 @@ class CompareTable extends BaseObjectEditor {
         maxWidth: "30%",
       },
       () => {
+        ObjectsToCompare = [];
         this.destroyWidject(dialogWindow);
       }
     );
@@ -630,8 +645,11 @@ class CompareTable extends BaseObjectEditor {
         ReactComponent[hLayout].htmlElement.addEventListener(
           "mousewheel",
           (e) => {
-            e.preventDefault()
-            this.scrollFunction(e.target.parentElement.parentElement.parentElement, e.deltaY);
+            e.preventDefault();
+            this.scrollFunction(
+              e.target.parentElement.parentElement.parentElement,
+              e.deltaY
+            );
           }
         );
         continue;
@@ -644,8 +662,11 @@ class CompareTable extends BaseObjectEditor {
       ReactComponent[hLayout].htmlElement.addEventListener(
         "mousewheel",
         (e) => {
-          e.preventDefault()
-          this.scrollFunction(e.target.parentElement.parentElement.parentElement, e.deltaY);
+          e.preventDefault();
+          this.scrollFunction(
+            e.target.parentElement.parentElement.parentElement,
+            e.deltaY
+          );
         }
       );
 
@@ -659,11 +680,20 @@ class CompareTable extends BaseObjectEditor {
       ReactComponent[hLayout].innerObject = dataInfo[i - 1]._id.$oid;
 
       tasksListElement.addEventListener("dragstart", (evt) => {
-        // console.log('Drag start', evt);
         evt.target.classList.add("selectedObjectProperty");
       });
       tasksListElement.addEventListener("dragend", (evt) => {
-        // console.log('Drag end', evt);
+        if (ReactComponent[evt.target.id]) {
+          const dragActive = ReactComponent[evt.target.id].innerObject;
+          const dragNext =
+            ReactComponent[evt.srcElement.nextElementSibling.id].innerObject;
+
+          this.moveObjInArray(dragActive, dragNext);
+
+          this.clearWidget(this._bodyTableLayout);
+          this.createTable(this._bodyTableLayout, this._comparedObjects);
+        }
+
         evt.target.classList.remove("selectedObjectProperty");
       });
 
@@ -709,11 +739,6 @@ class CompareTable extends BaseObjectEditor {
         tasksListElement.insertBefore(activeElement, nextElement);
 
         evt.target.classList.remove("selectedObjectProperty");
-
-        // this.moveObjInArray(
-        //   ReactComponent[activeElement.id].innerObject,
-        //   ReactComponent[nextElement.id].innerObject
-        // );
       });
 
       //#endregion
@@ -765,7 +790,20 @@ class CompareTable extends BaseObjectEditor {
               this._comparedObjects.splice(i - 1, 1);
               this.clearWidget(this._bodyTableLayout);
               this.createTable(this._bodyTableLayout, this._comparedObjects);
-              // ReactComponent[hLayout].htmlElement.style.display = "none";
+
+              // this.clearWidget(this._widgetTitle);
+
+              //   const widgetTitle = this.drawLabel(
+              //     this._headerlayout,
+              //     `Cравнение характеристик ${this._comparedObjects.length} товаров`,
+              //     {
+              //       minWidth: "100%",
+              //       maxHeight: "30%",
+              //     }
+              //   );
+
+              //   this._widgetTitle = widgetTitle;
+              //   // ReactComponent[hLayout].htmlElement.style.display = "none";
             }
           );
 
@@ -845,6 +883,24 @@ class CompareTable extends BaseObjectEditor {
           );
         }
       }
+
+      for (
+        let i = 0;
+        i <
+        ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes
+          .length;
+        i++
+      ) {
+        const el =
+          ReactComponent[
+            ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[
+              i
+            ].id
+          ];
+        ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[
+          i
+        ].scrollTo(0, this._Offset);
+      }
     }
   }
 
@@ -923,7 +979,7 @@ class CompareTable extends BaseObjectEditor {
     this._comparedObjects.forEach((element) => {
       result = [...new Set([...result, ...Object.keys(element.object)])];
     });
-    return result;
+    return result.sort();
   }
 
   /**
@@ -954,6 +1010,8 @@ class CompareTable extends BaseObjectEditor {
     } else {
       this._diffProperties = this.getAllProperties();
     }
+
+    this._comparedObjects.sort();
 
     this.clearWidget(this._bodyTableLayout);
     this.createTable(this._bodyTableLayout, this._comparedObjects);
@@ -1118,9 +1176,6 @@ class CompareTable extends BaseObjectEditor {
   }
 
   moveObjInArray(oldId, newId) {
-
-    if (oldId == newId) return;
-
     const oldIndex = this._comparedObjects.indexOf(
       this._comparedObjects.find((el) => el._id.$oid == oldId)
     );
@@ -1128,26 +1183,39 @@ class CompareTable extends BaseObjectEditor {
       this._comparedObjects.find((el) => el._id.$oid == newId)
     );
 
-    if (oldIndex < newIndex)
-      this._comparedObjects.splice(
-        newIndex + 1,
-        0,
-        this._comparedObjects.splice(oldIndex, 1)[0]
-      );
-
-    if (oldIndex > newIndex)
-      this._comparedObjects.splice(
-        oldIndex - 1,
-        0,
-        this._comparedObjects.splice(oldIndex, 1)[0]
-      );
+    this._comparedObjects.splice(
+      newIndex,
+      0,
+      this._comparedObjects.splice(oldIndex, 1)[0]
+    );
   }
 
+  /**
+   * Scrolls all main layout elements with selected element
+   *
+   * @param {Object} element
+   * @param {Number} offset
+   * @memberof CompareTable
+   */
   scrollFunction(element, offset) {
-    let off = element.scrollTop + offset
-    for (let i = 0; i < ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes.length; i++){
-      const el = ReactComponent[ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i].id]
-      ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i].scrollTo(0, off)
-    }    
+    let off = element.scrollTop + offset;
+
+    this._Offset = off;
+
+    for (
+      let i = 0;
+      i <
+      ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes.length;
+      i++
+    ) {
+      const el =
+        ReactComponent[
+          ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[i]
+            .id
+        ];
+      ReactComponent[this._bodyLayout].htmlElement.firstChild.childNodes[
+        i
+      ].scrollTo(0, off);
+    }
   }
 }

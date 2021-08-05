@@ -1,10 +1,11 @@
 let MainClassification;
 let MainClassificator;
 let MainObjects;
+let ObjectsToCompare = [];
+
 class ProjectEditor extends BaseObjectEditor {
   constructor() {
     super();
-
 
     this._leftLayout = undefined;
     this._centerLayout = undefined;
@@ -22,6 +23,8 @@ class ProjectEditor extends BaseObjectEditor {
     this._openedProject = [];
     this._mineProjects = [];
     this._openProjectLayout = "";
+
+    this._newLayout = "";
 
     this._classificatorArray = [];
 
@@ -122,7 +125,6 @@ class ProjectEditor extends BaseObjectEditor {
       minHeight: "40px",
       maxHeight: "50px",
       background: "#26a69a",
-      margin: "6px 0 0 0",
       "border-bottom": "2px solid rgb(170, 170, 170)",
     });
 
@@ -159,27 +161,26 @@ class ProjectEditor extends BaseObjectEditor {
     });
 
     ReactComponent[myProjectLabel].fontSize = 40;
-    ReactComponent[myProjectLabel].fontWeight = "bold";    
+    ReactComponent[myProjectLabel].fontWeight = "bold";
 
     // поле для поиска
-    const searchProjectInput = this.drawInput(this._leftLayout,'',{
-      maxHeight: '30px',
-      minWidth: '100%',
-    })
-       
+    const searchProjectInput = this.drawInput(this._leftLayout, "", {
+      maxHeight: "30px",
+      minWidth: "100%",
+    });
+
     // поиск в моих проектах
     this._mineProjects = this._projects;
     ReactComponent[searchProjectInput].htmlElement.oninput = (e) => {
-      if(e.target.value.length > 0) {
-        this._mineProjects = searchByName(this._projects, e.target.value)
+      if (e.target.value.length > 0) {
+        this._mineProjects = searchByName(this._projects, e.target.value);
       } else {
-        this._mineProjects = this._projects
+        this._mineProjects = this._projects;
       }
 
       ReactComponent[this._allProjectLayout].clearWidget();
-      this.drawProjects(this._allProjectLayout, this._mineProjects );
-    }
-    
+      this.drawProjects(this._allProjectLayout, this._mineProjects);
+    };
 
     this._allProjectLayout = this.drawLayout(
       this.drawLayout(this._leftLayout, "layoutHorizontal", { width: "100%" }),
@@ -192,6 +193,8 @@ class ProjectEditor extends BaseObjectEditor {
         width: "100%",
         minHeight: "50px",
         maxHeight: "50px",
+        margin: "0 0 4px 0"
+       
       }),
       "Создать новый проект",
       { color: "#123456" },
@@ -199,7 +202,10 @@ class ProjectEditor extends BaseObjectEditor {
         this.drawFormEditProject();
       }
     );
-    this.drawProjects(this._allProjectLayout, this._mineProjects || this._projects);
+    this.drawProjects(
+      this._allProjectLayout,
+      this._mineProjects || this._projects
+    );
   }
 
   // Открытые проекты
@@ -237,9 +243,6 @@ class ProjectEditor extends BaseObjectEditor {
           this.openProject(projects[i]["_id"]["$oid"]);
 
           this.showObjects();
-
-          console.log("e", e);
-          console.log("this._currentProjectLayout", this._currentProjectLayout);
         };
       }
     }
@@ -682,7 +685,7 @@ class ProjectEditor extends BaseObjectEditor {
       const classificationLayout = this.drawLayout(
         this._classLayout,
         "layoutVertical",
-        { height: "100%", paddingLeft: "3%" }
+        { height: "100%", paddingLeft: "3%", marginRight: "4px" }
       );
       // this.drawLabel(
       //   this.drawLayout(classificationLayout, "layoutHorizontal", {
@@ -732,9 +735,9 @@ class ProjectEditor extends BaseObjectEditor {
         }),
         "Редактировать группу",
         { color: "#123456" },
-        () => { 
+        () => {
           // import WidgetCompareTable from './WidgetCompareTable'
-          const compareobj = new CompareTable(this._allProjectLayout)
+          const compareobj = new CompareTable(this._allProjectLayout);
         }
         // () => {
         //   const editor = new PatternEditorSystem(this);
@@ -1043,7 +1046,7 @@ class Classificator {
     };
     const rootID = Object.keys(this._classificator[projectID])[0];
     getID.bind(this, rootID, this._classificator[projectID][rootID])();
-    console.log('Classificator PROJECT', ids);
+    console.log("Classificator PROJECT", ids);
     return Object.keys(ids);
   }
   fillClassificatorWithCommon(projectID, common) {
@@ -1263,11 +1266,11 @@ class Classificator {
   }
 
   drawClassificatorTreeByItems(classificator) {
-    console.log('Draw classificator ', classificator);
+    console.log("Draw classificator ", classificator);
     const treeItem = {};
     const tree = new WidgetTree();
     if (Object.keys(classificator).length == 0) {
-      console.log('Enter undefined', Object.keys(classificator));
+      console.log("Enter undefined", Object.keys(classificator));
       const item = tree.createItemInTree(-1);
       ReactComponent[item].text = "Классификатор проекта";
 
@@ -1285,22 +1288,22 @@ class Classificator {
       treeItem[id] = {
         widget: item,
         parent: predParentID,
-        name:  element,
+        name: element,
         parentID: pID,
         id: id,
       };
-     // for (let childID of Object.keys(element.childrens)) {
-        // drawItem.bind(
-        //   this,
-        //   id,
-        //   item,
-        //   element,
-        //   predParentID,
-        //   id
-        // )();
-     // }
+      // for (let childID of Object.keys(element.childrens)) {
+      // drawItem.bind(
+      //   this,
+      //   id,
+      //   item,
+      //   element,
+      //   predParentID,
+      //   id
+      // )();
+      // }
     };
-    const rootID = Object.keys(classificator)[0];    
+    const rootID = Object.keys(classificator)[0];
     drawItem.bind(this, rootID, -1, classificator[rootID], -1, -1)();
 
     return tree;
@@ -1404,7 +1407,12 @@ class Classificator {
         this._contextMenu.setMenuItemCallback(
           this._classificatorMainMenuName,
           "Добавить категорию",
-          this.addInMainClassificator.bind(this, finded.info.name, ids, finded.info.id)
+          this.addInMainClassificator.bind(
+            this,
+            finded.info.name,
+            ids,
+            finded.info.id
+          )
         );
         this._contextMenu.showMenu(
           this._classificatorMainMenuName,
@@ -1480,25 +1488,42 @@ class Classificator {
     }
   }
 
-  addInMainClassificator(info, ids, addInMainId, asd = 123, nameRU = "name", nameEN = "nam", descRU = "na", descEN = "n") {
-    const loadedClass = function (resultJSON) { debugger;
+  addInMainClassificator(
+    info,
+    ids,
+    addInMainId,
+    asd = 123,
+    nameRU = "name",
+    nameEN = "nam",
+    descRU = "na",
+    descEN = "n"
+  ) {
+    const loadedClass = function (resultJSON) {
+      debugger;
       if (resultJSON.cursor.firstBatch.length == 0) {
-
       } else {
         let res = resultJSON.cursor.firstBatch[0];
-        res.layer.push({name: {ru: nameRU, en: nameEN}, description: {ru: descRU, en: descEN}, leaf_id: ""})
-        const saved = function(result){
-          console.log("result",result);
+        res.layer.push({
+          name: { ru: nameRU, en: nameEN },
+          description: { ru: descRU, en: descEN },
+          leaf_id: "",
+        });
+        const saved = function (result) {
+          console.log("result", result);
+        };
+        const sets = {
+          $set: {
+            layer: res.layer,
+          },
+        };
+        APP.dbWorker.responseDOLMongoRequest = saved;
+        APP.dbWorker.sendUpdateRCRequest(
+          "DOLMongoRequest",
+          res._id["$oid"],
+          JSON.stringify(sets)
+        );
       }
-      const sets = {
-          "$set": {
-              "layer" : res.layer
-          }
-      }
-      APP.dbWorker.responseDOLMongoRequest = saved;
-      APP.dbWorker.sendUpdateRCRequest("DOLMongoRequest", res._id["$oid"], JSON.stringify(sets));
-      }
-    }
+    };
     const request = '{"_id" : {"$oid" : "' + addInMainId + '"}}';
     console.log("loadClass", request);
     APP.dbWorker.responseDOLMongoRequest = loadedClass.bind(this);
@@ -1511,9 +1536,7 @@ class Classificator {
         "Общий классификатор",
         "",
         "Отмена",
-        () => {
-          
-        },
+        () => {},
         true
       );
       this._drawFormWidgets.drawSearch(searchLayout, (e) => {});
@@ -1770,6 +1793,7 @@ class ObjectSystem extends BaseObjectEditor {
     this._objectProps = {};
     this._projectSystem = projectSystem;
   }
+
   loadObjects(projectID, ids, callback) {
     console.log("loadObjects ids", ids);
     const loadedObjects = function (resultJSON) {
@@ -1907,10 +1931,11 @@ class ObjectSystem extends BaseObjectEditor {
         if (this._objectProps.hasOwnProperty(prop)) {
         } else {
           if (object["object"][prop].hasOwnProperty("prop_ref")) {
-            if (object["object"][prop]["prop_ref"]["$oid"]) {req[prop] = object["object"][prop]["prop_ref"]["$oid"];
-            this._objectProps[prop] =
-              object["object"][prop]["prop_ref"]["$oid"];
-          }
+            if (object["object"][prop]["prop_ref"]["$oid"]) {
+              req[prop] = object["object"][prop]["prop_ref"]["$oid"];
+              this._objectProps[prop] =
+                object["object"][prop]["prop_ref"]["$oid"];
+            }
           }
         }
       }
@@ -1926,6 +1951,13 @@ class ObjectSystem extends BaseObjectEditor {
     console.log("this._objectProps", request);
   }
 
+  /**
+   *    *
+   * @param {*} layout
+   * @param {*} projectID
+   * @param {*} id
+   * @memberof ObjectSystem
+   */
   showObjectInfo(layout, projectID, id) {
     ReactComponent[layout].clearWidget();
     const object = this.findObjectByID(projectID, id);
@@ -1933,12 +1965,120 @@ class ObjectSystem extends BaseObjectEditor {
     this.showObjectProperties(layout, object, projectID);
   }
 
+  fillTheLayoutWithObjects(layout, _projectID, id, element) {
+    console.log("element", element);
+
+    const serchedObjects = MainObjects._objects[_projectID].filter((el) => {
+      if (el.additional) {
+        if (el.additional.hasOwnProperty("classification"))
+          if (el.additional.classification[_projectID].indexOf(id) !== -1)
+            return el;
+      }
+    });
+
+    ReactComponent[layout].clearWidget();
+
+    const headerTitle = this.drawLabel(
+      layout,
+      `Объекты группы ${element.name.ru}`,
+      {
+        background: "rgb(156 155 155 / 80)",
+        maxHeight: "25px",
+        minWidth: "100%",
+      }
+    );
+
+    ReactComponent[headerTitle].fontWeight = "bold";
+    ReactComponent[headerTitle].fontSize = 20;
+
+    const infoLayout = this.drawLayout(layout, "layoutVertical", {
+      minWidth: "100%",
+    });
+
+    ReactComponent[infoLayout].htmlElement.style = "max-height: 71vh";
+
+    for (let i = 0; i < serchedObjects.length; i++) {
+      const newLabel = this.drawLabel(infoLayout, serchedObjects[i].meta.name, {
+        minWidth: "100%",
+      });
+
+      // forDraggingOnly
+      ReactComponent[newLabel].htmlElement.firstChild.classList.add(
+        "forDragDrop"
+      );
+      ReactComponent[newLabel].htmlElement.firstChild.setAttribute(
+        "draggable",
+        true
+      );
+      ReactComponent[newLabel].htmlElement.setAttribute("draggable", true);
+      ReactComponent[newLabel].htmlElement.classList.add("forDragDrop");
+      ReactComponent[newLabel].htmlElement.style =
+        'max-height: 50px; min-height: 50px; border-bottom: 1px solid black; background: "#2bbbad"; cursor: pointer';
+      ReactComponent[newLabel].htmlElement.addEventListener(
+        "mouseover",
+        (e) => {
+          e.target.style.background = "#D9EDF7";
+        }
+      );
+      ReactComponent[newLabel].htmlElement.addEventListener("mouseout", (e) => {
+        e.target.style.background = "";
+      });
+    }
+
+    const editGroupButton = this.drawButton(
+      layout,
+      "Редактировать группу",
+      {
+        color: "#123456",
+        maxHeight: "50px",
+        minWidth: "100%",
+      },
+      () => {
+        console.error("NOT IMPLEMENTED EXCEPTION");
+      }
+    );
+
+    ReactComponent[editGroupButton].htmlElement.style =
+      "color:black; max-height: 50px";
+
+    ReactComponent[infoLayout].htmlElement.addEventListener(
+      "dragover",
+      (evt) => {
+        evt.preventDefault();
+        const activeElement = document.querySelector(`.forDraggingOnly`);
+
+        const currentElement = evt.target;
+
+        const isMoveable =
+          activeElement !== currentElement &&
+          currentElement.classList.contains(`forDraggingOnly`);
+
+        if (!isMoveable) {
+          return;
+        }
+
+        const nextElement =
+          currentElement === activeElement.nextElementSibling
+            ? currentElement.nextElementSibling
+            : currentElement;
+
+        // ReactComponent[infoLayout].htmlElement.insertBefore(activeElement, nextElement);
+        // this.drawLabel(infoLayout, 'asdasd')
+      }
+    );   
+  }
+
+  // отображение объектов в группе или свойства объекта
+
   showObjectTitle(layout, object) {
     const newLayout = this.drawLayout(layout, "layoutHorizontal", {
       width: "100%",
       maxHeight: "25px",
       minHeight: "25px",
     });
+
+    this._newLayout = newLayout;
+
     const headerTitle = this.drawLabel(newLayout, "Объект", {
       background: "rgb(156 155 155 / 80)",
       height: "25px",
@@ -1952,6 +2092,8 @@ class ObjectSystem extends BaseObjectEditor {
       maxHeight: "50px",
       minHeight: "50px",
     });
+
+    //   this.drawLabel(object)
 
     this.drawLabel(nameLayout, "Название");
     this.drawLabel(nameLayout, object["meta"]["name"]);
@@ -1970,7 +2112,7 @@ class ObjectSystem extends BaseObjectEditor {
       console.log("resultJSOn", resultJSON);
       const result = resultJSON.cursor.firstBatch;
       if (Array.isArray(result) && result.length == 0) {
-        return APP.log("warn", "Данный прототип не создан"); //asd
+        return APP.log("warn", "Данный прототип не создан");
       }
       return callback(result[0]);
     };
@@ -2083,12 +2225,11 @@ class ObjectSystem extends BaseObjectEditor {
  *@return {Array} Array of objects that have that keyword in name
  */
 function searchByName(data, searchKeyword) {
-  debugger;
-  let arrayToFonSearch
+  let arrayToFonSearch;
   if (!data.isArray) {
     arrayToFonSearch = convertToArray(Object.values(data));
   } else {
-    arrayToFonSearch = data
+    arrayToFonSearch = data;
   }
 
   let objectsToOutput;
@@ -2097,7 +2238,7 @@ function searchByName(data, searchKeyword) {
   } else {
     objectsToOutput = BigDataSearch(arrayToFonSearch, searchKeyword);
   }
-  
+
   return objectsToOutput;
 }
 
@@ -2153,7 +2294,7 @@ function searchProperty(array, propName, propValue = null, comparison = "=") {
   // преобразование к строке в нижнем регистре или к числу для дальнейшего сравнения
   isNaN(propValue) ? propValue.toLowerCase() : (propValue = Number(propValue));
 
-  // сравнение значения свойства с требуемым 
+  // сравнение значения свойства с требуемым
   const result = [];
   searchArray.map((obj) => {
     Object.keys(obj.object).map((prop) => {
@@ -2195,7 +2336,7 @@ function searchProperty(array, propName, propValue = null, comparison = "=") {
 
 function convertClassificatorToArray(classificator) {
   debugger;
-  console.log('Enter a converter');
+  console.log("Enter a converter");
   let result;
   result = classificator._classificator;
   result = Object.values(result);
@@ -2205,15 +2346,13 @@ function convertClassificatorToArray(classificator) {
   });
 }
 
-function getChildrens(obj) { 
-  console.log('Enter get children');
+function getChildrens(obj) {
+  console.log("Enter get children");
   if (Object.values(obj.childrens).length > 0) {
     Object.values(obj.childrens).forEach((child) => {
-      return getChildrens( child);
+      return getChildrens(child);
     });
   } else {
-    debugger;
-    console.log('Classificator array', this);
     this._classificatorArray.push(obj.name.ru || obj.name);
     return obj;
   }
@@ -2221,38 +2360,200 @@ function getChildrens(obj) {
 
 function searchClassificatorByName(classifiactors, searcher) {
   debugger;
-  console.log('Enter a searcher');
+  console.log("Enter a searcher");
   convertClassificatorToArray(classifiactors);
 
   let arrayToSearch;
   const keywords = searcher.trim().replace(/ +/g, " ").split(" ");
 
   keywords.forEach((keyword) => {
-    arrayToSearch = this._classificatorArray.filter(el => el.toLowerCase().includes(keyword.toLowerCase()))  
+    arrayToSearch = this._classificatorArray.filter((el) =>
+      el.toLowerCase().includes(keyword.toLowerCase())
+    );
   });
   return this._classificatorArray;
 }
 
-
 //#region Adaptive mb in future
- 
-window.addEventListener('resize', (e) => {
-  // console.log('resize',e);
-})
 
-function move(){
-	const viewport_width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-	if (viewport_width <= 992) {
-		if (!item.classList.contains('done')) {
-			parent.insertBefore(item, parent.children[2]);
-			item.classList.add('done');
-		}
-	} else {
-		if (item.classList.contains('done')) {
-			parent_original.insertBefore(item, parent_original.children[2]);
-			item.classList.remove('done');
-		}
-	}
+window.addEventListener("resize", (e) => {
+  // console.log('resize',e);
+});
+
+function move() {
+  const viewport_width = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  if (viewport_width <= 992) {
+    if (!item.classList.contains("done")) {
+      parent.insertBefore(item, parent.children[2]);
+      item.classList.add("done");
+    }
+  } else {
+    if (item.classList.contains("done")) {
+      parent_original.insertBefore(item, parent_original.children[2]);
+      item.classList.remove("done");
+    }
+  }
 }
 
 //#endregion
+
+var DragManager = new function() {
+
+  /**
+   * составной объект для хранения информации о переносе:
+   * {
+   *   elem - элемент, на котором была зажата мышь
+   *   avatar - аватар
+   *   downX/downY - координаты, на которых был mousedown
+   *   shiftX/shiftY - относительный сдвиг курсора от угла элемента
+   * }
+   */
+  var dragObject = {};
+
+  var self = this;
+
+  function onMouseDown(e) {
+
+    if (e.which != 1) return;
+
+    var elem = e.target.closest('.draggable');
+    if (!elem) return;
+
+    dragObject.elem = elem;
+
+    // запомним, что элемент нажат на текущих координатах pageX/pageY
+    dragObject.downX = e.pageX;
+    dragObject.downY = e.pageY;
+
+    return false;
+  }
+
+  function onMouseMove(e) {
+    if (!dragObject.elem) return; // элемент не зажат
+
+    if (!dragObject.avatar) { // если перенос не начат...
+      var moveX = e.pageX - dragObject.downX;
+      var moveY = e.pageY - dragObject.downY;
+
+      // если мышь передвинулась в нажатом состоянии недостаточно далеко
+      if (Math.abs(moveX) < 3 && Math.abs(moveY) < 3) {
+        return;
+      }
+
+      // начинаем перенос
+      dragObject.avatar = createAvatar(e); // создать аватар
+      if (!dragObject.avatar) { // отмена переноса, нельзя "захватить" за эту часть элемента
+        dragObject = {};
+        return;
+      }
+
+      // аватар создан успешно
+      // создать вспомогательные свойства shiftX/shiftY
+      var coords = getCoords(dragObject.avatar);
+      dragObject.shiftX = dragObject.downX - coords.left;
+      dragObject.shiftY = dragObject.downY - coords.top;
+
+      startDrag(e); // отобразить начало переноса
+    }
+
+    // отобразить перенос объекта при каждом движении мыши
+    dragObject.avatar.style.left = e.pageX - dragObject.shiftX + 'px';
+    dragObject.avatar.style.top = e.pageY - dragObject.shiftY + 'px';
+
+    return false;
+  }
+
+  function onMouseUp(e) {
+    if (dragObject.avatar) { // если перенос идет
+      finishDrag(e);
+    }
+
+    // перенос либо не начинался, либо завершился
+    // в любом случае очистим "состояние переноса" dragObject
+    dragObject = {};
+  }
+
+  function finishDrag(e) {
+    var dropElem = findDroppable(e);
+
+    if (!dropElem) {
+      self.onDragCancel(dragObject);
+    } else {
+      self.onDragEnd(dragObject, dropElem);
+    }
+  }
+
+  function createAvatar(e) {
+
+    // запомнить старые свойства, чтобы вернуться к ним при отмене переноса
+    var avatar = dragObject.elem;
+    var old = {
+      parent: avatar.parentNode,
+      nextSibling: avatar.nextSibling,
+      position: avatar.position || '',
+      left: avatar.left || '',
+      top: avatar.top || '',
+      zIndex: avatar.zIndex || ''
+    };
+
+    // функция для отмены переноса
+    avatar.rollback = function() {
+      old.parent.insertBefore(avatar, old.nextSibling);
+      avatar.style.position = old.position;
+      avatar.style.left = old.left;
+      avatar.style.top = old.top;
+      avatar.style.zIndex = old.zIndex
+    };
+
+    return avatar;
+  }
+
+  function startDrag(e) {
+    var avatar = dragObject.avatar;
+
+    // инициировать начало переноса
+    document.body.appendChild(avatar);
+    avatar.style.zIndex = 9999;
+    avatar.style.position = 'absolute';
+  }
+
+  function findDroppable(event) {
+    // спрячем переносимый элемент
+    dragObject.avatar.hidden = true;
+
+    // получить самый вложенный элемент под курсором мыши
+    var elem = document.elementFromPoint(event.clientX, event.clientY);
+
+    // показать переносимый элемент обратно
+    dragObject.avatar.hidden = false;
+
+    if (elem == null) {
+      // такое возможно, если курсор мыши "вылетел" за границу окна
+      return null;
+    }
+
+    return elem.closest('.droppable');
+  }
+
+  document.onmousemove = onMouseMove;
+  document.onmouseup = onMouseUp;
+  document.onmousedown = onMouseDown;
+
+  this.onDragEnd = function(dragObject, dropElem) {};
+  this.onDragCancel = function(dragObject) {};
+
+};
+
+
+function getCoords(elem) { // кроме IE8-
+  var box = elem.getBoundingClientRect();
+
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+
+}

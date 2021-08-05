@@ -19,6 +19,7 @@ class PatternEditorSystem extends BaseObjectEditor {
     this._loadedPatternsLayout;
     this._loadedPatterns = {};
     this._selectedPatternsLayout;
+    this._mainLayout;
 
         this._createdClassification;
 
@@ -764,6 +765,8 @@ class PatternEditorSystem extends BaseObjectEditor {
         const mainLayout = this.drawLayout(dialog, "layoutVertical", {
             minWidth: "500px",
         });
+
+        this._mainLayout = mainLayout;
         this.drawLabel(
             this.drawLayout(mainLayout, "layoutHorizontal", {
                 width: "100%",
@@ -1142,8 +1145,6 @@ class PatternEditorSystem extends BaseObjectEditor {
             ReactComponent[otherTree[id]["id"]].htmlElement.style.display = "";
         }
 
-
-
         if (this._searchMode == "pattern") {
             this.drawButton(
                 this._searchBtnLayout,
@@ -1196,8 +1197,10 @@ class PatternEditorSystem extends BaseObjectEditor {
             width: "100%",
             minHeight: "50px",
             maxHeight: "50px",
+            marginBottom: "2px"
         });
-        this.drawLabel(searchLayout, "Поиск");
+        this.drawLabel(searchLayout, "Поиск");       
+
         ReactComponent[this.drawInput(searchLayout, "")].htmlElement.oninput =
             this.controlFindInput.bind(this);
         const searchOptionLayout = this.drawLayout(mainLayout, "layoutHorizontal", {
@@ -1205,6 +1208,19 @@ class PatternEditorSystem extends BaseObjectEditor {
             minHeight: "50px",
             maxHeight: "50px",
         });
+
+
+        // Кнопка сравнить объекты
+         const compareButton = this.drawButton(searchLayout,'Сравнить',{
+            color: 'black',
+            maxWidth: '100px'
+        }, ()=>{
+            console.log('Сравниваю объекты', mainLayout);
+            const compareobj = new CompareTable(mainLayout, this._searchData);
+        })
+
+        ReactComponent[compareButton].htmlElement.style.border = "1px solid black"
+
         const objectBTNOption = this.drawButton(
             searchOptionLayout,
             "Объекты",
@@ -1271,6 +1287,10 @@ class PatternEditorSystem extends BaseObjectEditor {
        const data = searchByName(Object.values(Object.values(MainObjects)[7]), e.target.value)
       //MainObjects.find(e.target.value);
       
+      this._searchData = data;
+        console.log('Search Data result ', data);
+
+
       let result = []
       data.forEach(item => result.push({name: item.meta.name, classification: item.additional.classification}))
 

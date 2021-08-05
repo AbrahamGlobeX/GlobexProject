@@ -1,7 +1,7 @@
 class DrawFormWidgets extends BaseObjectEditor {
   constructor() {
-  super();
-  this._widgets = {};
+    super();
+    this._widgets = {};
   }
   drawComboBoxWithTitle(layout, title) {
     const comboBoxLayout = this.drawLayout(layout, "layoutHorizontal", {
@@ -13,7 +13,7 @@ class DrawFormWidgets extends BaseObjectEditor {
     const comboBox = this.drawComboBox(comboBoxLayout);
     return comboBox;
   }
-  
+
   drawCommonDialog(title, OKName, CancelName, callback, isSearched = false) {
     try {
       const dialog = this.drawDialog(-1);
@@ -314,7 +314,25 @@ class Classification {
             ? `${element.name.ru}`
             : element.name["ru"] + " ( группа )";
         predParentID = parentID;
-        const item = this._tree[projectID].createItemInTree(parentID, () => {});
+        // Это добавляет клик
+        const item = this._tree[projectID].createItemInTree(parentID, () =>
+          this._objectSystem.fillTheLayoutWithObjects(
+            this._rightLayout,
+            this._projectID,
+            id,
+            element
+          )
+        );
+
+        // const item = this._tree[projectID].createItemInTree(parentID, () =>
+        //   this._objectSystem.fillTheLayoutWithObjects(
+        //     this._rightLayout,
+        //     this._projectID,
+        //     id,
+        //     element
+        //   )
+        // );
+
         this._contextMenu.addMenuItem(
           this._classificationItemsName,
           "",
@@ -324,7 +342,7 @@ class Classification {
           undefined
         );
 
-        if (parentID != -1) {          
+        if (parentID != -1) {
           this._classificationGroupListAddMenu.addMenuItem(
             name.replace(" ( группа )", ""),
             -1,
@@ -385,11 +403,15 @@ class Classification {
     }
   }
   fillTreeWithObject(projectID) {
-    if (!this._tree[projectID]) return;
+    if (!this._tree[projectID]) {
+      return;
+    }
     this._objectTreeItem[projectID] = {};
     const objects = this._objectSystem._objects[projectID];
     for (let i = 0; i < objects.length; i++) {
-      if (!objects[i]["additional"].hasOwnProperty("classification")) continue;
+      if (!objects[i]["additional"].hasOwnProperty("classification")) {
+        continue;
+      }
       const objectClassifications = objects[i]["additional"]["classification"][
         projectID
       ].map((item) => item.split(".").pop());
@@ -437,9 +459,9 @@ class Classification {
     const tree = new WidgetTree();
 
     if (data.length == 0) {
-      return
+      return;
       // const item = tree.createItemInTree(-1);
-      // ReactComponent[item].text = "Классификация проекта";  
+      // ReactComponent[item].text = "Классификация проекта";
 
       // const item2 = tree.createItemInTree(item);
       // ReactComponent[item2].text = "Ничего не найдено";
@@ -465,7 +487,7 @@ class Classification {
     allClassification = Object.keys(allClassification);
 
     if (allClassification.length == 0) {
-      return
+      return;
       // const item = tree.createItemInTree(-1);
       // ReactComponent[item].text = "Классификация проекта";
 
@@ -721,7 +743,8 @@ class Classification {
     APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
-  formEditGroup(group = undefined) { debugger;
+  formEditGroup(group = undefined) {
+    debugger;
     console.log("group", group);
     let languageValues;
     let currentParentClassification = -1;
@@ -1063,7 +1086,10 @@ class Classification {
     ReactComponent[item].text =
       this._objectSystem.getObjectName(this._projectID, objectID) +
       " ( объект )";
-    this._objectTreeItem[this._projectID][objectID].push({ group: id, widget: item });
+    this._objectTreeItem[this._projectID][objectID].push({
+      group: id,
+      widget: item,
+    });
   }
   moveObjectToClassificationGroup(info) {
     console.log("moveObjectToClassificationGroup");

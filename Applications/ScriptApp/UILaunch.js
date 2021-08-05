@@ -85,7 +85,7 @@ class UILaunch {
 		document.addEventListener("mousedown", this.mouseDown.bind(this));
 		document.addEventListener("mousemove", this.mouseMove.bind(this));
 		document.addEventListener("mouseup", this.mouseUp.bind(this));
-		document.addEventListener("mousewheel", 	this.mouseWheel.bind(this));
+		document.addEventListener("mousewheel", this.mouseWheel.bind(this));
 		document.addEventListener("keydown", this.keyDown.bind(this));
 	}
 
