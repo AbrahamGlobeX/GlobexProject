@@ -299,7 +299,6 @@ class PatternEditorSystem extends BaseObjectEditor {
                 MainClassificator.smartWidget = new WidgetSmartImage();
                 MainClassificator.smartWidget.projectObject = this.$external._projectSystem;
                 MainClassificator.smartWidget.mainObject = object;//si f
-                MainClassificator.smartWidget.currentLayerObject = object;
                 MainClassificator.smartWidget.height = "90vh";
 
                 const contentLayout = this.drawLayout(
@@ -438,7 +437,6 @@ class PatternEditorSystem extends BaseObjectEditor {
         }
         console.log("properties", properties);
         console.log("newProperties", newProperties);
-
         await this.createNewProps(newProperties);
         console.log("newProperties", newProperties);
 

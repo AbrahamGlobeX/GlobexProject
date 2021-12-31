@@ -646,7 +646,7 @@ class ProjectEditor extends BaseObjectEditor {
     const classificatorTreeLayout = this.drawLayout(
       classificatorLayout,
       "layoutHorizontal",
-      { width: "100%", minHeight: "600px" }
+      { width: "100%", minHeight: "550px" }
     );
     ReactComponent[classificatorTreeLayout].includeWidget(
       ReactComponent[
@@ -660,11 +660,23 @@ class ProjectEditor extends BaseObjectEditor {
         MainClassificator.showContextMenu(e, "mainView");
       }
     );
+      // Кнопка "Обновить группы"
+      this.drawButton(
+        this.drawLayout(classificatorLayout, "layoutHorizontal", {
+          width: "100%",
+          maxHeight: "50px",
+        }),
+        "Обновить группы",
+        { color: "#123456" },
+        () => {
+          console.log('groups', this.refreshGroups());
+        }
+      );
     // Кнопка "Добавить объект"
 
     this.drawButton(
       this.drawLayout(classificatorLayout, "layoutHorizontal", {
-        width: "99%",
+        width: "100%",
         maxHeight: "50px",
       }),
       "Добавить объект",
@@ -676,6 +688,20 @@ class ProjectEditor extends BaseObjectEditor {
       }
     );
   }
+
+  refreshGroups(key = "1", classification = MainClassification._classification[MainClassification._projectID]) {//пересобрать группы в объекты
+    let group = classification[key]; debugger;
+    Object.keys(group.childrens).forEach(el => {
+      group[key][el] = this.refreshGroups(el, group.childrens);
+    });
+    return group;
+  }
+
+  reloadObjects() {
+    
+  }
+
+
 
   drawClassification() {
     try {
@@ -1836,7 +1862,8 @@ class ObjectSystem extends BaseObjectEditor {
   setObjectClassification(projectID, objectID, classification) {
     const finded = this.findObjectByID(projectID, objectID);
     if (finded) {
-      finded["additional"]["classification"][projectID] = [classification];
+      if (classification != 2) finded["additional"]["classification"][projectID] = ['2', classification];
+      else finded["additional"]["classification"][projectID] = [classification]
       this.updateObject(projectID, objectID);
     }
   }

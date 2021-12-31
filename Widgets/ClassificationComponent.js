@@ -1,7 +1,7 @@
 class DrawFormWidgets extends BaseObjectEditor {
   constructor() {
-  super();
-  this._widgets = {};
+    super();
+    this._widgets = {};
   }
   drawComboBoxWithTitle(layout, title) {
     const comboBoxLayout = this.drawLayout(layout, "layoutHorizontal", {
@@ -13,10 +13,11 @@ class DrawFormWidgets extends BaseObjectEditor {
     const comboBox = this.drawComboBox(comboBoxLayout);
     return comboBox;
   }
-  
+
   drawCommonDialog(title, OKName, CancelName, callback, isSearched = false) {
     try {
       const dialog = this.drawDialog(-1);
+      ReactComponent[dialog].dialogContent.style.minWidth = "100%";
       const dialogName = title + new Date().getSeconds();
       this._widgets[dialogName] = dialog;
       const mainLayout = this.drawLayout(dialog, "layoutVertical", {
@@ -284,7 +285,7 @@ class Classification {
         resultJSON.cursor.firstBatch[0].classification;
       this._classificationMaxID[projectID] = -1;
       const findMaxID = function (id, element) {
-        if (id > this._classificationMaxID[projectID]) {
+        if (Number(id) > Number(this._classificationMaxID[projectID])) {
           this._classificationMaxID[projectID] = id;
         }
         for (let childID of Object.keys(element["childrens"])) {
@@ -314,7 +315,7 @@ class Classification {
             ? `${element.name.ru}`
             : element.name["ru"] + " ( группа )";
         predParentID = parentID;
-        const item = this._tree[projectID].createItemInTree(parentID, () => {});
+        const item = this._tree[projectID].createItemInTree(parentID, () => { });
         this._contextMenu.addMenuItem(
           this._classificationItemsName,
           "",
@@ -324,7 +325,7 @@ class Classification {
           undefined
         );
 
-        if (parentID != -1) {          
+        if (parentID != -1) {
           this._classificationGroupListAddMenu.addMenuItem(
             name.replace(" ( группа )", ""),
             -1,
@@ -385,16 +386,62 @@ class Classification {
     }
   }
   fillTreeWithObject(projectID) {
+    let map ={};
+    const loaded = function (res) {
+      console.log('res - ', res);
+    }
+    // for (let i = 0; i < MainClassification._objectSystem._objects[MainClassification._projectID].length; i++) {
+    //   //console.log('object to change: ',MainClassification._objectSystem._objects[MainClassification._projectID][i]);
+    //   if (!map.MainClassification._objectSystem._objects[MainClassification._projectID][i].additional.classification[projectID][j])
+    //   const obj = {
+    //     "meta": {
+    //       "owner": {
+    //         "$oid": APP.owner
+    //       },
+    //       "name": "",//
+    //       "description": "",
+    //       "pattern": {
+    //         "$oid": "602e8108b0125500080c818c"//
+    //       }
+    //     },
+    //     "object": "",//
+    //     "additional": {
+    //       "wiki_ref": "",
+    //       "image": ""
+    //     }
+    //   }
+
+    //   APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
+    //   APP.dbWorker.sendInsertRCRequest("DOLMongoRequest", JSON.stringify(obj), "objects");
+    // }
     if (!this._tree[projectID]) return;
     this._objectTreeItem[projectID] = {};
     const objects = this._objectSystem._objects[projectID];
     for (let i = 0; i < objects.length; i++) {
       if (!objects[i]["additional"].hasOwnProperty("classification")) continue;
-      const objectClassifications = objects[i]["additional"]["classification"][
+      let objectClassifications = objects[i]["additional"]["classification"][
         projectID
       ].map((item) => item.split(".").pop());
       this._objectTreeItem[projectID][objects[i]["_id"]["$oid"]] = [];
       for (let id of objectClassifications) {
+        if (!this._treeItem[projectID][id]) {
+          let updated = function (res) { 'fix', console.log(res); }
+          objectClassifications.splice(objectClassifications.indexOf(id), 1);
+          this._objectSystem._objects[projectID][i].additional.classification[projectID] = objectClassifications;
+          objects[i]["additional"]["classification"][projectID]
+          const sets = {
+            $set: {
+              additional: this._objectSystem._objects[projectID][i].additional,
+            },
+          };
+          APP.dbWorker.responseDOLMongoRequest = updated.bind(this);
+          APP.dbWorker.sendUpdateRCRequest(
+            "DOLMongoRequest",
+            this._objectSystem._objects[projectID][i]._id["$oid"],
+            JSON.stringify(sets)
+          );
+          continue;
+        }
         const item = this._tree[projectID].createItemInTree(
           this._treeItem[projectID][id]["widget"],
           () => {
@@ -721,7 +768,8 @@ class Classification {
     APP.dbWorker.responseDOLMongoRequest = loaded.bind(this);
     APP.dbWorker.sendBaseRCRequest("DOLMongoRequest", "patterns", request);
   }
-  formEditGroup(group = undefined) { debugger;
+  formEditGroup(group = undefined) {
+    debugger;
     console.log("group", group);
     let languageValues;
     let currentParentClassification = -1;
@@ -770,10 +818,10 @@ class Classification {
             this._projectID,
             parents,
             this._treeItem[this._projectID][currentParentClassification][
-              "widget"
+            "widget"
             ],
             languageValues,
-            () => {}
+            () => { }
           );
         } else {
           this.updateBranchInClassification(
@@ -883,7 +931,9 @@ class Classification {
       currentClassification = currentClassification[id];
       currentClassification = currentClassification["childrens"];
     }
-    const id = (parseInt(this._classificationMaxID[projectID]) + 1).toString();
+    let id = (parseInt(this._classificationMaxID[projectID]) + 1).toString();
+    //let id = 0; debugger;
+    //while(currentClassification[id]) id++;
     currentClassification[id] = {
       name: names,
       childrens: {},
@@ -1010,9 +1060,10 @@ class Classification {
     treeItem["name"] = name["ru"];
     ReactComponent[treeItem["widget"]].text = name["ru"];
 
-    this.updateClassification(projectID, () => {});
+    this.updateClassification(projectID, () => { });
   }
   updateClassification(projectID, callback) {
+    debugger;
     const updated = function (resultJSON) {
       console.log("updateClassification", resultJSON);
       callback();
@@ -1041,7 +1092,7 @@ class Classification {
 
     const item = this._tree[this._projectID].createItemInTree(
       this._treeItem[this._projectID][id]["widget"],
-      () => {},
+      () => { },
       { id: objectID }
     );
     this._contextMenu.addMenuItem(
@@ -1073,15 +1124,14 @@ class Classification {
       this._projectID,
       objectID,
       id.toString()
-    );
-
+    ); debugger;
     for (let group of this._objectTreeItem[this._projectID][objectID]) {
-      this._tree[this._projectID].removeItemFromTree(group["widget"]);
+      if (group.group !== "2") this._tree[this._projectID].removeItemFromTree(group["widget"]);
     }
 
     const item = this._tree[this._projectID].createItemInTree(
       this._treeItem[this._projectID][id]["widget"],
-      () => {},
+      () => { },
       { id: objectID }
     );
     this._contextMenu.addMenuItem(
@@ -1142,7 +1192,7 @@ class Classification {
 
       const item = this._tree[this._projectID].createItemInTree(
         this._treeItem[this._projectID]["2"]["widget"],
-        () => {},
+        () => { },
         { id: objectID }
       );
       this._contextMenu.addMenuItem(

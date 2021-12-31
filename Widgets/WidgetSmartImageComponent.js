@@ -7,35 +7,36 @@ class WidgetSmartImage extends BaseWidget {
 	}
 
 	onCreate() {
-		this._imageId = -1;
+		//смещения по x и y
 		this.ofsX = 0;
 		this.ofsY = 0;
-		this._imageData = "";
+
+		this._imageData = "";//путь к картинке
 		this.addClassName("WidgetImage");
+		this.editMode = false;//режим редактирования
+		this.editModeButton = undefined;//ссылка на кнопку
+		this._name = undefined;//имя текущего объекта
+		this.nameLabel = undefined;//ссылка на поле с именем
+		this.layersTree = undefined;//дерево слоев
+		this.mainLay = undefined;//главный слой
+		this.target = undefined;//цель при нажатии пкм
+		this.table = undefined;//таблица
+		this.cp = 1;//todo
+		this.imageSize = {};//размер изображения
+		this.proportions = 0;//пропорции изображения
+		this.exPointers = [];//todo
+		this.list = undefined;//сводка внизу
+		this.saveData = {};//объект для сохранения, самая главная хрень
+		this.firstIn = true;//todo
+		this.layers = {};//слои
+		this.layerObjects = {};//todo
+		this.testObjectId = "60c97ac9d4acdd755b5beea2";//todo
+		this._currentLayerObject = {};//объект текущего слоя
+		this._mainObject = {};//объект главного слоя
+		this.visibleBtn = true;//отображать ли кнопки
+		this.btnData = { btnArray: [] };//массив кнопок и их данных
 
-		this.editMode = false;
-		this.editModeButton = "";
-		this.name = "Name0";
-		this.nameLabel = "";
-		this.layersTree = "";
-		this.mainLay = "";
-		this.target = "";
-		this.table = "";
-		this.abs = false;
-		this.cp = 1;
-		this.imageSize = {};
-		this.proportions = 0;
-		this.exPointers = [];
-		this.list = "";
-		this.treeNum = "";
-		this.saveData = {};
-		this.firstIn = true;
-		this.layers = {[this.name]: {}};
-		this.layerObjects = {};
-		this.testObjectId = "60c97ac9d4acdd755b5beea2";
-		this.currentLayerObject = {};
-		this.mainObject = {};
-
+		///////////////////отрисовка
 		this.window = new widgetsComponentsTypes["window"];
 		this.htmlElement.appendChild(this.window.htmlElement);
 		this.window.htmlElement.style.width = "100%";
@@ -47,32 +48,15 @@ class WidgetSmartImage extends BaseWidget {
 		this.mainMainLay.htmlElement.style.width = "100%";
 		this.mainMainLay.htmlElement.style.height = "100%";
 
-
 		this.mainLay = new widgetsComponentsTypes["layoutHorizontal"];
 		this.mainMainLay.includeWidget(this.mainLay);
 		this.mainLay.htmlElement.style.width = "100%";
-		this.mainLay.htmlElement.style.height = "98%";
+		this.mainLay.htmlElement.style.height = "95%";
 
 		this.tabLay = new widgetsComponentsTypes["layoutHorizontal"];
 		this.mainMainLay.includeWidget(this.tabLay);
 		this.tabLay.htmlElement.style.width = "100%";
-		this.tabLay.htmlElement.style.maxHeight = "4%";
-
-		const main = new widgetsComponentsTypes["button"]
-		this.tabLay.includeWidget(main);
-		main.htmlElement.style.maxWidth = "300px";
-		main.text = this.name;
-		main.htmlElement.style.margin = "5px";
-		main.htmlElement.style.backgroundColor = "green";
-
-		main.btn = "";
-
-
-		main.htmlElement.addEventListener("click", e => {
-			if (e.target.className != "WidgetButton") this.selectLayer(main.text, ReactComponent[e.target.parentNode.id]);
-			else this.selectLayer(main.text, ReactComponent[e.target.id]);
-		});
-
+		this.tabLay.htmlElement.style.maxHeight = "5%";
 
 		this.sideLay = new widgetsComponentsTypes["layoutVertical"];
 		this.sideLay.htmlElement.style.maxWidth = "300px";
@@ -93,20 +77,10 @@ class WidgetSmartImage extends BaseWidget {
 		this.htmlImage = document.createElement('div');
 		this.imgLay.htmlElement.appendChild(this.htmlImage);
 		this.sizeImage = document.createElement('img');
-		console.log(this.htmlImage);
-		this.imageData = '/data/textures/sborka.jpg';
-		console.log(this.sizeImage);
 
-		
-
-		//let img = new Image();
-
-		this.sizeImage.onload = this.imageHandlerr.bind(this);
-		//this.htmlImage.style.width = "500px";
-		//this.htmlImage.style.height = "300px";
+		this.sizeImage.onload = this.imageHandler.bind(this);
 		
 		this.htmlImage.oncontextmenu = this.showContextMenu.bind(this);
-		//this.position = 2;
 
 		this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		this.svg.classList.add("smartSvg");
@@ -114,13 +88,6 @@ class WidgetSmartImage extends BaseWidget {
 		this.svg.style.minHeight = "100%";
 		this.svg.style.position = "relative";
 		this.htmlImage.appendChild(this.svg);
-
-		
-
-
-
-
-
 
 		const layhor = new widgetsComponentsTypes["layoutHorizontal"];
 		layhor.htmlElement.style.width = "100%";
@@ -145,11 +112,6 @@ class WidgetSmartImage extends BaseWidget {
 		widget.htmlElement.style.borderWidth = "1px";
 		widget.htmlElement.style.borderStyle = "groove";
 
-
-
-
-
-
 		const tableWindow = new WidgetWindow;
 		tableWindow.htmlElement.style.width = "100%";
 		tableWindow.htmlElement.style.height = "100%";
@@ -160,11 +122,7 @@ class WidgetSmartImage extends BaseWidget {
 		tableLayout.htmlElement.style.height = "100%";
 		tableWindow.includeWidget(tableLayout);
 
-
-
-
-
-		this._contextMenu = new ContextMenu();
+		this._contextMenu = new ContextMenu();//todo
 
 		const chooseTree = new WidgetTree;
 		this.layersTree = chooseTree;
@@ -203,9 +161,6 @@ class WidgetSmartImage extends BaseWidget {
 			this.refreshTable(0);
 		});
 
-
-
-
 		const objButton = new widgetsComponentsTypes["button"];
 		tableLayout.includeWidget(objButton);
 		objButton.htmlElement.style.width = "100%";
@@ -215,82 +170,20 @@ class WidgetSmartImage extends BaseWidget {
 		objButton.htmlElement.style.color = "black";
 		objButton.htmlElement.addEventListener("click", e => {
 
-
-			this.showProps(this.currentLayerObject);
-
-
-
+		this.showProps(this.currentLayerObject);
 
 		});
 
-
-
-		this.svgNS = this.svg.namespaceURI;
-
-		this.gridsWidth = this.svg.clientWidth - 80;
-		this.gridsHeight = this.svg.clientHeight - 80;
-
+		this.svgNS = this.svg.namespaceURI;//svg
+		this.gridsWidth = this.svg.clientWidth - 80;//svg
+		this.gridsHeight = this.svg.clientHeight - 80;//svg
+		///////////////////конец отрисовки
 		
 		
-		//this.htmlImage.setAttribute("href", this.imageData);
-		this.btnData = { btnArray: [] };
-		this.visibleBtn = true;
+		
 		document.addEventListener('contextmenu', event => event.preventDefault());
 
-		window.addEventListener('resize', event => {
-
-			this.htmlImage.style.backgroundSize = "cover";
-			
-			if (ReactComponent["w_1"].htmlElement.parentNode.parentNode.style.display != "none") {
-				this.oldX = this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2);
-				this.oldY = this.htmlImage.style.height.substring(0, this.htmlImage.style.height.length - 2);
-				this.htmlImage.style.height = this.imgLay.htmlElement.clientHeight + 'px';
-				this.htmlImage.style.width = this.imgLay.htmlElement.clientHeight * this.proportions + 'px';
-				ReactComponent[this.nameLabel].htmlElement.style.maxWidth = this.svg.clientHeight * this.proportions + 'px';
-				for (let i = 0; i < this.btnData.btnArray.length; i++) {
-
-					let offsetX = (1 + (this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2) - this.oldX) / this.oldX);
-					let offsetY = (1 + (this.htmlImage.style.height.substring(0, this.htmlImage.style.height.length - 2) - this.oldY) / this.oldY);
-
-					this.btnData.btnArray[i].setAttribute('x', this.btnData.btnArray[i].x.animVal.value * offsetX);
-					this.btnData.btnArray[i].setAttribute('y', this.btnData.btnArray[i].y.animVal.value * offsetY);
-					this.btnData.btnArray[i].textElement.setAttribute('x', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2 - 8);
-					this.btnData.btnArray[i].textElement.setAttribute('y', this.btnData.btnArray[i].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2 + 6);
-					if (this.btnData.btnArray[i].attributes.rx.value == "0") {
-						//this.btnData.btnArray[i].textElement.textContent = btnNew.dataText;
-						this.btnData.btnArray[i].textElement.setAttribute('x', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2 - 8 - (textElement.textContent.length - 1) * 5);
-					}
-
-					for (let j = 0; j < this.btnData.btnArray[i].tempBtn.length; j++) {
-						this.btnData.btnArray[i].tempBtn[j].setAttribute('cx', this.btnData.btnArray[i].tempBtn[j].cx.animVal.value * offsetX);
-						this.btnData.btnArray[i].tempBtn[j].setAttribute('cy', this.btnData.btnArray[i].tempBtn[j].cy.animVal.value * offsetY);
-
-						this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('x1', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2);
-						this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('x2', this.btnData.btnArray[i].tempBtn[j].cx.animVal.value);
-						this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('y1', this.btnData.btnArray[i].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2);
-						this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('y2', this.btnData.btnArray[i].tempBtn[j].cy.animVal.value);
-					}
-
-					for (let j = 0; j < this.btnData.btnArray[i].duplicates.length; j++) {
-						this.btnData.btnArray[i].duplicates[j].setAttribute('x', this.btnData.btnArray[i].duplicates[j].x.animVal.value * offsetX);
-						this.btnData.btnArray[i].duplicates[j].setAttribute('y', this.btnData.btnArray[i].duplicates[j].y.animVal.value * offsetY);
-						this.btnData.btnArray[i].duplicates[j].textElement.setAttribute('x', this.btnData.btnArray[i].duplicates[j].x.animVal.value + this.btnData.btnArray[i].duplicates[j].clientWidth / 2 - 8);
-						this.btnData.btnArray[i].duplicates[j].textElement.setAttribute('y', this.btnData.btnArray[i].duplicates[j].y.animVal.value + this.btnData.btnArray[i].duplicates[j].clientHeight / 2 + 6);
-
-						for (let k = 0; k < this.btnData.btnArray[i].duplicates[j].tempBtn.length; k++) {
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].setAttribute('cx', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cx.animVal.value * offsetX);
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].setAttribute('cy', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cy.animVal.value * offsetY);
-
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('x1', this.btnData.btnArray[i].duplicates[j].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2);
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('x2', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cx.animVal.value);
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('y1', this.btnData.btnArray[i].duplicates[j].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2);
-							this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('y2', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cy.animVal.value);
-						}
-					}
-
-				}
-			}
-		});
+		window.addEventListener('resize', this.Resize.bind(this));
 
 		window.oncontextmenu = this.showContextMenu.bind(this);
 		
@@ -317,13 +210,65 @@ class WidgetSmartImage extends BaseWidget {
 
 		this.refreshList();
 		this.refreshTable();
-
-		//this.linkObject(); 
-		//this.htmlElement.style.display.o // NIKOLAYS
 		
+		this.toggleEditMode();
 	}
 
-	saveWorkToDatabase() {
+	Resize() {//при изменении размера окна
+
+		this.htmlImage.style.backgroundSize = "cover";
+		
+		if (ReactComponent["w_1"].htmlElement.parentNode.parentNode.style.display != "none") {
+			this.oldX = this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2);
+			this.oldY = this.htmlImage.style.height.substring(0, this.htmlImage.style.height.length - 2);
+			this.htmlImage.style.height = this.imgLay.htmlElement.clientHeight + 'px';
+			this.htmlImage.style.width = this.imgLay.htmlElement.clientHeight * this.proportions + 'px';
+			ReactComponent[this.nameLabel].htmlElement.style.maxWidth = this.svg.clientHeight * this.proportions + 'px';
+			for (let i = 0; i < this.btnData.btnArray.length; i++) {
+
+				let offsetX = (1 + (this.htmlImage.style.width.substring(0, this.htmlImage.style.width.length - 2) - this.oldX) / this.oldX);
+				let offsetY = (1 + (this.htmlImage.style.height.substring(0, this.htmlImage.style.height.length - 2) - this.oldY) / this.oldY);
+
+				this.btnData.btnArray[i].setAttribute('x', this.btnData.btnArray[i].x.animVal.value * offsetX);
+				this.btnData.btnArray[i].setAttribute('y', this.btnData.btnArray[i].y.animVal.value * offsetY);
+				this.btnData.btnArray[i].textElement.setAttribute('x', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2 - 8);
+				this.btnData.btnArray[i].textElement.setAttribute('y', this.btnData.btnArray[i].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2 + 6);
+				if (this.btnData.btnArray[i].attributes.rx.value == "0") {
+					this.btnData.btnArray[i].textElement.setAttribute('x', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2 - 8 - (textElement.textContent.length - 1) * 5);
+				}
+
+				for (let j = 0; j < this.btnData.btnArray[i].tempBtn.length; j++) {
+					this.btnData.btnArray[i].tempBtn[j].setAttribute('cx', this.btnData.btnArray[i].tempBtn[j].cx.animVal.value * offsetX);
+					this.btnData.btnArray[i].tempBtn[j].setAttribute('cy', this.btnData.btnArray[i].tempBtn[j].cy.animVal.value * offsetY);
+
+					this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('x1', this.btnData.btnArray[i].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2);
+					this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('x2', this.btnData.btnArray[i].tempBtn[j].cx.animVal.value);
+					this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('y1', this.btnData.btnArray[i].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2);
+					this.btnData.btnArray[i].tempBtn[j].currentLine.setAttribute('y2', this.btnData.btnArray[i].tempBtn[j].cy.animVal.value);
+				}
+
+				for (let j = 0; j < this.btnData.btnArray[i].duplicates.length; j++) {
+					this.btnData.btnArray[i].duplicates[j].setAttribute('x', this.btnData.btnArray[i].duplicates[j].x.animVal.value * offsetX);
+					this.btnData.btnArray[i].duplicates[j].setAttribute('y', this.btnData.btnArray[i].duplicates[j].y.animVal.value * offsetY);
+					this.btnData.btnArray[i].duplicates[j].textElement.setAttribute('x', this.btnData.btnArray[i].duplicates[j].x.animVal.value + this.btnData.btnArray[i].duplicates[j].clientWidth / 2 - 8);
+					this.btnData.btnArray[i].duplicates[j].textElement.setAttribute('y', this.btnData.btnArray[i].duplicates[j].y.animVal.value + this.btnData.btnArray[i].duplicates[j].clientHeight / 2 + 6);
+
+					for (let k = 0; k < this.btnData.btnArray[i].duplicates[j].tempBtn.length; k++) {
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].setAttribute('cx', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cx.animVal.value * offsetX);
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].setAttribute('cy', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cy.animVal.value * offsetY);
+
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('x1', this.btnData.btnArray[i].duplicates[j].x.animVal.value + this.btnData.btnArray[i].clientWidth / 2);
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('x2', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cx.animVal.value);
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('y1', this.btnData.btnArray[i].duplicates[j].y.animVal.value + this.btnData.btnArray[i].clientHeight / 2);
+						this.btnData.btnArray[i].duplicates[j].tempBtn[k].currentLine.setAttribute('y2', this.btnData.btnArray[i].duplicates[j].tempBtn[k].cy.animVal.value);
+					}
+				}
+
+			}
+		}
+	}
+
+	saveWorkToDatabase() {//todo
 		let object = {};
 		Object.keys(this.saveData).forEach(key => {
 			object[key] = this.saveData[key];
@@ -388,12 +333,7 @@ class WidgetSmartImage extends BaseWidget {
 
 	}
 
-	showStats() {
-		let object = this.saveData;
-		console.log(object);
-	}
-
-	showProps(tar) {
+	showProps(target) {//todo
 		const dialog = new widgetsComponentsTypes["dialog"];
 		dialog.dialogContent.style.width = "700px";
 		dialog.dialogContent.style.height = "700px";
@@ -401,9 +341,9 @@ class WidgetSmartImage extends BaseWidget {
 		layout.htmlElement.style.width = "100%";
 		layout.htmlElement.style.height = "100%";
 		dialog.includeWidget(layout);
-		let boom = tar;
-		if (boom.additional) boom = boom.object;
-		Object.keys(boom).forEach(key => {
+		let obj = target;
+		if (obj.additional) obj = obj.object;
+		Object.keys(obj).forEach(key => {
 			if (key != "Composition") {
 				const label = new widgetsComponentsTypes["label"];
 				layout.includeWidget(label);
@@ -411,7 +351,7 @@ class WidgetSmartImage extends BaseWidget {
 				label.htmlElement.style.minHeight = "50px";
 
 
-				label.text = "Ключ: " + key + "				Значение: " + boom[key].value;
+				label.text = "Ключ: " + key + "				Значение: " + obj[key].value;
 			}
 
 		});
@@ -420,8 +360,8 @@ class WidgetSmartImage extends BaseWidget {
 	}
 
 
-	refreshList(no = false) {
-		if (this.list != "") {
+	refreshList(no = false) {//todo
+		if (this.list) {
 			for (let i = 0; i < this.list.children.length; i++) this.deleteElement(this.list.children[i]);
 			this.deleteElement(this.list.id);
 
@@ -457,7 +397,7 @@ class WidgetSmartImage extends BaseWidget {
 		}
 	}
 
-	deleteElement(id = null) {
+	deleteElement(id = null) {//удаление виджета
 		let res = false;
 		const component = ReactComponent[id];
 		delete ReactComponent[id];
@@ -468,7 +408,7 @@ class WidgetSmartImage extends BaseWidget {
 		return res;
 	}
 
-	toggleEditMode() {
+	toggleEditMode() {//todo
 
 		this.editMode = !this.editMode;
 		if (!this.editMode) {
@@ -495,7 +435,7 @@ class WidgetSmartImage extends BaseWidget {
 		}
 	}
 
-	setImage() {
+	setImage() {//Задать изображение
 
 		const dialog = new widgetsComponentsTypes["dialog"];
 		dialog.dialogContent.style.width = "700px";
@@ -512,7 +452,7 @@ class WidgetSmartImage extends BaseWidget {
 		});
 	}
 
-	addButton() {
+	addButton() {//Добавить кнопку
 
 		const dialog = new widgetsComponentsTypes["dialog"];
 		dialog.dialogContent.style.width = "700px";
@@ -540,7 +480,7 @@ class WidgetSmartImage extends BaseWidget {
 		console.log(size);
 	}
 
-	deleteButton(event = null, check) {
+	deleteButton(event = null, check) {//удалить кнопку
 		if (!this.target.dupp && check) {
 			check = false;
 			const dialog = new widgetsComponentsTypes["dialog"];
@@ -649,7 +589,7 @@ class WidgetSmartImage extends BaseWidget {
 		//=-= удаление из массива
 	}
 
-	imageHandlerr() {
+	imageHandler() {//чтобы узнать размер изображения
 		const size = {
 			width: this.sizeImage.width,
 			height: this.sizeImage.height
@@ -658,7 +598,7 @@ class WidgetSmartImage extends BaseWidget {
 		this.proportions = this.imageSize.width/this.imageSize.height;
 	}
 
-	deletePointers(btn = this.target) {
+	deletePointers(btn = this.target) {//удаление указателей кнопки
 		for (let i = 0; i < btn.tempBtn.length; i++) {
 			let l = btn.tempBtn[i].currentLine;
 			if (l.parentNode) l.parentNode.removeChild(l);
@@ -667,7 +607,7 @@ class WidgetSmartImage extends BaseWidget {
 		btn.tempBtn = [];
 	}
 
-	setNumPointers(btn, num) {
+	setNumPointers(btn, num) {//задать количество указателей
 		for (let i = 0; i < num; i++) {
 
 			let line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
@@ -866,7 +806,7 @@ class WidgetSmartImage extends BaseWidget {
 
 	}
 
-	renameImage(value) {
+	renameImage(value) {//ask
 
 		const dialog = new widgetsComponentsTypes["dialog"];
 		dialog.dialogContent.style.width = "700px";
@@ -885,7 +825,7 @@ class WidgetSmartImage extends BaseWidget {
 		});
 	}
 
-	linkButtonObj(check = false) {
+	linkButtonObj(check = false) {//присоединить объект
 		const dialog = new widgetsComponentsTypes["dialog"];
 		dialog.dialogContent.style.width = "700px";
 		dialog.dialogContent.style.height = "700px";
@@ -895,25 +835,7 @@ class WidgetSmartImage extends BaseWidget {
 		layout.htmlElement.style.overflow = "hidden";
 		dialog.includeWidget(layout);
 		dialog.addDialogButton("Закрыть", () => { this.deleteElement(dialog.id); });
-		debugger;
 		if (check) this.target = this.btnData.btnArray[this.btnData.btnArray.length - 1];
-		console.log(this);
-		if (this.currentLayerObject.Comp) for (let i = 0; i < this.currentLayerObject.Comp.length; i++) {
-
-			const main = new widgetsComponentsTypes["button"];
-			layout.includeWidget(main);
-			main.text = this.name;
-			main.htmlElement.style.margin = "5px";
-			main.htmlElement.style.backgroundColor = "green";
-			main.htmlElement.style.width = "100%";
-			main.htmlElement.style.maxHeight = "50px";
-			main.text = this.currentLayerObject.Comp[i].meta.name;
-			main.htmlElement.addEventListener("click", e => {
-				this.target.obj = this.currentLayerObject.Comp[i];
-				this.deleteElement(dialog.id);
-				this.refreshTable(0);
-			});
-		}
 
 		const newobj = new widgetsComponentsTypes["button"];
 		layout.includeWidget(newobj);
@@ -927,6 +849,34 @@ class WidgetSmartImage extends BaseWidget {
 			this.createLinkObject(dialog.id);
 		});
 
+		const newobj2 = new widgetsComponentsTypes["button"];
+		layout.includeWidget(newobj2);
+		newobj2.text = this.name;
+		newobj2.htmlElement.style.margin = "5px";
+		newobj2.htmlElement.style.backgroundColor = "black";
+		newobj2.htmlElement.style.width = "100%";
+		newobj2.htmlElement.style.maxHeight = "50px";
+		newobj2.text = "Выбрать из проекта"
+		newobj2.htmlElement.addEventListener("click", e => {
+			this.chooseLinkObject(dialog.id);
+		});
+
+		let that = this;
+		if (this._currentLayerObject.Comp) for (let i = 0; i < this._currentLayerObject.Comp.length; i++) {
+
+			const main = new widgetsComponentsTypes["button"];
+			layout.includeWidget(main);
+			main.htmlElement.style.margin = "5px";
+			main.htmlElement.style.backgroundColor = "green";
+			main.htmlElement.style.minWidth = "100%";
+			main.htmlElement.style.maxHeight = "50px";
+			main.text = that._currentLayerObject.Comp[i].meta.name;
+			main.htmlElement.addEventListener("click", e => {
+				that.target.obj = that._currentLayerObject.Comp[i];
+				that.deleteElement(dialog.id);
+				that.refreshTable(0);
+			});
+		}
 	}
 
 	/*linkObject(value) { //=-= заргузка объекта NIKOLAYS old
@@ -943,7 +893,7 @@ class WidgetSmartImage extends BaseWidget {
 		dialog.addDialogButton("Создать новый объект", () => { this.createLinkObject(dialog.id); });
 	}*/
 
-	linkObject(value){ // NIKOLAYS new
+	linkObject(value){ //форма привязки
 		const dialog = new WidgetDialog();
 		dialog.width = "700px";
 		dialog.height = "300px";
@@ -976,7 +926,7 @@ class WidgetSmartImage extends BaseWidget {
 
 	}
 
-	loadLinkObject(dialog, id, sub = false) {
+	loadLinkObject(dialog, id, sub = false) {//загрузка
 
 
 		console.log(MainClassification._objectSystem._objects[MainClassification._projectID]);
@@ -1014,8 +964,7 @@ class WidgetSmartImage extends BaseWidget {
 		// if (dialog) this.deleteElement(dialog);
 	}
 
-	createLinkObject(dialog) { // NIKOLAYS 
-		//
+	createLinkObject(dialog) {//создать новый 
 		this.deleteElement(dialog);
 		window.oncontextmenu = undefined;
 		this.htmlImage.oncontextmenu = undefined;
@@ -1030,7 +979,14 @@ class WidgetSmartImage extends BaseWidget {
 		editor.drawFormObjectsWithPatterns();
 	}
 
-	callbackCreateObject(args){ // NIKOLAYS
+	chooseLinkObject(dialog) {//выбрать из проекта 
+		this.deleteElement(dialog);
+		window.oncontextmenu = undefined;
+		this.htmlImage.oncontextmenu = undefined;
+		console.log('choose');
+	}
+
+	callbackCreateObject(args){//упаковать
 		console.log("callbackCreateObject",args);
 		MainClassificator._callbackCreateObject = this._savedCallbackCreateObject;
 		window.oncontextmenu = this.showContextMenu.bind(this);
@@ -1052,7 +1008,7 @@ class WidgetSmartImage extends BaseWidget {
 
 
 	}
-	cancelCreateObject(){
+	cancelCreateObject(){//отмена
 		MainClassificator._callbackCreateObject = this._savedCallbackCreateObject;
 
 		window.oncontextmenu = this.showContextMenu.bind(this);
@@ -1060,7 +1016,7 @@ class WidgetSmartImage extends BaseWidget {
 
 	}
 
-	refreshTable(props) {
+	refreshTable(props) {//обновить данные в таблице
 		if (ReactComponent[this.table]) {
 			let table = ReactComponent[this.table];
 			let arr = [[["№"], ["Имя"], ["Кол-во"], ["Объект"]]];
@@ -1082,7 +1038,7 @@ class WidgetSmartImage extends BaseWidget {
 		}
 	}
 
-	exampleButton(lay) {
+	exampleButton(lay) {//todo
 		lay.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		lay.svg.classList.add("smartSvg");
 		lay.htmlElement.appendChild(lay.svg);
@@ -1233,15 +1189,7 @@ class WidgetSmartImage extends BaseWidget {
 		return [btn, lowBtn, line];
 	}
 
-	drawProps(btn) {
-		if (btn.style.borderRadius == "50%") {
-
-		} else {
-
-		}
-	}
-
-	setColor(value, id, one) {
+	setColor(value, id, one) {//цвет кнопки
 		if (one) this.target.setAttribute('fill', value);
 		else for (let i = 0; i < this.btnData.btnArray.length; i++) {
 			this.btnData.btnArray[i].setAttribute('fill', value);
@@ -1997,7 +1945,7 @@ class WidgetSmartImage extends BaseWidget {
 		this.showProps(this.target.obj);
 	}
 
-	showContextMenu(e, flag = false) {
+	showContextMenu(e, flag = false) {//todo
 		if (this._contextMenu.isBlocked) return false;
 
 		this._contextMenu.clearItems();
@@ -2625,9 +2573,7 @@ class WidgetSmartImage extends BaseWidget {
 	}
 	set imageData(value) {
 		if (value === this._imageData) return;
-		this.sizeImage.setAttribute('src', value);
-		console.log(this.sizeImage.clientWidth);
-		console.log(this.sizeImage.clientHeight);	
+		this.sizeImage.setAttribute('src', value);	
 		this._imageData = value;
 		this.htmlImage.style.background = "url(" + this.imageData + ")";
 	}
@@ -2635,53 +2581,56 @@ class WidgetSmartImage extends BaseWidget {
 	get imageData() {
 		return this._imageData;
 	}
-	onGenerateContent(content = null, docData = null) {
-		const htmlImage = this.htmlImage;
-		const imageSize = htmlImage.getBoundingClientRect();
-		let imgData = getStyle(htmlImage, 'background-image');
-		if (imgData.indexOf('url') !== -1) {
-			imgData = imgData.substring(5, imgData.length - 2);
+
+	set mainObject(value) {
+		this._mainObject = value;
+		this.currentLayerObject = this._mainObject;
+		this.layers['main'] = this._mainObject;
+
+		const main = new widgetsComponentsTypes["button"]
+		this.tabLay.includeWidget(main);
+		main.htmlElement.style.maxWidth = "300px";
+		main.text = this._name;
+		main.htmlElement.style.margin = "5px";
+		main.htmlElement.style.backgroundColor = "green";
+
+		main.btn = undefined;
+
+		main.htmlElement.addEventListener("click", e => {
+			if (e.target.className != "WidgetButton") this.selectLayer(main.text, ReactComponent[e.target.parentNode.id]);
+			else this.selectLayer(main.text, ReactComponent[e.target.id]);
+		});
+
+		this.layers['main'].tabButton = main.id;
+
+		let that = this;
+		if (this._currentLayerObject.Comp) for (let i = 0; i < this._currentLayerObject.Comp.length; i++) {
+			that._currentLayerObject.Comp[i] = MainClassificator.smartWidget.projectObject._currentProject.project.objects.find(obj => {
+				return obj._id["$oid"] === that._currentLayerObject.Comp[i];
+			})
 		}
+	}
 
-		let table = content.table;
-		table.widths.push(imageSize.width);
-		table.heights.push(imageSize.height);
+	get mainObject() {
+		return this._mainObject;
+	}
 
-		table.body.push([{}]);
-		//do not draw a hidden element
-		if (imageSize.width === 0 || imageSize.height === 0)
-			return;
+	set currentLayerObject(value) {
+		this._currentLayerObject = value;
+		this.name = this._currentLayerObject.meta.name;
+	}
 
-		if (imgData.indexOf('http') !== -1) {
-			//TODO: need to draw special image
-			return;
-		}
+	get currentLayerObject() {
+		return this._currentLayerObject;
+	}
 
-		let body = table.body[0][0];
-		body.image = imgData;
+	set name(value) {
+		this._name = value;
+		ReactComponent[this.nameLabel].text = this._name;
+	}
 
-		let img = new Image();
-		img.src = imgData;
-		function imageHandler() {
-			const size = {
-				width: img.width,
-				height: img.height
-			}
-			if (this.position === 0) {
-				body.width = imageSize.width;
-				body.height = imageSize.height;
-			} else {
-				body.fit = [size.width / (size.height / imageSize.height), imageSize.height];
-				const left = Math.abs((imageSize.width - body.fit[0]) / 2);
-				const top = Math.abs((imageSize.height - body.fit[1]) / 2);
-				body.margin = [left, top, left, top];
-			}
-
-			docData.images.splice(docData.images.indexOf(img), 1);
-		}
-
-		img.onload = imageHandler.bind(this);
-		docData.images.push(img);
+	get name() {
+		return this._name;
 	}
 
 	set position(value) {
